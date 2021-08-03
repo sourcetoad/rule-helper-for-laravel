@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Sourcetoad\RuleHelper;
 
+use DateTimeInterface;
+use InvalidArgumentException;
+
 trait BuildsDefaultRules
 {
     /**
@@ -31,22 +34,22 @@ trait BuildsDefaultRules
      * The field under validation must be a value after a given date.
      *
      * @link https://laravel.com/docs/8.x/validation#rule-after
-     * @param string $date A date parseable by 'strtotime'
+     * @param string|DateTimeInterface $date A date parseable by 'strtotime'
      */
-    public static function after(string $date): string
+    public static function after($date): string
     {
-        return 'after:'.$date;
+        return 'after:'.static::convertDateForRule($date);
     }
 
     /**
      * The field under validation must be a value after or equal to the given date.
      *
      * @link https://laravel.com/docs/8.x/validation#rule-after-or-equal
-     * @param string $date A date parseable by 'strtotime'
+     * @param string|DateTimeInterface $date A date parseable by 'strtotime'
      */
-    public static function afterOrEqual(string $date): string
+    public static function afterOrEqual($date): string
     {
-        return 'after_or_equal:'.$date;
+        return 'after_or_equal:'.static::convertDateForRule($date);
     }
 
     /**
@@ -107,22 +110,22 @@ trait BuildsDefaultRules
      * The field under validation must be a value preceding the given date.
      *
      * @link https://laravel.com/docs/8.x/validation#rule-before
-     * @param string $date A date parseable by 'strtotime'
+     * @param string|DateTimeInterface $date A date parseable by 'strtotime'
      */
-    public static function before(string $date): string
+    public static function before($date): string
     {
-        return 'before:'.$date;
+        return 'before:'.static::convertDateForRule($date);
     }
 
     /**
      * The field under validation must be a value preceding or equal to the given date.
      *
      * @link https://laravel.com/docs/8.x/validation#rule-before-or-equal
-     * @param string $date A date parseable by 'strtotime'
+     * @param string|DateTimeInterface $date A date parseable by 'strtotime'
      */
-    public static function beforeOrEqual(string $date): string
+    public static function beforeOrEqual($date): string
     {
-        return 'before_or_equal:'.$date;
+        return 'before_or_equal:'.static::convertDateForRule($date);
     }
 
     /**
@@ -183,11 +186,11 @@ trait BuildsDefaultRules
      * The field under validation must be equal to the given date.
      *
      * @link https://laravel.com/docs/8.x/validation#rule-date-equals
-     * @param string $date A date parseable by 'strtotime'
+     * @param string|DateTimeInterface $date A date parseable by 'strtotime'
      */
-    public static function dateEquals(string $date): string
+    public static function dateEquals($date): string
     {
-        return 'date_equals:'.$date;
+        return 'date_equals:'.static::convertDateForRule($date, 'Y-m-d');
     }
 
     /**
@@ -583,7 +586,8 @@ trait BuildsDefaultRules
     }
 
     /**
-     * The field under validation must be present and not empty unless the *anotherField* field is equal to any *value*.
+     * The field under validation must be present and not empty unless the *anotherField* field is equal to any
+     * *value*.
      *
      * @link https://laravel.com/docs/8.x/validation#rule-required-unless
      */
@@ -604,8 +608,8 @@ trait BuildsDefaultRules
     }
 
     /**
-     * The field under validation must be present and not empty *only if* all the other specified fields are present and
-     * not empty.
+     * The field under validation must be present and not empty *only if* all the other specified fields are present
+     * and not empty.
      *
      * @link https://laravel.com/docs/8.x/validation#rule-required-with-all
      */
@@ -717,5 +721,22 @@ trait BuildsDefaultRules
     public static function uuid(): string
     {
         return 'uuid';
+    }
+
+    /**
+     * @param string|DateTimeInterface $date
+     * @return string
+     */
+    private static function convertDateForRule($date, string $format = DateTimeInterface::RFC3339): string
+    {
+        if (is_string($date)) {
+            return $date;
+        }
+
+        if ($date instanceof DateTimeInterface) {
+            return $date->format($format);
+        }
+
+        throw new InvalidArgumentException('Invalid date type supplied');
     }
 }
