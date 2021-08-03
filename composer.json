@@ -1,5 +1,5 @@
 {
-    "name": "sourcetoad/rule-helper",
+    "name": "sourcetoad/rule-helper-for-laravel",
     "type": "library",
     "license": "MIT",
     "minimum-stability": "stable",
