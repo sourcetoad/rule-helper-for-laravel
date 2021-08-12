@@ -725,6 +725,7 @@ trait BuildsDefaultRules
 
     /**
      * @param string|DateTimeInterface $date
+     * @param string $format
      * @return string
      */
     private static function convertDateForRule($date, string $format = DateTimeInterface::RFC3339): string
