@@ -30,11 +30,17 @@ class RuleSet implements Contracts\RuleSet, Arrayable
         return $this;
     }
 
+    /**
+     * The field must be present if any of the criteria are true.
+     */
     public function requiredIfAny(RequiredIf ...$rules): self
     {
         return $this->concat(Rule::requiredIfAny(...$rules));
     }
 
+    /**
+     * The field must be present if all the criteria are true.
+     */
     public function requiredIfAll(RequiredIf ...$rules): self
     {
         return $this->concat(Rule::requiredIfAll(...$rules));

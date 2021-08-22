@@ -12,6 +12,9 @@ class Rule extends LaravelRule
 {
     use BuildsDefaultRules;
 
+    /**
+     * The field must be present if any of the criteria are true.
+     */
     public static function requiredIfAny(RequiredIf ...$rules): RequiredIf
     {
         return self::requiredIf(function () use ($rules) {
@@ -19,6 +22,9 @@ class Rule extends LaravelRule
         });
     }
 
+    /**
+     * The field must be present if all the criteria are true.
+     */
     public static function requiredIfAll(RequiredIf ...$rules): RequiredIf
     {
         return self::requiredIf(function () use ($rules) {
