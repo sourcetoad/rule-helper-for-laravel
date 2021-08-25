@@ -36,22 +36,6 @@ class RuleSet implements Contracts\RuleSet, Arrayable
     }
 
     /**
-     * The field must be present if any of the criteria are true.
-     */
-    public function requiredIfAny(RequiredIf ...$rules): self
-    {
-        return $this->concat(Rule::requiredIfAny(...$rules));
-    }
-
-    /**
-     * The field must be present if all the criteria are true.
-     */
-    public function requiredIfAll(RequiredIf ...$rules): self
-    {
-        return $this->concat(Rule::requiredIfAll(...$rules));
-    }
-
-    /**
      * The field under validation must be "yes", "on", 1, or true. This is useful for validating "Terms of Service"
      * acceptance or similar fields.
      *
@@ -605,6 +589,32 @@ class RuleSet implements Contracts\RuleSet, Arrayable
     public function required(): self
     {
         return $this->concat(Rule::required());
+    }
+
+    /**
+     * The field must be present if all the criteria are true.
+     */
+    public function requiredIfAll(RequiredIf ...$rules): self
+    {
+        return $this->concat(Rule::requiredIfAll(...$rules));
+    }
+
+    /**
+     * The field must be present if any of the criteria are true.
+     */
+    public function requiredIfAny(RequiredIf ...$rules): self
+    {
+        return $this->concat(Rule::requiredIfAny(...$rules));
+    }
+
+    /**
+     * The field under validation must be present and not empty if the *anotherField* field is equal to any *value*.
+     *
+     * @link https://laravel.com/docs/8.x/validation#rule-required-if
+     */
+    public function requiredIfAnyValue(string $anotherField, string ...$value): self
+    {
+        return $this->concat(Rule::requiredIfAnyValue($anotherField, ...$value));
     }
 
     /**
