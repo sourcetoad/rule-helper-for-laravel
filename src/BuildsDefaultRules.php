@@ -586,6 +586,16 @@ trait BuildsDefaultRules
     }
 
     /**
+     * The field under validation must be present and not empty if the *anotherField* field is equal to any *value*.
+     *
+     * @link https://laravel.com/docs/8.x/validation#rule-required-if
+     */
+    public static function requiredIfAny(string $anotherField, string ...$value): string
+    {
+        return sprintf('required_if:%s,%s', $anotherField, implode(',', $value));
+    }
+
+    /**
      * The field under validation must be present and not empty unless the *anotherField* field is equal to any
      * *value*.
      *
