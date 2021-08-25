@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\Facade;
 use Illuminate\Validation\Rules\RequiredIf;
 
 /**
+ * @method static \Sourcetoad\RuleHelper\RuleSet create(array $rules = [])
  * @method static \Sourcetoad\RuleHelper\RuleSet concat(...$rule)
- * @method static \Sourcetoad\RuleHelper\RuleSet requiredIfAny(RequiredIf ...$rules)
- * @method static \Sourcetoad\RuleHelper\RuleSet requiredIfAll(RequiredIf ...$rules)
+ *
  * @method static \Sourcetoad\RuleHelper\RuleSet accepted()
  * @method static \Sourcetoad\RuleHelper\RuleSet activeUrl()
  * @method static \Sourcetoad\RuleHelper\RuleSet after($date)
@@ -65,6 +65,8 @@ use Illuminate\Validation\Rules\RequiredIf;
  * @method static \Sourcetoad\RuleHelper\RuleSet prohibitedUnless(string $anotherField, string ...$value)
  * @method static \Sourcetoad\RuleHelper\RuleSet regex(string $pattern)
  * @method static \Sourcetoad\RuleHelper\RuleSet required()
+ * @method static \Sourcetoad\RuleHelper\RuleSet requiredIfAny(RequiredIf ...$rules)
+ * @method static \Sourcetoad\RuleHelper\RuleSet requiredIfAll(RequiredIf ...$rules)
  * @method static \Sourcetoad\RuleHelper\RuleSet requiredUnless(string $anotherField, string ...$value)
  * @method static \Sourcetoad\RuleHelper\RuleSet requiredWith(string ...$field)
  * @method static \Sourcetoad\RuleHelper\RuleSet requiredWithAll(string ...$field)

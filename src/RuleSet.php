@@ -23,6 +23,11 @@ class RuleSet implements Contracts\RuleSet, Arrayable
         return $this->rules->toArray();
     }
 
+    public static function create(array $rules = []): self
+    {
+        return new static($rules);
+    }
+
     public function concat(...$rule): self
     {
         $this->rules->push(...$rule);
