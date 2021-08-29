@@ -5,19 +5,45 @@ declare(strict_types=1);
 namespace Sourcetoad\RuleHelper;
 
 use DateTimeInterface;
-use InvalidArgumentException;
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Support\Collection;
+use Illuminate\Validation\Rules\RequiredIf;
 
-trait BuildsDefaultRules
+class RuleSet implements Contracts\RuleSet, Arrayable
 {
+    private Collection $rules;
+
+    public function __construct(array $rules = [])
+    {
+        $this->rules = collect($rules);
+    }
+
+    public function toArray(): array
+    {
+        return $this->rules->toArray();
+    }
+
+    public static function create(array $rules = []): self
+    {
+        return new static($rules);
+    }
+
+    public function concat(...$rule): self
+    {
+        $this->rules->push(...$rule);
+
+        return $this;
+    }
+
     /**
      * The field under validation must be "yes", "on", 1, or true. This is useful for validating "Terms of Service"
      * acceptance or similar fields.
      *
      * @link https://laravel.com/docs/8.x/validation#rule-accepted
      */
-    public static function accepted(): string
+    public function accepted(): self
     {
-        return 'accepted';
+        return $this->concat(Rule::accepted());
     }
 
     /**
@@ -25,9 +51,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-active-url
      */
-    public static function activeUrl(): string
+    public function activeUrl(): self
     {
-        return 'active_url';
+        return $this->concat(Rule::activeUrl());
     }
 
     /**
@@ -36,9 +62,9 @@ trait BuildsDefaultRules
      * @link https://laravel.com/docs/8.x/validation#rule-after
      * @param string|DateTimeInterface $date A date parseable by 'strtotime'
      */
-    public static function after($date): string
+    public function after($date): self
     {
-        return 'after:'.static::convertDateForRule($date);
+        return $this->concat(Rule::after($date));
     }
 
     /**
@@ -47,9 +73,9 @@ trait BuildsDefaultRules
      * @link https://laravel.com/docs/8.x/validation#rule-after-or-equal
      * @param string|DateTimeInterface $date A date parseable by 'strtotime'
      */
-    public static function afterOrEqual($date): string
+    public function afterOrEqual($date): self
     {
-        return 'after_or_equal:'.static::convertDateForRule($date);
+        return $this->concat(Rule::afterOrEqual($date));
     }
 
     /**
@@ -57,9 +83,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-alpha
      */
-    public static function alpha(): string
+    public function alpha(): self
     {
-        return 'alpha';
+        return $this->concat(Rule::alpha());
     }
 
     /**
@@ -67,9 +93,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-alpha-dash
      */
-    public static function alphaDash(): string
+    public function alphaDash(): self
     {
-        return 'alpha_dash';
+        return $this->concat(Rule::alphaDash());
     }
 
     /**
@@ -77,9 +103,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-alpha-num
      */
-    public static function alphaNum(): string
+    public function alphaNum(): self
     {
-        return 'alpha_num';
+        return $this->concat(Rule::alphaNum());
     }
 
     /**
@@ -87,13 +113,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-array
      */
-    public static function array(string ...$requiredKey): string
+    public function array(string ...$requiredKey): self
     {
-        if (count($requiredKey)) {
-            return 'array:'.implode(',', $requiredKey);
-        }
-
-        return 'array';
+        return $this->concat(Rule::array(...$requiredKey));
     }
 
     /**
@@ -101,9 +123,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-bail
      */
-    public static function bail(): string
+    public function bail(): self
     {
-        return 'bail';
+        return $this->concat(Rule::bail());
     }
 
     /**
@@ -112,9 +134,9 @@ trait BuildsDefaultRules
      * @link https://laravel.com/docs/8.x/validation#rule-before
      * @param string|DateTimeInterface $date A date parseable by 'strtotime'
      */
-    public static function before($date): string
+    public function before($date): self
     {
-        return 'before:'.static::convertDateForRule($date);
+        return $this->concat(Rule::before($date));
     }
 
     /**
@@ -123,9 +145,9 @@ trait BuildsDefaultRules
      * @link https://laravel.com/docs/8.x/validation#rule-before-or-equal
      * @param string|DateTimeInterface $date A date parseable by 'strtotime'
      */
-    public static function beforeOrEqual($date): string
+    public function beforeOrEqual($date): self
     {
-        return 'before_or_equal:'.static::convertDateForRule($date);
+        return $this->concat(Rule::beforeOrEqual($date));
     }
 
     /**
@@ -133,9 +155,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-between
      */
-    public static function between(int $min, int $max): string
+    public function between(int $min, int $max): self
     {
-        return sprintf('between:%d,%d', $min, $max);
+        return $this->concat(Rule::between($min, $max));
     }
 
     /**
@@ -143,9 +165,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-boolean
      */
-    public static function boolean(): string
+    public function boolean(): self
     {
-        return 'boolean';
+        return $this->concat(Rule::boolean());
     }
 
     /**
@@ -153,9 +175,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-confirmed
      */
-    public static function confirmed(): string
+    public function confirmed(): self
     {
-        return 'confirmed';
+        return $this->concat(Rule::confirmed());
     }
 
     /**
@@ -163,13 +185,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-current-password
      */
-    public static function currentPassword(?string $authenticationGuard = null): string
+    public function currentPassword(?string $authenticationGuard = null): self
     {
-        if ($authenticationGuard !== null) {
-            return 'current_password:'.$authenticationGuard;
-        }
-
-        return 'current_password';
+        return $this->concat(Rule::currentPassword($authenticationGuard));
     }
 
     /**
@@ -177,9 +195,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-date
      */
-    public static function date(): string
+    public function date(): self
     {
-        return 'date';
+        return $this->concat(Rule::date());
     }
 
     /**
@@ -188,9 +206,9 @@ trait BuildsDefaultRules
      * @link https://laravel.com/docs/8.x/validation#rule-date-equals
      * @param string|DateTimeInterface $date A date parseable by 'strtotime'
      */
-    public static function dateEquals($date): string
+    public function dateEquals($date): self
     {
-        return 'date_equals:'.static::convertDateForRule($date, 'Y-m-d');
+        return $this->concat(Rule::dateEquals($date));
     }
 
     /**
@@ -200,9 +218,9 @@ trait BuildsDefaultRules
      * @link https://www.php.net/manual/en/datetime.format.php
      * @param string $dateFormat A format supported by the *DateTime* class
      */
-    public static function dateFormat(string $dateFormat): string
+    public function dateFormat(string $dateFormat): self
     {
-        return 'date_format:'.$dateFormat;
+        return $this->concat(Rule::dateFormat($dateFormat));
     }
 
     /**
@@ -210,9 +228,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-different
      */
-    public static function different(string $field): string
+    public function different(string $field): self
     {
-        return 'different:'.$field;
+        return $this->concat(Rule::different($field));
     }
 
     /**
@@ -220,9 +238,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-digits
      */
-    public static function digits(int $count): string
+    public function digits(int $count): self
     {
-        return 'digits:'.$count;
+        return $this->concat(Rule::digits($count));
     }
 
     /**
@@ -230,9 +248,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-digits-between
      */
-    public static function digitsBetween(int $min, int $max): string
+    public function digitsBetween(int $min, int $max): self
     {
-        return sprintf('digits_between:%d,%d', $min, $max);
+        return $this->concat(Rule::digitsBetween($min, $max));
     }
 
     /**
@@ -240,17 +258,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-distinct
      */
-    public static function distinct(bool $strict = false, $ignoreCase = false): string
+    public function distinct(bool $strict = false, $ignoreCase = false): self
     {
-        if ($ignoreCase) {
-            return 'distinct:ignore_case';
-        }
-
-        if ($strict) {
-            return 'distinct:strict';
-        }
-
-        return 'distinct';
+        return $this->concat(Rule::distinct($strict, $ignoreCase));
     }
 
     /**
@@ -258,13 +268,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-email
      */
-    public static function email(string ...$validator): string
+    public function email(string ...$validator): self
     {
-        if (count($validator)) {
-            return 'email:'.implode(',', $validator);
-        }
-
-        return 'email';
+        return $this->concat(Rule::email(...$validator));
     }
 
     /**
@@ -272,9 +278,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-ends-with
      */
-    public static function endsWith(string ...$value): string
+    public function endsWith(string ...$value): self
     {
-        return 'ends_with:'.implode(',', $value);
+        return $this->concat(Rule::endsWith(...$value));
     }
 
     /**
@@ -283,9 +289,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-exclude-if
      */
-    public static function excludeIf(string $anotherField, ?string $value): string
+    public function excludeIf(string $anotherField, ?string $value): self
     {
-        return sprintf('exclude_if:%s,%s', $anotherField, $value ?? 'null');
+        return $this->concat(Rule::excludeIf($anotherField, $value));
     }
 
     /**
@@ -294,9 +300,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-exclude-unless
      */
-    public static function excludeUnless(string $anotherField, ?string $value): string
+    public function excludeUnless(string $anotherField, ?string $value): self
     {
-        return sprintf('exclude_unless:%s,%s', $anotherField, $value ?? 'null');
+        return $this->concat(Rule::excludeUnless($anotherField, $value));
     }
 
     /**
@@ -304,9 +310,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-file
      */
-    public static function file(): string
+    public function file(): self
     {
-        return 'file';
+        return $this->concat(Rule::file());
     }
 
     /**
@@ -314,9 +320,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-filled
      */
-    public static function filled(): string
+    public function filled(): self
     {
-        return 'filled';
+        return $this->concat(Rule::filled());
     }
 
     /**
@@ -324,9 +330,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-gt
      */
-    public static function gt(string $field): string
+    public function gt(string $field): self
     {
-        return 'gt:'.$field;
+        return $this->concat(Rule::gt($field));
     }
 
     /**
@@ -334,9 +340,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-gte
      */
-    public static function gte(string $field): string
+    public function gte(string $field): self
     {
-        return 'gte:'.$field;
+        return $this->concat(Rule::gte($field));
     }
 
     /**
@@ -344,9 +350,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-image
      */
-    public static function image(): string
+    public function image(): self
     {
-        return 'image';
+        return $this->concat(Rule::image());
     }
 
     /**
@@ -354,9 +360,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-in-array
      */
-    public static function inArray(string $anotherField): string
+    public function inArray(string $anotherField): self
     {
-        return 'in_array:'.$anotherField;
+        return $this->concat(Rule::inArray($anotherField));
     }
 
     /**
@@ -367,9 +373,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-integer
      */
-    public static function integer(): string
+    public function integer(): self
     {
-        return 'integer';
+        return $this->concat(Rule::integer());
     }
 
     /**
@@ -377,9 +383,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-ip
      */
-    public static function ip(): string
+    public function ip(): self
     {
-        return 'ip';
+        return $this->concat(Rule::ip());
     }
 
     /**
@@ -387,9 +393,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-ipv4
      */
-    public static function ipv4(): string
+    public function ipv4(): self
     {
-        return 'ipv4';
+        return $this->concat(Rule::ipv4());
     }
 
     /**
@@ -397,9 +403,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-ipv6
      */
-    public static function ipv6(): string
+    public function ipv6(): self
     {
-        return 'ipv6';
+        return $this->concat(Rule::ipv6());
     }
 
     /**
@@ -407,9 +413,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-json
      */
-    public static function json(): string
+    public function json(): self
     {
-        return 'json';
+        return $this->concat(Rule::json());
     }
 
     /**
@@ -417,9 +423,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-lt
      */
-    public static function lt(string $field): string
+    public function lt(string $field): self
     {
-        return 'lt:'.$field;
+        return $this->concat(Rule::lt($field));
     }
 
     /**
@@ -427,9 +433,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-lte
      */
-    public static function lte(string $field): string
+    public function lte(string $field): self
     {
-        return 'lte:'.$field;
+        return $this->concat(Rule::lte($field));
     }
 
     /**
@@ -437,9 +443,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-max
      */
-    public static function max(string $value): string
+    public function max(string $value): self
     {
-        return 'max:'.$value;
+        return $this->concat(Rule::max($value));
     }
 
     /**
@@ -448,9 +454,9 @@ trait BuildsDefaultRules
      * @link https://laravel.com/docs/8.x/validation#rule-mimes
      * @link https://svn.apache.org/repos/asf/httpd/httpd/trunk/docs/conf/mime.types
      */
-    public static function mimes(string ...$extension): string
+    public function mimes(string ...$extension): self
     {
-        return 'mimes:'.implode(',', $extension);
+        return $this->concat(Rule::mimes(...$extension));
     }
 
     /**
@@ -458,9 +464,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-mimetypes
      */
-    public static function mimetypes(string ...$mimeType): string
+    public function mimetypes(string ...$mimeType): self
     {
-        return 'mimetypes:'.implode(',', $mimeType);
+        return $this->concat(Rule::mimetypes(...$mimeType));
     }
 
     /**
@@ -468,9 +474,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-min
      */
-    public static function min(string $value): string
+    public function min(string $value): self
     {
-        return 'min:'.$value;
+        return $this->concat(Rule::min($value));
     }
 
     /**
@@ -478,9 +484,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#multiple-of
      */
-    public static function multipleOf(string $value): string
+    public function multipleOf(string $value): self
     {
-        return 'multiple_of:'.$value;
+        return $this->concat(Rule::multipleOf($value));
     }
 
     /**
@@ -488,9 +494,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-not-regex
      */
-    public static function notRegex(string $pattern): string
+    public function notRegex(string $pattern): self
     {
-        return 'not_regex:'.$pattern;
+        return $this->concat(Rule::notRegex($pattern));
     }
 
     /**
@@ -498,9 +504,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-nullable
      */
-    public static function nullable(): string
+    public function nullable(): self
     {
-        return 'nullable';
+        return $this->concat(Rule::nullable());
     }
 
     /**
@@ -509,9 +515,9 @@ trait BuildsDefaultRules
      * @link https://laravel.com/docs/8.x/validation#rule-numeric
      * @link https://www.php.net/manual/en/function.is-numeric.php
      */
-    public static function numeric(): string
+    public function numeric(): self
     {
-        return 'numeric';
+        return $this->concat(Rule::numeric());
     }
 
     /**
@@ -520,9 +526,9 @@ trait BuildsDefaultRules
      * @link https://laravel.com/docs/8.x/validation#rule-password
      * @deprecated To be removed in 9.0, use currentPassword instead.
      */
-    public static function password(): string
+    public function password(): self
     {
-        return 'password';
+        return $this->concat(Rule::password());
     }
 
     /**
@@ -530,9 +536,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-present
      */
-    public static function present(): string
+    public function present(): self
     {
-        return 'present';
+        return $this->concat(Rule::present());
     }
 
     /**
@@ -540,9 +546,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-prohibited
      */
-    public static function prohibited(): string
+    public function prohibited(): self
     {
-        return 'prohibited';
+        return $this->concat(Rule::prohibited());
     }
 
     /**
@@ -550,9 +556,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-prohibited-if
      */
-    public static function prohibitedIf(string $anotherField, string ...$value): string
+    public function prohibitedIf(string $anotherField, string ...$value): self
     {
-        return sprintf('prohibited_if:%s,%s', $anotherField, implode(',', $value));
+        return $this->concat(Rule::prohibitedIf($anotherField, ...$value));
     }
 
     /**
@@ -560,9 +566,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-prohibited-unless
      */
-    public static function prohibitedUnless(string $anotherField, string ...$value): string
+    public function prohibitedUnless(string $anotherField, string ...$value): self
     {
-        return sprintf('prohibited_unless:%s,%s', $anotherField, implode(',', $value));
+        return $this->concat(Rule::prohibitedUnless($anotherField, ...$value));
     }
 
     /**
@@ -570,9 +576,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-regex
      */
-    public static function regex(string $pattern): string
+    public function regex(string $pattern): self
     {
-        return 'regex:'.$pattern;
+        return $this->concat(Rule::regex($pattern));
     }
 
     /**
@@ -580,9 +586,25 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-required
      */
-    public static function required(): string
+    public function required(): self
     {
-        return 'required';
+        return $this->concat(Rule::required());
+    }
+
+    /**
+     * The field must be present if all the criteria are true.
+     */
+    public function requiredIfAll(RequiredIf ...$rules): self
+    {
+        return $this->concat(Rule::requiredIfAll(...$rules));
+    }
+
+    /**
+     * The field must be present if any of the criteria are true.
+     */
+    public function requiredIfAny(RequiredIf ...$rules): self
+    {
+        return $this->concat(Rule::requiredIfAny(...$rules));
     }
 
     /**
@@ -590,9 +612,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-required-if
      */
-    public static function requiredIfAnyValue(string $anotherField, string ...$value): string
+    public function requiredIfAnyValue(string $anotherField, string ...$value): self
     {
-        return sprintf('required_if:%s,%s', $anotherField, implode(',', $value));
+        return $this->concat(Rule::requiredIfAnyValue($anotherField, ...$value));
     }
 
     /**
@@ -601,9 +623,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-required-unless
      */
-    public static function requiredUnless(string $anotherField, string ...$value): string
+    public function requiredUnless(string $anotherField, string ...$value): self
     {
-        return sprintf('required_unless:%s,%s', $anotherField, implode(',', $value));
+        return $this->concat(Rule::requiredUnless($anotherField, ...$value));
     }
 
     /**
@@ -612,9 +634,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-required-with
      */
-    public static function requiredWith(string ...$field): string
+    public function requiredWith(string ...$field): self
     {
-        return 'required_with:'.implode(',', $field);
+        return $this->concat(Rule::requiredWith(...$field));
     }
 
     /**
@@ -623,9 +645,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-required-with-all
      */
-    public static function requiredWithAll(string ...$field): string
+    public function requiredWithAll(string ...$field): self
     {
-        return 'required_with_all:'.implode(',', $field);
+        return $this->concat(Rule::requiredWithAll(...$field));
     }
 
     /**
@@ -634,9 +656,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-required-without
      */
-    public static function requiredWithout(string ...$field): string
+    public function requiredWithout(string ...$field): self
     {
-        return 'required_without:'.implode(',', $field);
+        return $this->concat(Rule::requiredWithout(...$field));
     }
 
     /**
@@ -645,9 +667,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-required-without-all
      */
-    public static function requiredWithoutAll(string ...$field): string
+    public function requiredWithoutAll(string ...$field): self
     {
-        return 'required_without_all:'.implode(',', $field);
+        return $this->concat(Rule::requiredWithoutAll(...$field));
     }
 
     /**
@@ -655,9 +677,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-same
      */
-    public static function same(string $field): string
+    public function same(string $field): self
     {
-        return 'same:'.$field;
+        return $this->concat(Rule::same($field));
     }
 
     /**
@@ -665,9 +687,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-size
      */
-    public static function size(string $value): string
+    public function size(string $value): self
     {
-        return 'size:'.$value;
+        return $this->concat(Rule::size($value));
     }
 
     /**
@@ -677,9 +699,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#validating-when-present
      */
-    public static function sometimes(): string
+    public function sometimes(): self
     {
-        return 'sometimes';
+        return $this->concat(Rule::sometimes());
     }
 
     /**
@@ -687,9 +709,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-starts-with
      */
-    public static function startsWith(string ...$value): string
+    public function startsWith(string ...$value): self
     {
-        return 'starts_with:'.implode(',', $value);
+        return $this->concat(Rule::startsWith(...$value));
     }
 
     /**
@@ -697,9 +719,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-string
      */
-    public static function string(): string
+    public function string(): self
     {
-        return 'string';
+        return $this->concat(Rule::string());
     }
 
     /**
@@ -708,9 +730,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-timezone
      */
-    public static function timezone(): string
+    public function timezone(): self
     {
-        return 'timezone';
+        return $this->concat(Rule::timezone());
     }
 
     /**
@@ -718,9 +740,9 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-url
      */
-    public static function url(): string
+    public function url(): self
     {
-        return 'url';
+        return $this->concat(Rule::url());
     }
 
     /**
@@ -728,26 +750,8 @@ trait BuildsDefaultRules
      *
      * @link https://laravel.com/docs/8.x/validation#rule-uuid
      */
-    public static function uuid(): string
+    public function uuid(): self
     {
-        return 'uuid';
-    }
-
-    /**
-     * @param string|DateTimeInterface $date
-     * @param string $format
-     * @return string
-     */
-    private static function convertDateForRule($date, string $format = DateTimeInterface::RFC3339): string
-    {
-        if (is_string($date)) {
-            return $date;
-        }
-
-        if ($date instanceof DateTimeInterface) {
-            return $date->format($format);
-        }
-
-        throw new InvalidArgumentException('Invalid date type supplied');
+        return $this->concat(Rule::uuid());
     }
 }
