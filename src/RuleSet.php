@@ -545,6 +545,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function password(): self
     {
+        /** @noinspection PhpDeprecationInspection */
         return $this->concat(Rule::password());
     }
 
