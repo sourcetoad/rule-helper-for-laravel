@@ -18,16 +18,33 @@ class RuleSet implements Contracts\RuleSet, Arrayable
         $this->rules = collect($rules);
     }
 
+    /**
+     * Get the rule set as an array.
+     *
+     * @return array
+     */
     public function toArray(): array
     {
         return $this->rules->toArray();
     }
 
+    /**
+     * Create a new rule set.
+     *
+     * @param array $rules
+     * @return static
+     */
     public static function create(array $rules = []): self
     {
         return new static($rules);
     }
 
+    /**
+     * Append one or more rules to the end of the rule set.
+     *
+     * @param  \Illuminate\Contracts\Validation\Rule|string $rule
+     * @return $this
+     */
     public function concat(...$rule): self
     {
         $this->rules->push(...$rule);
