@@ -7,12 +7,48 @@ namespace Sourcetoad\RuleHelper\Tests\Unit;
 use Carbon\CarbonImmutable;
 use DateTime;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\RequiredIf;
 use Sourcetoad\RuleHelper\Rule;
+use Sourcetoad\RuleHelper\Support\Facades\RuleSet;
 use Sourcetoad\RuleHelper\Tests\TestCase;
 
+/**
+ * @covers \Sourcetoad\RuleHelper\Rule
+ * @covers \Sourcetoad\RuleHelper\RuleSet
+ * @covers \Sourcetoad\RuleHelper\ServiceProvider
+ * @covers \Sourcetoad\RuleHelper\Support\Facades\RuleSet
+ */
 class RuleTest extends TestCase
 {
+    /**
+     * @dataProvider ruleDataProvider
+     */
+    public function testRuleIntegration($data, callable $rules, bool $fails, ?array $errors = null): void
+    {
+        // Arrange
+        if (!is_array($data)) {
+            $data = ['field' => $data];
+        }
+
+        $rules = $rules();
+        if (!is_array($rules)) {
+            $rules = ['field' => $rules];
+        }
+
+        $validator = Validator::make($data, $rules);
+
+        // Act
+        $validatorFailed = $validator->fails();
+
+        // Assert
+        $this->assertEquals($fails, $validatorFailed, 'Failed asserting that validator failed.');
+
+        if ($errors) {
+            $this->assertEquals($errors, $validator->errors()->toArray());
+        }
+    }
+
     /**
      * @dataProvider requireIfProvider
      */
@@ -29,7 +65,7 @@ class RuleTest extends TestCase
         $validatorFailed = $validator->fails();
 
         // Assert
-        $this->assertEquals($fails, $validatorFailed);
+        $this->assertEquals($fails, $validatorFailed, 'Failed asserting that validator failed.');
     }
 
     /**
@@ -48,7 +84,7 @@ class RuleTest extends TestCase
         $validatorFailed = $validator->fails();
 
         // Assert
-        $this->assertEquals($fails, $validatorFailed);
+        $this->assertEquals($fails, $validatorFailed, 'Failed asserting that validator failed.');
     }
 
     public function requireIfProvider(): array
@@ -218,6 +254,151 @@ class RuleTest extends TestCase
                     CarbonImmutable::create(2021, 1, 1, 9, 55, 0, 'America/New_York')
                 ),
                 'fails' => true,
+            ],
+        ];
+    }
+
+    public function ruleDataProvider(): array
+    {
+        return [
+            'accepted valid' => [
+                'data' => '1',
+                'rules' => fn() => RuleSet::create()->accepted(),
+                'fails' => false,
+            ],
+            'accepted invalid' => [
+                'data' => '',
+                'rules' => fn() => RuleSet::create()->accepted(),
+                'fails' => true,
+            ],
+            'activeUrl valid' => [
+                'data' => 'https://www.example.com/',
+                'rules' => fn() => RuleSet::create()->activeUrl(),
+                'fails' => false,
+            ],
+            'activeUrl invalid' => [
+                'data' => 'https://'.str_repeat((string)Str::uuid(), 3).'/',
+                'rules' => fn() => RuleSet::create()->activeUrl(),
+                'fails' => true,
+            ],
+            'after valid' => [
+                'data' => '2021-01-02',
+                'rules' => fn() => RuleSet::create()->after('2021-01-01'),
+                'fails' => false,
+            ],
+            'after invalid' => [
+                'data' => '2021-01-01',
+                'rules' => fn() => RuleSet::create()->after('2021-01-01'),
+                'fails' => true,
+            ],
+            'after valid with DateTime' => [
+                'data' => '2021-01-02',
+                'rules' => fn() => RuleSet::create()->after(new DateTime('2021-01-01')),
+                'fails' => false,
+            ],
+            'after invalid with DateTime' => [
+                'data' => '2021-01-01',
+                'rules' => fn() => RuleSet::create()->after(new DateTime('2021-01-01')),
+                'fails' => true,
+            ],
+            'after valid with Carbon' => [
+                'data' => '2021-01-02',
+                'rules' => fn() => RuleSet::create()->after(CarbonImmutable::parse('2021-01-01')),
+                'fails' => false,
+            ],
+            'after invalid with Carbon' => [
+                'data' => '2021-01-01',
+                'rules' => fn() => RuleSet::create()->after(CarbonImmutable::parse('2021-01-01')),
+                'fails' => true,
+            ],
+            'afterOrEqual valid' => [
+                'data' => '2021-01-02',
+                'rules' => fn() => RuleSet::create()->afterOrEqual('2021-01-02'),
+                'fails' => false,
+            ],
+            'afterOrEqual invalid' => [
+                'data' => '2021-01-01',
+                'rules' => fn() => RuleSet::create()->afterOrEqual('2021-01-02'),
+                'fails' => true,
+            ],
+            'afterOrEqual valid with DateTime' => [
+                'data' => '2021-01-02',
+                'rules' => fn() => RuleSet::create()->afterOrEqual(new DateTime('2021-01-02')),
+                'fails' => false,
+            ],
+            'afterOrEqual invalid with DateTime' => [
+                'data' => '2021-01-01',
+                'rules' => fn() => RuleSet::create()->afterOrEqual(new DateTime('2021-01-02')),
+                'fails' => true,
+            ],
+            'alpha valid' => [
+                'data' => 'alpha',
+                'rules' => fn() => RuleSet::create()->alpha(),
+                'fails' => false,
+            ],
+            'alpha invalid' => [
+                'data' => 'not-alpha',
+                'rules' => fn() => RuleSet::create()->alpha(),
+                'fails' => true,
+            ],
+            'alphaDash valid' => [
+                'data' => 'still-alpha',
+                'rules' => fn() => RuleSet::create()->alphaDash(),
+                'fails' => false,
+            ],
+            'alphaDash invalid' => [
+                'data' => 'not/alpha',
+                'rules' => fn() => RuleSet::create()->alphaDash(),
+                'fails' => true,
+            ],
+            'alphaNum valid' => [
+                'data' => 'alpha1',
+                'rules' => fn() => RuleSet::create()->alphaNum(),
+                'fails' => false,
+            ],
+            'alphaNum invalid' => [
+                'data' => 'not-alpha1',
+                'rules' => fn() => RuleSet::create()->alphaNum(),
+                'fails' => true,
+            ],
+            'array valid' => [
+                'data' => [
+                    'field' => ['value'],
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->array(),
+                ],
+                'fails' => false,
+            ],
+            'array invalid' => [
+                'data' => [
+                    'field' => 'value',
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->array(),
+                ],
+                'fails' => true,
+            ],
+            'bail not set' => [
+                'data' => 11,
+                'rules' => fn() => RuleSet::create()->max('1')->string(),
+                'fails' => true,
+                'errors' => [
+                    'field' => [
+                        'The field must not be greater than 1 characters.',
+                        'The field must be a string.',
+                    ],
+                ],
+            ],
+            'bail set' => [
+                'data' => 11,
+                'rules' => fn() => RuleSet::create()->bail()->max('1')->string(),
+                'fails' => true,
+                'errors' => [
+                    'field' => [
+                        'The field must not be greater than 1 characters.',
+                    ],
+                ],
             ],
         ];
     }
