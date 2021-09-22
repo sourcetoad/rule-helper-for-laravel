@@ -208,6 +208,24 @@ class RuleTest extends TestCase
                 ],
                 'fails' => true,
             ],
+            'array with keys valid' => [
+                'data' => [
+                    'field' => ['key1' => 'value1', 'key2' => 'value2'],
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->array('key1', 'key2'),
+                ],
+                'fails' => false,
+            ],
+            'array with keys invalid' => [
+                'data' => [
+                    'field' => ['key1' => 'value1', 'key3' => 'value3'],
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->array('key1', 'key2'),
+                ],
+                'fails' => true,
+            ],
             'bail not set' => [
                 'data' => 11,
                 'rules' => fn() => RuleSet::create()->max(1)->string(),
