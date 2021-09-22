@@ -440,7 +440,7 @@ class Rule extends LaravelRule
      *
      * @link https://laravel.com/docs/8.x/validation#rule-max
      */
-    public static function max(string $value): string
+    public static function max(int $value): string
     {
         return 'max:'.$value;
     }

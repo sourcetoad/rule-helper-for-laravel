@@ -49,7 +49,7 @@ interface RuleSet
     public function json(): self;
     public function lt(string $field): self;
     public function lte(string $field): self;
-    public function max(string $value): self;
+    public function max(int $value): self;
     public function mimes(string ...$extension): self;
     public function mimetypes(string ...$mimeType): self;
     public function min(string $value): self;

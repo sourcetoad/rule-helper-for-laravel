@@ -210,7 +210,7 @@ class RuleTest extends TestCase
             ],
             'bail not set' => [
                 'data' => 11,
-                'rules' => fn() => RuleSet::create()->max('1')->string(),
+                'rules' => fn() => RuleSet::create()->max(1)->string(),
                 'fails' => true,
                 'errors' => [
                     'field' => [
@@ -221,7 +221,7 @@ class RuleTest extends TestCase
             ],
             'bail set' => [
                 'data' => 11,
-                'rules' => fn() => RuleSet::create()->bail()->max('1')->string(),
+                'rules' => fn() => RuleSet::create()->bail()->max(1)->string(),
                 'fails' => true,
                 'errors' => [
                     'field' => [

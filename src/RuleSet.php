@@ -460,7 +460,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      *
      * @link https://laravel.com/docs/8.x/validation#rule-max
      */
-    public function max(string $value): self
+    public function max(int $value): self
     {
         return $this->concat(Rule::max($value));
     }
