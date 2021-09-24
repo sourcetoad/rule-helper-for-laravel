@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="rule-helper-for-laravel">
+    <arg name="colors"/>
+
+    <file>./src</file>
+    <file>./tests</file>
+
+    <exclude-pattern>*/vendor/*</exclude-pattern>
+
+    <rule ref="PSR2" />
+</ruleset>
