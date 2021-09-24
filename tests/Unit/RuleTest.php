@@ -54,6 +54,23 @@ class RuleTest extends TestCase
     }
 
     /**
+     * @dataProvider excludeProvider
+     */
+    public function testExcludeRuleIntegration($data, \Closure $rules, array $expected): void
+    {
+        // Arrange
+        $rules = $rules->call($this);
+        $validator = Validator::make($data, $rules);
+
+        // Act
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $valid = $validator->validate();
+
+        // Assert
+        $this->assertEqualsCanonicalizing($expected, $valid);
+    }
+
+    /**
      * @dataProvider requireIfProvider
      */
     public function testRequiredIfExtensions(string $data, RequiredIf $rule, bool $fails): void
@@ -616,6 +633,66 @@ class RuleTest extends TestCase
                 'data' => 1,
                 'rules' => fn() => RuleSet::create()->string(),
                 'fails' => true,
+            ],
+        ];
+    }
+
+    public function excludeProvider(): array
+    {
+        return [
+            'excludeIf match' => [
+                'data' => [
+                    'field-a' => 'a',
+                    'field-b' => 'b',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->excludeIf('field-b', 'b'),
+                    'field-b' => RuleSet::create(),
+                ],
+                'expected' => [
+                    'field-b' => 'b',
+                ],
+            ],
+            'excludeIf not matched' => [
+                'data' => [
+                    'field-a' => 'a',
+                    'field-b' => 'c',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->excludeIf('field-b', 'b'),
+                    'field-b' => RuleSet::create(),
+                ],
+                'expected' => [
+                    'field-a' => 'a',
+                    'field-b' => 'c',
+                ],
+            ],
+            'excludeUnless match' => [
+                'data' => [
+                    'field-a' => 'a',
+                    'field-b' => 'b',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->excludeUnless('field-b', 'b'),
+                    'field-b' => RuleSet::create(),
+                ],
+                'expected' => [
+                    'field-a' => 'a',
+                    'field-b' => 'b',
+                ],
+            ],
+            'excludeUnless not matched' => [
+                'data' => [
+                    'field-a' => 'a',
+                    'field-b' => 'c',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->excludeUnless('field-b', 'b'),
+                    'field-b' => RuleSet::create(),
+                ],
+                'expected' => [
+                    'field-b' => 'c',
+                ],
             ],
         ];
     }
