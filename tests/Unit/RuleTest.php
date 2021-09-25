@@ -16,6 +16,7 @@ use Illuminate\Validation\Rules\RequiredIf;
 use Sourcetoad\RuleHelper\Rule;
 use Sourcetoad\RuleHelper\Support\Facades\RuleSet;
 use Sourcetoad\RuleHelper\Tests\TestCase;
+use Symfony\Component\HttpFoundation\File\File;
 
 /**
  * @covers \Sourcetoad\RuleHelper\Rule
@@ -598,8 +599,183 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->endsWith('a', 'b', 'c'),
                 'fails' => true,
             ],
-
-
+            'file valid' => [
+                'data' => new File(__FILE__),
+                'rules' => fn() => RuleSet::create()->file(),
+                'fails' => false,
+            ],
+            'file invalid' => [
+                'data' => 'not a file',
+                'rules' => fn() => RuleSet::create()->file(),
+                'fails' => true,
+            ],
+            'filled valid' => [
+                'data' => 'content',
+                'rules' => fn() => RuleSet::create()->filled(),
+                'fails' => false,
+            ],
+            'filled invalid' => [
+                'data' => '',
+                'rules' => fn() => RuleSet::create()->filled(),
+                'fails' => true,
+            ],
+            'gt valid' => [
+                'data' => [
+                    'field-a' => '2',
+                    'field-b' => '1',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->gt('field-b'),
+                ],
+                'fails' => false,
+            ],
+            'gt invalid' => [
+                'data' => [
+                    'field-a' => '1',
+                    'field-b' => '2',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->gt('field-b'),
+                ],
+                'fails' => true,
+            ],
+            'gte valid' => [
+                'data' => [
+                    'field-a' => '1',
+                    'field-b' => '1',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->gte('field-b'),
+                ],
+                'fails' => false,
+            ],
+            'gte invalid' => [
+                'data' => [
+                    'field-a' => '1',
+                    'field-b' => '2',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->gte('field-b'),
+                ],
+                'fails' => true,
+            ],
+            // TODO image
+            'inArray valid' => [
+                'data' => [
+                    'field-a' => 'a',
+                    'field-b' => ['a', 'b', 'c'],
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->inArray('field-b.*'),
+                ],
+                'fails' => false,
+            ],
+            'inArray invalid' => [
+                'data' => [
+                    'field-a' => 'd',
+                    'field-b' => ['a', 'b', 'c'],
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->inArray('field-b.*'),
+                ],
+                'fails' => true,
+            ],
+            'integer valid' => [
+                'data' => '1',
+                'rules' => fn() => RuleSet::create()->integer(),
+                'fails' => false,
+            ],
+            'integer invalid' => [
+                'data' => 'a',
+                'rules' => fn() => RuleSet::create()->integer(),
+                'fails' => true,
+            ],
+            'ip valid' => [
+                'data' => [
+                    'field-a' => '127.0.0.1',
+                    'field-b' => '::1',
+                ],
+                'rules' => fn() => [
+                    'field-a' => fn() => RuleSet::create()->ip(),
+                    'field-b' => fn() => RuleSet::create()->ip(),
+                ],
+                'fails' => false,
+            ],
+            'ip invalid' => [
+                'data' => 'not an ip',
+                'rules' => fn() => RuleSet::create()->ip(),
+                'fails' => true,
+            ],
+            'ipv4 valid' => [
+                'data' => '127.0.0.1',
+                'rules' => fn() => RuleSet::create()->ipv4(),
+                'fails' => false,
+            ],
+            'ipv4 invalid' => [
+                'data' => '::1',
+                'rules' => fn() => RuleSet::create()->ipv4(),
+                'fails' => true,
+            ],
+            'ipv6 valid' => [
+                'data' => '::1',
+                'rules' => fn() => RuleSet::create()->ipv6(),
+                'fails' => false,
+            ],
+            'ipv6 invalid' => [
+                'data' => '127.0.0.1',
+                'rules' => fn() => RuleSet::create()->ipv6(),
+                'fails' => true,
+            ],
+            'json valid' => [
+                'data' => '{"a":1}',
+                'rules' => fn() => RuleSet::create()->json(),
+                'fails' => false,
+            ],
+            'json invalid' => [
+                'data' => '{"a":',
+                'rules' => fn() => RuleSet::create()->json(),
+                'fails' => true,
+            ],
+            'lt valid' => [
+                'data' => [
+                    'field-a' => '1',
+                    'field-b' => '2',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->lt('field-b'),
+                ],
+                'fails' => false,
+            ],
+            'lt invalid' => [
+                'data' => [
+                    'field-a' => '2',
+                    'field-b' => '1',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->lt('field-b'),
+                ],
+                'fails' => true,
+            ],
+            'lte valid' => [
+                'data' => [
+                    'field-a' => '1',
+                    'field-b' => '1',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->lte('field-b'),
+                ],
+                'fails' => false,
+            ],
+            'lte invalid' => [
+                'data' => [
+                    'field-a' => '2',
+                    'field-b' => '1',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->lte('field-b'),
+                ],
+                'fails' => true,
+            ],
             'max valid with string' => [
                 'data' => str_repeat('.', 10),
                 'rules' => fn() => RuleSet::create()->max(10),
@@ -624,6 +800,51 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->max(2),
                 'fails' => true,
             ],
+            // TODO mimes
+            // TODO mimetypes
+            // TODO min
+            // TODO multipleOf
+            // TODO notRegex
+            // TODO nullable
+            // TODO numeric
+            // TODO password
+            // TODO present
+            // TODO prohibited
+            // TODO prohibitedIf
+            // TODO prohibitedUnless
+            // TODO regex
+            // TODO required
+            // TODO requiredIfAll
+            // TODO requiredIfAny
+            // TODO requiredIfAnyValue
+            // TODO requiredUnless
+            // TODO requiredWith
+            // TODO requiredWithAll
+            // TODO requiredWithout
+            // TODO requiredWithoutAll
+            // TODO same
+            // TODO size
+            // TODO sometimes
+            'startsWith valid' => [
+                'data' => 'string',
+                'rules' => fn() => RuleSet::create()->startsWith('s'),
+                'fails' => false,
+            ],
+            'startsWith invalid' => [
+                'data' => 'string',
+                'rules' => fn() => RuleSet::create()->startsWith('a'),
+                'fails' => true,
+            ],
+            'startsWith any valid' => [
+                'data' => 'c-string',
+                'rules' => fn() => RuleSet::create()->startsWith('a', 'b', 'c'),
+                'fails' => false,
+            ],
+            'startsWith any invalid' => [
+                'data' => 'd-string',
+                'rules' => fn() => RuleSet::create()->startsWith('a', 'b', 'c'),
+                'fails' => true,
+            ],
             'string valid' => [
                 'data' => 'string',
                 'rules' => fn() => RuleSet::create()->string(),
@@ -632,6 +853,36 @@ class RuleTest extends TestCase
             'string invalid' => [
                 'data' => 1,
                 'rules' => fn() => RuleSet::create()->string(),
+                'fails' => true,
+            ],
+            'timezone valid' => [
+                'data' => 'America/New_York',
+                'rules' => fn() => RuleSet::create()->timezone(),
+                'fails' => false,
+            ],
+            'timezone invalid' => [
+                'data' => 'not a timezone',
+                'rules' => fn() => RuleSet::create()->timezone(),
+                'fails' => true,
+            ],
+            'url valid' => [
+                'data' => 'https://example.com',
+                'rules' => fn() => RuleSet::create()->url(),
+                'fails' => false,
+            ],
+            'url invalid' => [
+                'data' => 'not a url',
+                'rules' => fn() => RuleSet::create()->url(),
+                'fails' => true,
+            ],
+            'uuid valid' => [
+                'data' => '4b74310e-3253-49c7-965b-8002ea52432d',
+                'rules' => fn() => RuleSet::create()->uuid(),
+                'fails' => false,
+            ],
+            'uuid invalid' => [
+                'data' => '123456',
+                'rules' => fn() => RuleSet::create()->uuid(),
                 'fails' => true,
             ],
         ];
