@@ -802,29 +802,282 @@ class RuleTest extends TestCase
             ],
             // TODO mimes
             // TODO mimetypes
-            // TODO min
-            // TODO multipleOf
-            // TODO notRegex
-            // TODO nullable
-            // TODO numeric
-            // TODO password
-            // TODO present
-            // TODO prohibited
-            // TODO prohibitedIf
-            // TODO prohibitedUnless
-            // TODO regex
-            // TODO required
-            // TODO requiredIfAll
-            // TODO requiredIfAny
-            // TODO requiredIfAnyValue
-            // TODO requiredUnless
+            'min valid with string' => [
+                'data' => str_repeat('.', 11),
+                'rules' => fn() => RuleSet::create()->min(10),
+                'fails' => false,
+            ],
+            'min invalid with string' => [
+                'data' => str_repeat('.', 9),
+                'rules' => fn() => RuleSet::create()->min(10),
+                'fails' => true,
+            ],
+            'min valid with array' => [
+                'data' => [
+                    'field' => ['a', 'b', 'c'],
+                ],
+                'rules' => fn() => RuleSet::create()->min(3),
+                'fails' => false,
+            ],
+            'min invalid with array' => [
+                'data' => [
+                    'field' => ['a', 'b', 'c'],
+                ],
+                'rules' => fn() => RuleSet::create()->min(4),
+                'fails' => true,
+            ],
+            'multipleOf valid' => [
+                'data' => 9.9,
+                'rules' => fn() => RuleSet::create()->multipleOf(3.3),
+                'fails' => false,
+            ],
+            'multipleOf invalid' => [
+                'data' => 9,
+                'rules' => fn() => RuleSet::create()->multipleOf(2),
+                'fails' => true,
+            ],
+            'notRegex valid' => [
+                'data' => 'value-1',
+                'rules' => fn() => RuleSet::create()->notRegex('/[a-z]+$/'),
+                'fails' => false,
+            ],
+            'notRegex invalid' => [
+                'data' => 'value-a',
+                'rules' => fn() => RuleSet::create()->notRegex('/[a-z]+$/'),
+                'fails' => true,
+            ],
+            'nullable valid' => [
+                'data' => null,
+                'rules' => fn() => RuleSet::create()->nullable()->string(),
+                'fails' => false,
+            ],
+            'nullable invalid' => [
+                'data' => 1,
+                'rules' => fn() => RuleSet::create()->nullable()->string(),
+                'fails' => true,
+            ],
+            'numeric valid' => [
+                'data' => '1.25',
+                'rules' => fn() => RuleSet::create()->numeric(),
+                'fails' => false,
+            ],
+            'numeric invalid' => [
+                'data' => 'a',
+                'rules' => fn() => RuleSet::create()->numeric(),
+                'fails' => true,
+            ],
+            'password valid' => [
+                'data' => 'password-one',
+                'rules' => function () {
+                    $this->mockUserAuth('password-one', null);
+
+                    /** @noinspection PhpDeprecationInspection */
+                    return RuleSet::create()->password();
+                },
+                'fails' => false,
+            ],
+            'password invalid' => [
+                'data' => 'password-one',
+                'rules' => function () {
+                    $this->mockUserAuth('password-two', null);
+
+                    /** @noinspection PhpDeprecationInspection */
+                    return RuleSet::create()->password();
+                },
+                'fails' => true,
+            ],
+            'present valid' => [
+                'data' => [
+                    'field-a' => '',
+                    'field-b' => '',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->present(),
+                ],
+                'fails' => false,
+            ],
+            'present invalid' => [
+                'data' => [
+                    'field-b' => '',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->present(),
+                ],
+                'fails' => true,
+            ],
+            'prohibited valid' => [
+                'data' => [
+                    'field-a' => '',
+                    'field-b' => '',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->prohibited(),
+                ],
+                'fails' => false,
+            ],
+            'prohibited invalid' => [
+                'data' => [
+                    'field-a' => 'a',
+                    'field-b' => '',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->prohibited(),
+                ],
+                'fails' => true,
+            ],
+            'prohibitedIf valid' => [
+                'data' => [
+                    'field-a' => '',
+                    'field-b' => 'b',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->prohibitedIf('field-b', 'a', 'b', 'c'),
+                ],
+                'fails' => false,
+            ],
+            'prohibitedIf invalid' => [
+                'data' => [
+                    'field-a' => 'a',
+                    'field-b' => 'b',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->prohibitedIf('field-b', 'a', 'b', 'c'),
+                ],
+                'fails' => true,
+            ],
+            'prohibitedUnless valid' => [
+                'data' => [
+                    'field-a' => '',
+                    'field-b' => 'd',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->prohibitedUnless('field-b', 'a', 'b', 'c'),
+                ],
+                'fails' => false,
+            ],
+            'prohibitedUnless invalid' => [
+                'data' => [
+                    'field-a' => 'a',
+                    'field-b' => 'd',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->prohibitedUnless('field-b', 'a', 'b', 'c'),
+                ],
+                'fails' => true,
+            ],
+            'regex valid' => [
+                'data' => 'value-a',
+                'rules' => fn() => RuleSet::create()->regex('/[a-z]+$/'),
+                'fails' => false,
+            ],
+            'regex invalid' => [
+                'data' => 'value-1',
+                'rules' => fn() => RuleSet::create()->regex('/[a-z]+$/'),
+                'fails' => true,
+            ],
+            'required valid' => [
+                'data' => 'value',
+                'rules' => fn() => RuleSet::create()->required(),
+                'fails' => false,
+            ],
+            'required invalid' => [
+                'data' => '',
+                'rules' => fn() => RuleSet::create()->required(),
+                'fails' => true,
+            ],
+            'requiredIfAnyValue valid' => [
+                'data' => [
+                    'field-a' => 'a',
+                    'field-b' => 'c',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->requiredIfAnyValue('field-b', 'a', 'b', 'c'),
+                ],
+                'fails' => false,
+            ],
+            'requiredIfAnyValue invalid' => [
+                'data' => [
+                    'field-a' => '',
+                    'field-b' => 'c',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->requiredIfAnyValue('field-b', 'a', 'b', 'c'),
+                ],
+                'fails' => true,
+            ],
+            'requiredUnless valid' => [
+                'data' => [
+                    'field-a' => '',
+                    'field-b' => 'c',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->requiredUnless('field-b', 'a', 'b', 'c'),
+                ],
+                'fails' => false,
+            ],
+            'requiredUnless invalid' => [
+                'data' => [
+                    'field-a' => '',
+                    'field-b' => 'd',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->requiredUnless('field-b', 'a', 'b', 'c'),
+                ],
+                'fails' => true,
+            ],
             // TODO requiredWith
             // TODO requiredWithAll
             // TODO requiredWithout
             // TODO requiredWithoutAll
-            // TODO same
-            // TODO size
-            // TODO sometimes
+            'same valid' => [
+                'data' => [
+                    'field-a' => 'a',
+                    'field-b' => 'a',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->same('field-b'),
+                ],
+                'fails' => false,
+            ],
+            'same invalid' => [
+                'data' => [
+                    'field-a' => 'a',
+                    'field-b' => 'b',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->same('field-b'),
+                ],
+                'fails' => true,
+            ],
+            'size valid' => [
+                'data' => 'str',
+                'rules' => fn() => RuleSet::create()->size(3),
+                'fails' => false,
+            ],
+            'size invalid' => [
+                'data' => 'string',
+                'rules' => fn() => RuleSet::create()->size(3),
+                'fails' => true,
+            ],
+            'sometimes valid' => [
+                'data' => [
+                    'field-b' => 2,
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->sometimes()->string(),
+                ],
+                'fails' => false,
+            ],
+            'sometimes invalid' => [
+                'data' => [
+                    'field-a' => 1,
+                    'field-b' => 2,
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->sometimes()->string(),
+                ],
+                'fails' => true,
+            ],
             'startsWith valid' => [
                 'data' => 'string',
                 'rules' => fn() => RuleSet::create()->startsWith('s'),
