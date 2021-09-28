@@ -52,8 +52,8 @@ interface RuleSet
     public function max(int $value): self;
     public function mimes(string ...$extension): self;
     public function mimetypes(string ...$mimeType): self;
-    public function min(string $value): self;
-    public function multipleOf(string $value): self;
+    public function min(int $value): self;
+    public function multipleOf($value): self;
     public function notRegex(string $pattern): self;
     public function nullable(): self;
     public function numeric(): self;
@@ -73,7 +73,7 @@ interface RuleSet
     public function requiredWithout(string ...$field): self;
     public function requiredWithoutAll(string ...$field): self;
     public function same(string $field): self;
-    public function size(string $value): self;
+    public function size(int $value): self;
     public function sometimes(): self;
     public function startsWith(string ...$value): self;
     public function string(): self;

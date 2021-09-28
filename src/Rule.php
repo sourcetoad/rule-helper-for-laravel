@@ -471,7 +471,7 @@ class Rule extends LaravelRule
      *
      * @link https://laravel.com/docs/8.x/validation#rule-min
      */
-    public static function min(string $value): string
+    public static function min(int $value): string
     {
         return 'min:'.$value;
     }
@@ -479,9 +479,10 @@ class Rule extends LaravelRule
     /**
      * The field under validation must be a multiple of *value*.
      *
+     * @param int|float $value
      * @link https://laravel.com/docs/8.x/validation#multiple-of
      */
-    public static function multipleOf(string $value): string
+    public static function multipleOf($value): string
     {
         return 'multiple_of:'.$value;
     }
@@ -688,7 +689,7 @@ class Rule extends LaravelRule
      *
      * @link https://laravel.com/docs/8.x/validation#rule-size
      */
-    public static function size(string $value): string
+    public static function size(int $value): string
     {
         return 'size:'.$value;
     }

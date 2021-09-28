@@ -491,7 +491,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      *
      * @link https://laravel.com/docs/8.x/validation#rule-min
      */
-    public function min(string $value): self
+    public function min(int $value): self
     {
         return $this->concat(Rule::min($value));
     }
@@ -499,9 +499,10 @@ class RuleSet implements Contracts\RuleSet, Arrayable
     /**
      * The field under validation must be a multiple of *value*.
      *
+     * @param int|float $value
      * @link https://laravel.com/docs/8.x/validation#multiple-of
      */
-    public function multipleOf(string $value): self
+    public function multipleOf($value): self
     {
         return $this->concat(Rule::multipleOf($value));
     }
@@ -705,7 +706,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      *
      * @link https://laravel.com/docs/8.x/validation#rule-size
      */
-    public function size(string $value): self
+    public function size(int $value): self
     {
         return $this->concat(Rule::size($value));
     }
