@@ -74,13 +74,13 @@ class RuleTest extends TestCase
     /**
      * @dataProvider requireIfProvider
      */
-    public function testRequiredIfExtensions(string $data, RequiredIf $rule, bool $fails): void
+    public function testRequiredIfExtensions(string $data, \Closure $rule, bool $fails): void
     {
         // Arrange
         $validator = Validator::make([
             'field' => $data,
         ], [
-            'field' => $rule,
+            'field' => $rule->call($this),
         ]);
 
         // Act
@@ -953,7 +953,7 @@ class RuleTest extends TestCase
         return [
             'requiredIfAny required with no data' => [
                 'data' => '',
-                'rule' => Rule::requiredIfAny(
+                'rule' => fn() => RuleSet::create()->requiredIfAny(
                     Rule::requiredIf(fn() => false),
                     Rule::requiredIf(fn() => true),
                 ),
@@ -961,7 +961,7 @@ class RuleTest extends TestCase
             ],
             'requiredIfAny required with data (callback)' => [
                 'data' => 'not empty',
-                'rule' => Rule::requiredIfAny(
+                'rule' => fn() => RuleSet::create()->requiredIfAny(
                     Rule::requiredIf(fn() => false),
                     Rule::requiredIf(fn() => true),
                 ),
@@ -969,7 +969,7 @@ class RuleTest extends TestCase
             ],
             'requiredIfAny required with data (bool)' => [
                 'data' => 'not empty',
-                'rule' => Rule::requiredIfAny(
+                'rule' => fn() => RuleSet::create()->requiredIfAny(
                     Rule::requiredIf(false),
                     Rule::requiredIf(true),
                 ),
@@ -977,7 +977,7 @@ class RuleTest extends TestCase
             ],
             'requiredIfAny not required' => [
                 'data' => '',
-                'rule' => Rule::requiredIfAny(
+                'rule' => fn() => RuleSet::create()->requiredIfAny(
                     Rule::requiredIf(fn() => false),
                     Rule::requiredIf(fn() => false),
                 ),
@@ -985,7 +985,7 @@ class RuleTest extends TestCase
             ],
             'requiredIfAll required with no data' => [
                 'data' => '',
-                'rule' => Rule::requiredIfAll(
+                'rule' => fn() => RuleSet::create()->requiredIfAll(
                     Rule::requiredIf(fn() => true),
                     Rule::requiredIf(fn() => true),
                 ),
@@ -993,7 +993,7 @@ class RuleTest extends TestCase
             ],
             'requiredIfAll required with data (callback)' => [
                 'data' => 'not empty',
-                'rule' => Rule::requiredIfAll(
+                'rule' => fn() => RuleSet::create()->requiredIfAll(
                     Rule::requiredIf(fn() => true),
                     Rule::requiredIf(fn() => true),
                 ),
@@ -1001,7 +1001,7 @@ class RuleTest extends TestCase
             ],
             'requiredIfAll required with data (bool)' => [
                 'data' => 'not empty',
-                'rule' => Rule::requiredIfAll(
+                'rule' => fn() => RuleSet::create()->requiredIfAll(
                     Rule::requiredIf(true),
                     Rule::requiredIf(true),
                 ),
@@ -1009,7 +1009,7 @@ class RuleTest extends TestCase
             ],
             'requiredIfAll not required (mismatch)' => [
                 'data' => '',
-                'rule' => Rule::requiredIfAll(
+                'rule' => fn() => RuleSet::create()->requiredIfAll(
                     Rule::requiredIf(fn() => false),
                     Rule::requiredIf(fn() => true),
                 ),
@@ -1017,7 +1017,7 @@ class RuleTest extends TestCase
             ],
             'requiredIfAll not required (false)' => [
                 'data' => '',
-                'rule' => Rule::requiredIfAll(
+                'rule' => fn() => RuleSet::create()->requiredIfAll(
                     Rule::requiredIf(fn() => false),
                     Rule::requiredIf(fn() => false),
                 ),
