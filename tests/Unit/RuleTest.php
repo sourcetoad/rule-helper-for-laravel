@@ -12,7 +12,6 @@ use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-use Illuminate\Validation\Rules\RequiredIf;
 use Sourcetoad\RuleHelper\Rule;
 use Sourcetoad\RuleHelper\Support\Facades\RuleSet;
 use Sourcetoad\RuleHelper\Tests\TestCase;
@@ -1025,10 +1024,132 @@ class RuleTest extends TestCase
                 ],
                 'fails' => true,
             ],
-            // TODO requiredWith
-            // TODO requiredWithAll
-            // TODO requiredWithout
-            // TODO requiredWithoutAll
+            'requiredWith valid - required' => [
+                'data' => [
+                    'field-a' => 'a',
+                    'field-b' => 'b',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->requiredWith('field-b'),
+                ],
+                'fails' => false,
+            ],
+            'requiredWith valid - not required' => [
+                'data' => [
+                    'field-a' => '',
+                    'field-b' => '',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->requiredWith('field-b'),
+                ],
+                'fails' => false,
+            ],
+            'requiredWith invalid' => [
+                'data' => [
+                    'field-a' => '',
+                    'field-b' => 'b',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->requiredWith('field-b'),
+                ],
+                'fails' => true,
+            ],
+            'requiredWithAll valid - all' => [
+                'data' => [
+                    'field-a' => 'a',
+                    'field-b' => 'b',
+                    'field-c' => 'c',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->requiredWithAll('field-b', 'field-c'),
+                ],
+                'fails' => false,
+            ],
+            'requiredWithAll valid - not all' => [
+                'data' => [
+                    'field-a' => '',
+                    'field-b' => 'b',
+                    'field-c' => '',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->requiredWithAll('field-b', 'field-c'),
+                ],
+                'fails' => false,
+            ],
+            'requiredWithAll invalid' => [
+                'data' => [
+                    'field-a' => '',
+                    'field-b' => 'b',
+                    'field-c' => 'c',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->requiredWithAll('field-b', 'field-c'),
+                ],
+                'fails' => true,
+            ],
+            'requiredWithout valid - required' => [
+                'data' => [
+                    'field-a' => 'a',
+                    'field-b' => '',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->requiredWithout('field-b'),
+                ],
+                'fails' => false,
+            ],
+            'requiredWithout valid - not required' => [
+                'data' => [
+                    'field-a' => '',
+                    'field-b' => 'b',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->requiredWithout('field-b'),
+                ],
+                'fails' => false,
+            ],
+            'requiredWithout invalid' => [
+                'data' => [
+                    'field-a' => '',
+                    'field-b' => '',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->requiredWithout('field-b'),
+                ],
+                'fails' => true,
+            ],
+            'requiredWithoutAll valid - all' => [
+                'data' => [
+                    'field-a' => 'a',
+                    'field-b' => '',
+                    'field-c' => '',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->requiredWithoutAll('field-b', 'field-c'),
+                ],
+                'fails' => false,
+            ],
+            'requiredWithoutAll valid - not all' => [
+                'data' => [
+                    'field-a' => 'a',
+                    'field-b' => 'b',
+                    'field-c' => '',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->requiredWithoutAll('field-b', 'field-c'),
+                ],
+                'fails' => false,
+            ],
+            'requiredWithoutAll invalid' => [
+                'data' => [
+                    'field-a' => '',
+                    'field-b' => '',
+                    'field-c' => '',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->requiredWithoutAll('field-b', 'field-c'),
+                ],
+                'fails' => true,
+            ],
             'same valid' => [
                 'data' => [
                     'field-a' => 'a',
