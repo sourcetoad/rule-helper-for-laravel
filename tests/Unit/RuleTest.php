@@ -16,6 +16,8 @@ use Sourcetoad\RuleHelper\Rule;
 use Sourcetoad\RuleHelper\Support\Facades\RuleSet;
 use Sourcetoad\RuleHelper\Tests\TestCase;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Mime\MimeTypeGuesserInterface;
+use Symfony\Component\Mime\MimeTypes;
 
 /**
  * @covers \Sourcetoad\RuleHelper\Rule
@@ -658,7 +660,16 @@ class RuleTest extends TestCase
                 ],
                 'fails' => true,
             ],
-            // TODO image
+            'image valid' => [
+                'data' => $this->mockFile('/code/image.jpg'),
+                'rules' => fn() => RuleSet::create()->image(),
+                'fails' => false,
+            ],
+            'image invalid' => [
+                'data' => $this->mockFile('/code/document.pdf'),
+                'rules' => fn() => RuleSet::create()->image(),
+                'fails' => true,
+            ],
             'inArray valid' => [
                 'data' => [
                     'field-a' => 'a',
@@ -799,8 +810,26 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->max(2),
                 'fails' => true,
             ],
-            // TODO mimes
-            // TODO mimetypes
+            'mimes valid' => [
+                'data' => $this->mockFile('/code/document.odf'),
+                'rules' => fn() => RuleSet::create()->mimes('pdf', 'odf'),
+                'fails' => false,
+            ],
+            'mimes invalid' => [
+                'data' => $this->mockFile('/code/document.ppt'),
+                'rules' => fn() => RuleSet::create()->mimes('pdf', 'odf'),
+                'fails' => true,
+            ],
+            'mimetypes valid' => [
+                'data' => $this->mockFile('/code/document.pdf', 'application/pdf'),
+                'rules' => fn() => RuleSet::create()->mimetypes('image/jpg', 'application/pdf'),
+                'fails' => false,
+            ],
+            'mimetypes invalid' => [
+                'data' => $this->mockFile('/code/image.jpg', 'image/jpg'),
+                'rules' => fn() => RuleSet::create()->mimetypes('image/gif'),
+                'fails' => true,
+            ],
             'min valid with string' => [
                 'data' => str_repeat('.', 11),
                 'rules' => fn() => RuleSet::create()->min(10),
@@ -1528,5 +1557,50 @@ class RuleTest extends TestCase
 
         $this->app->instance('auth', $authManager);
         $this->app->instance('hash', $hasher);
+    }
+
+    private function mockFile(string $path, ?string $mimeType = null): File
+    {
+        $extension = pathinfo($path, PATHINFO_EXTENSION);
+
+        if ($mimeType) {
+            // We need to start a new instance in case a guesser was already created for a previous test.
+            $finder = new MimeTypes();
+
+            $finder->registerGuesser(new class implements MimeTypeGuesserInterface {
+                public function isGuesserSupported(): bool
+                {
+                    return true;
+                }
+
+                public function guessMimeType(string $path): ?string
+                {
+                    $types = [
+                        '/code/image.jpg' => 'image/jpg',
+                        '/code/document.pdf' => 'application/pdf',
+                    ];
+
+                    return $types[$path] ?? null;
+                }
+            });
+
+            MimeTypes::setDefault($finder);
+        }
+
+        return new class($path, $extension) extends File {
+            private string $extension;
+
+            public function __construct(string $path, string $extension)
+            {
+                parent::__construct($path, false);
+
+                $this->extension = $extension;
+            }
+
+            public function guessExtension(): string
+            {
+                return $this->extension;
+            }
+        };
     }
 }
