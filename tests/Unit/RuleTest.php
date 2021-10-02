@@ -1567,7 +1567,14 @@ class RuleTest extends TestCase
             // We need to start a new instance in case a guesser was already created for a previous test.
             $finder = new MimeTypes();
 
-            $finder->registerGuesser(new class implements MimeTypeGuesserInterface {
+            $finder->registerGuesser(new class($mimeType) implements MimeTypeGuesserInterface {
+                private string $mimeType;
+
+                public function __construct(string $mimeType)
+                {
+                    $this->mimeType = $mimeType;
+                }
+
                 public function isGuesserSupported(): bool
                 {
                     return true;
@@ -1575,12 +1582,7 @@ class RuleTest extends TestCase
 
                 public function guessMimeType(string $path): ?string
                 {
-                    $types = [
-                        '/code/image.jpg' => 'image/jpg',
-                        '/code/document.pdf' => 'application/pdf',
-                    ];
-
-                    return $types[$path] ?? null;
+                    return $this->mimeType;
                 }
             });
 
