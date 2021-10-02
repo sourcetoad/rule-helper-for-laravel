@@ -33,6 +33,9 @@ class RuleTest extends TestCase
     public function testRuleIntegration($data, \Closure $rules, bool $fails, ?array $errors = null): void
     {
         // Arrange
+        if ($data instanceof \Closure) {
+            $data = $data->call($this);
+        }
         if (!is_array($data)) {
             $data = ['field' => $data];
         }
@@ -661,12 +664,12 @@ class RuleTest extends TestCase
                 'fails' => true,
             ],
             'image valid' => [
-                'data' => $this->mockFile('/code/image.jpg'),
+                'data' => fn() => $this->mockFile('/code/image.jpg'),
                 'rules' => fn() => RuleSet::create()->image(),
                 'fails' => false,
             ],
             'image invalid' => [
-                'data' => $this->mockFile('/code/document.pdf'),
+                'data' => fn() => $this->mockFile('/code/document.pdf'),
                 'rules' => fn() => RuleSet::create()->image(),
                 'fails' => true,
             ],
@@ -811,23 +814,23 @@ class RuleTest extends TestCase
                 'fails' => true,
             ],
             'mimes valid' => [
-                'data' => $this->mockFile('/code/document.odf'),
+                'data' => fn() => $this->mockFile('/code/document.odf'),
                 'rules' => fn() => RuleSet::create()->mimes('pdf', 'odf'),
                 'fails' => false,
             ],
             'mimes invalid' => [
-                'data' => $this->mockFile('/code/document.ppt'),
+                'data' => fn() => $this->mockFile('/code/document.ppt'),
                 'rules' => fn() => RuleSet::create()->mimes('pdf', 'odf'),
                 'fails' => true,
             ],
             'mimetypes valid' => [
-                'data' => $this->mockFile('/code/document.pdf', 'application/pdf'),
+                'data' => fn() => $this->mockFile('/code/document.pdf', 'application/pdf'),
                 'rules' => fn() => RuleSet::create()->mimetypes('image/jpg', 'application/pdf'),
                 'fails' => false,
             ],
             'mimetypes invalid' => [
-                'data' => $this->mockFile('/code/image.jpg', 'image/jpg'),
-                'rules' => fn() => RuleSet::create()->mimetypes('image/gif'),
+                'data' => fn() => $this->mockFile('/code/image.jpg', 'image/jpg'),
+                'rules' => fn() => RuleSet::create()->mimetypes('image/gif', 'application/pdf'),
                 'fails' => true,
             ],
             'min valid with string' => [
