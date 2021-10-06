@@ -4,8 +4,8 @@
     "license": "MIT",
     "minimum-stability": "stable",
     "require": {
-        "php": "^7.4",
-        "laravel/framework": "^8.0"
+        "php": "^7.4|^8.0",
+        "laravel/framework": "^8.47"
     },
     "require-dev": {
         "orchestra/testbench": "^6.19",
