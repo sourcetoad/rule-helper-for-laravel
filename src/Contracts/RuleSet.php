@@ -11,7 +11,7 @@ interface RuleSet
     public static function create(array $rules = []): self;
     public function concat(...$rule): self;
     public function accepted(): self;
-    public function acceptedIf(): self;
+    public function acceptedIf(string $anotherField, string... $value): self;
     public function activeUrl(): self;
     public function after($date): self;
     public function afterOrEqual($date): self;
