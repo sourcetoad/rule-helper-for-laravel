@@ -126,6 +126,36 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->accepted(),
                 'fails' => true,
             ],
+            'acceptedIf accepted' => [
+                'data' => [
+                    'field-a' => '1',
+                    'field-b' => 'B',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->acceptedIf('field-b', 'A', 'B', 'C'),
+                ],
+                'fails' => false,
+            ],
+            'acceptedIf accept not needed' => [
+                'data' => [
+                    'field-a' => '',
+                    'field-b' => 'D',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->acceptedIf('field-b', 'A', 'B', 'C'),
+                ],
+                'fails' => false,
+            ],
+            'acceptedIf invalid' => [
+                'data' => [
+                    'field-a' => '',
+                    'field-b' => 'B',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->acceptedIf('field-b', 'A', 'B'),
+                ],
+                'fails' => true,
+            ],
             'activeUrl valid' => [
                 'data' => 'https://www.example.com/',
                 'rules' => fn() => RuleSet::create()->activeUrl(),
