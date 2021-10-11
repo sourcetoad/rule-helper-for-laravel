@@ -64,6 +64,17 @@ class RuleSet implements Contracts\RuleSet, Arrayable
     }
 
     /**
+     * The field under validation must be "yes", "on", 1, or true if *another field* under validation is equal to a
+     * specified *value*. This is useful for validating "Terms of Service" acceptance or similar fields.
+     *
+     * @link https://laravel.com/docs/8.x/validation#rule-accepted-if
+     */
+    public function acceptedIf(string $anotherField, string ...$value): self
+    {
+        return $this->concat(Rule::acceptedIf($anotherField, ...$value));
+    }
+
+    /**
      * The field under validation must have a valid A or AAAA record according to the *dns_get_record* PHP function.
      *
      * @link https://laravel.com/docs/8.x/validation#rule-active-url

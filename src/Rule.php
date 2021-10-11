@@ -24,6 +24,17 @@ class Rule extends LaravelRule
     }
 
     /**
+     * The field under validation must be "yes", "on", 1, or true if *another field* under validation is equal to a
+     * specified *value*. This is useful for validating "Terms of Service" acceptance or similar fields.
+     *
+     * @link https://laravel.com/docs/8.x/validation#rule-accepted-if
+     */
+    public static function acceptedIf(string $anotherField, string ...$value): string
+    {
+        return sprintf('accepted_if:%s,%s', $anotherField, implode(',', $value));
+    }
+
+    /**
      * The field under validation must have a valid A or AAAA record according to the *dns_get_record* PHP function.
      *
      * @link https://laravel.com/docs/8.x/validation#rule-active-url
