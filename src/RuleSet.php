@@ -53,6 +53,19 @@ class RuleSet implements Contracts\RuleSet, Arrayable
     }
 
     /**
+     * Append a rule to the end of the rule set.
+     *
+     * @param  \Illuminate\Contracts\Validation\Rule|string $rule
+     * @return $this
+     */
+    public function rule($rule): self
+    {
+        $this->rules->push($rule);
+
+        return $this;
+    }
+
+    /**
      * The field under validation must be "yes", "on", 1, or true. This is useful for validating "Terms of Service"
      * acceptance or similar fields.
      *
@@ -60,7 +73,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function accepted(): self
     {
-        return $this->concat(Rule::accepted());
+        return $this->rule(Rule::accepted());
     }
 
     /**
@@ -71,7 +84,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function acceptedIf(string $anotherField, string ...$value): self
     {
-        return $this->concat(Rule::acceptedIf($anotherField, ...$value));
+        return $this->rule(Rule::acceptedIf($anotherField, ...$value));
     }
 
     /**
@@ -81,7 +94,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function activeUrl(): self
     {
-        return $this->concat(Rule::activeUrl());
+        return $this->rule(Rule::activeUrl());
     }
 
     /**
@@ -92,7 +105,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function after($date): self
     {
-        return $this->concat(Rule::after($date));
+        return $this->rule(Rule::after($date));
     }
 
     /**
@@ -103,7 +116,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function afterOrEqual($date): self
     {
-        return $this->concat(Rule::afterOrEqual($date));
+        return $this->rule(Rule::afterOrEqual($date));
     }
 
     /**
@@ -113,7 +126,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function alpha(): self
     {
-        return $this->concat(Rule::alpha());
+        return $this->rule(Rule::alpha());
     }
 
     /**
@@ -123,7 +136,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function alphaDash(): self
     {
-        return $this->concat(Rule::alphaDash());
+        return $this->rule(Rule::alphaDash());
     }
 
     /**
@@ -133,7 +146,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function alphaNum(): self
     {
-        return $this->concat(Rule::alphaNum());
+        return $this->rule(Rule::alphaNum());
     }
 
     /**
@@ -143,7 +156,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function array(string ...$requiredKey): self
     {
-        return $this->concat(Rule::array(...$requiredKey));
+        return $this->rule(Rule::array(...$requiredKey));
     }
 
     /**
@@ -153,7 +166,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function bail(): self
     {
-        return $this->concat(Rule::bail());
+        return $this->rule(Rule::bail());
     }
 
     /**
@@ -164,7 +177,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function before($date): self
     {
-        return $this->concat(Rule::before($date));
+        return $this->rule(Rule::before($date));
     }
 
     /**
@@ -175,7 +188,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function beforeOrEqual($date): self
     {
-        return $this->concat(Rule::beforeOrEqual($date));
+        return $this->rule(Rule::beforeOrEqual($date));
     }
 
     /**
@@ -185,7 +198,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function between(int $min, int $max): self
     {
-        return $this->concat(Rule::between($min, $max));
+        return $this->rule(Rule::between($min, $max));
     }
 
     /**
@@ -195,7 +208,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function boolean(): self
     {
-        return $this->concat(Rule::boolean());
+        return $this->rule(Rule::boolean());
     }
 
     /**
@@ -205,7 +218,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function confirmed(): self
     {
-        return $this->concat(Rule::confirmed());
+        return $this->rule(Rule::confirmed());
     }
 
     /**
@@ -215,7 +228,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function currentPassword(?string $authenticationGuard = null): self
     {
-        return $this->concat(Rule::currentPassword($authenticationGuard));
+        return $this->rule(Rule::currentPassword($authenticationGuard));
     }
 
     /**
@@ -225,7 +238,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function date(): self
     {
-        return $this->concat(Rule::date());
+        return $this->rule(Rule::date());
     }
 
     /**
@@ -236,7 +249,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function dateEquals($date): self
     {
-        return $this->concat(Rule::dateEquals($date));
+        return $this->rule(Rule::dateEquals($date));
     }
 
     /**
@@ -248,7 +261,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function dateFormat(string $dateFormat): self
     {
-        return $this->concat(Rule::dateFormat($dateFormat));
+        return $this->rule(Rule::dateFormat($dateFormat));
     }
 
     /**
@@ -258,7 +271,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function different(string $field): self
     {
-        return $this->concat(Rule::different($field));
+        return $this->rule(Rule::different($field));
     }
 
     /**
@@ -268,7 +281,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function digits(int $count): self
     {
-        return $this->concat(Rule::digits($count));
+        return $this->rule(Rule::digits($count));
     }
 
     /**
@@ -278,7 +291,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function digitsBetween(int $min, int $max): self
     {
-        return $this->concat(Rule::digitsBetween($min, $max));
+        return $this->rule(Rule::digitsBetween($min, $max));
     }
 
     /**
@@ -288,7 +301,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function distinct(bool $strict = false, $ignoreCase = false): self
     {
-        return $this->concat(Rule::distinct($strict, $ignoreCase));
+        return $this->rule(Rule::distinct($strict, $ignoreCase));
     }
 
     /**
@@ -298,7 +311,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function email(string ...$validator): self
     {
-        return $this->concat(Rule::email(...$validator));
+        return $this->rule(Rule::email(...$validator));
     }
 
     /**
@@ -308,7 +321,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function endsWith(string ...$value): self
     {
-        return $this->concat(Rule::endsWith(...$value));
+        return $this->rule(Rule::endsWith(...$value));
     }
 
     /**
@@ -319,7 +332,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function excludeIf(string $anotherField, ?string $value): self
     {
-        return $this->concat(Rule::excludeIf($anotherField, $value));
+        return $this->rule(Rule::excludeIf($anotherField, $value));
     }
 
     /**
@@ -330,7 +343,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function excludeUnless(string $anotherField, ?string $value): self
     {
-        return $this->concat(Rule::excludeUnless($anotherField, $value));
+        return $this->rule(Rule::excludeUnless($anotherField, $value));
     }
 
     /**
@@ -340,7 +353,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function file(): self
     {
-        return $this->concat(Rule::file());
+        return $this->rule(Rule::file());
     }
 
     /**
@@ -350,7 +363,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function filled(): self
     {
-        return $this->concat(Rule::filled());
+        return $this->rule(Rule::filled());
     }
 
     /**
@@ -360,7 +373,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function gt(string $field): self
     {
-        return $this->concat(Rule::gt($field));
+        return $this->rule(Rule::gt($field));
     }
 
     /**
@@ -370,7 +383,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function gte(string $field): self
     {
-        return $this->concat(Rule::gte($field));
+        return $this->rule(Rule::gte($field));
     }
 
     /**
@@ -380,7 +393,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function image(): self
     {
-        return $this->concat(Rule::image());
+        return $this->rule(Rule::image());
     }
 
     /**
@@ -390,7 +403,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function inArray(string $anotherField): self
     {
-        return $this->concat(Rule::inArray($anotherField));
+        return $this->rule(Rule::inArray($anotherField));
     }
 
     /**
@@ -403,7 +416,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function integer(): self
     {
-        return $this->concat(Rule::integer());
+        return $this->rule(Rule::integer());
     }
 
     /**
@@ -413,7 +426,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function ip(): self
     {
-        return $this->concat(Rule::ip());
+        return $this->rule(Rule::ip());
     }
 
     /**
@@ -423,7 +436,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function ipv4(): self
     {
-        return $this->concat(Rule::ipv4());
+        return $this->rule(Rule::ipv4());
     }
 
     /**
@@ -433,7 +446,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function ipv6(): self
     {
-        return $this->concat(Rule::ipv6());
+        return $this->rule(Rule::ipv6());
     }
 
     /**
@@ -443,7 +456,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function json(): self
     {
-        return $this->concat(Rule::json());
+        return $this->rule(Rule::json());
     }
 
     /**
@@ -453,7 +466,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function lt(string $field): self
     {
-        return $this->concat(Rule::lt($field));
+        return $this->rule(Rule::lt($field));
     }
 
     /**
@@ -463,7 +476,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function lte(string $field): self
     {
-        return $this->concat(Rule::lte($field));
+        return $this->rule(Rule::lte($field));
     }
 
     /**
@@ -473,7 +486,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function max(int $value): self
     {
-        return $this->concat(Rule::max($value));
+        return $this->rule(Rule::max($value));
     }
 
     /**
@@ -484,7 +497,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function mimes(string ...$extension): self
     {
-        return $this->concat(Rule::mimes(...$extension));
+        return $this->rule(Rule::mimes(...$extension));
     }
 
     /**
@@ -494,7 +507,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function mimetypes(string ...$mimeType): self
     {
-        return $this->concat(Rule::mimetypes(...$mimeType));
+        return $this->rule(Rule::mimetypes(...$mimeType));
     }
 
     /**
@@ -504,7 +517,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function min(int $value): self
     {
-        return $this->concat(Rule::min($value));
+        return $this->rule(Rule::min($value));
     }
 
     /**
@@ -515,7 +528,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function multipleOf($value): self
     {
-        return $this->concat(Rule::multipleOf($value));
+        return $this->rule(Rule::multipleOf($value));
     }
 
     /**
@@ -525,7 +538,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function notRegex(string $pattern): self
     {
-        return $this->concat(Rule::notRegex($pattern));
+        return $this->rule(Rule::notRegex($pattern));
     }
 
     /**
@@ -535,7 +548,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function nullable(): self
     {
-        return $this->concat(Rule::nullable());
+        return $this->rule(Rule::nullable());
     }
 
     /**
@@ -546,7 +559,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function numeric(): self
     {
-        return $this->concat(Rule::numeric());
+        return $this->rule(Rule::numeric());
     }
 
     /**
@@ -558,7 +571,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
     public function password(): self
     {
         /** @noinspection PhpDeprecationInspection */
-        return $this->concat(Rule::password());
+        return $this->rule(Rule::password());
     }
 
     /**
@@ -568,7 +581,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function present(): self
     {
-        return $this->concat(Rule::present());
+        return $this->rule(Rule::present());
     }
 
     /**
@@ -578,7 +591,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function prohibited(): self
     {
-        return $this->concat(Rule::prohibited());
+        return $this->rule(Rule::prohibited());
     }
 
     /**
@@ -588,7 +601,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function prohibitedIf(string $anotherField, string ...$value): self
     {
-        return $this->concat(Rule::prohibitedIf($anotherField, ...$value));
+        return $this->rule(Rule::prohibitedIf($anotherField, ...$value));
     }
 
     /**
@@ -598,7 +611,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function prohibitedUnless(string $anotherField, string ...$value): self
     {
-        return $this->concat(Rule::prohibitedUnless($anotherField, ...$value));
+        return $this->rule(Rule::prohibitedUnless($anotherField, ...$value));
     }
 
     /**
@@ -608,7 +621,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function regex(string $pattern): self
     {
-        return $this->concat(Rule::regex($pattern));
+        return $this->rule(Rule::regex($pattern));
     }
 
     /**
@@ -618,7 +631,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function required(): self
     {
-        return $this->concat(Rule::required());
+        return $this->rule(Rule::required());
     }
 
     /**
@@ -626,7 +639,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function requiredIfAll(RequiredIf ...$rules): self
     {
-        return $this->concat(Rule::requiredIfAll(...$rules));
+        return $this->rule(Rule::requiredIfAll(...$rules));
     }
 
     /**
@@ -634,7 +647,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function requiredIfAny(RequiredIf ...$rules): self
     {
-        return $this->concat(Rule::requiredIfAny(...$rules));
+        return $this->rule(Rule::requiredIfAny(...$rules));
     }
 
     /**
@@ -644,7 +657,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function requiredIfAnyValue(string $anotherField, string ...$value): self
     {
-        return $this->concat(Rule::requiredIfAnyValue($anotherField, ...$value));
+        return $this->rule(Rule::requiredIfAnyValue($anotherField, ...$value));
     }
 
     /**
@@ -655,7 +668,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function requiredUnless(string $anotherField, string ...$value): self
     {
-        return $this->concat(Rule::requiredUnless($anotherField, ...$value));
+        return $this->rule(Rule::requiredUnless($anotherField, ...$value));
     }
 
     /**
@@ -666,7 +679,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function requiredWith(string ...$field): self
     {
-        return $this->concat(Rule::requiredWith(...$field));
+        return $this->rule(Rule::requiredWith(...$field));
     }
 
     /**
@@ -677,7 +690,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function requiredWithAll(string ...$field): self
     {
-        return $this->concat(Rule::requiredWithAll(...$field));
+        return $this->rule(Rule::requiredWithAll(...$field));
     }
 
     /**
@@ -688,7 +701,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function requiredWithout(string ...$field): self
     {
-        return $this->concat(Rule::requiredWithout(...$field));
+        return $this->rule(Rule::requiredWithout(...$field));
     }
 
     /**
@@ -699,7 +712,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function requiredWithoutAll(string ...$field): self
     {
-        return $this->concat(Rule::requiredWithoutAll(...$field));
+        return $this->rule(Rule::requiredWithoutAll(...$field));
     }
 
     /**
@@ -709,7 +722,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function same(string $field): self
     {
-        return $this->concat(Rule::same($field));
+        return $this->rule(Rule::same($field));
     }
 
     /**
@@ -719,7 +732,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function size(int $value): self
     {
-        return $this->concat(Rule::size($value));
+        return $this->rule(Rule::size($value));
     }
 
     /**
@@ -731,7 +744,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function sometimes(): self
     {
-        return $this->concat(Rule::sometimes());
+        return $this->rule(Rule::sometimes());
     }
 
     /**
@@ -741,7 +754,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function startsWith(string ...$value): self
     {
-        return $this->concat(Rule::startsWith(...$value));
+        return $this->rule(Rule::startsWith(...$value));
     }
 
     /**
@@ -751,7 +764,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function string(): self
     {
-        return $this->concat(Rule::string());
+        return $this->rule(Rule::string());
     }
 
     /**
@@ -762,7 +775,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function timezone(): self
     {
-        return $this->concat(Rule::timezone());
+        return $this->rule(Rule::timezone());
     }
 
     /**
@@ -772,7 +785,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function url(): self
     {
-        return $this->concat(Rule::url());
+        return $this->rule(Rule::url());
     }
 
     /**
@@ -782,6 +795,6 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function uuid(): self
     {
-        return $this->concat(Rule::uuid());
+        return $this->rule(Rule::uuid());
     }
 }
