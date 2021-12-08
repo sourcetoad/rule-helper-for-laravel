@@ -9,7 +9,7 @@ use Illuminate\Validation\Rules\RequiredIf;
 interface RuleSet
 {
     public static function create(array $rules = []): self;
-    public function concat(...$rule): self;
+    public function push(...$rule): self;
     public function rule($rule): self;
     public function accepted(): self;
     public function acceptedIf(string $anotherField, string ...$value): self;

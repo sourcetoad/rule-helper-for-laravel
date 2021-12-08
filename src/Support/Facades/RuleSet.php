@@ -9,7 +9,7 @@ use Illuminate\Validation\Rules\RequiredIf;
 
 /**
  * @method static \Sourcetoad\RuleHelper\RuleSet create(array $rules = [])
- * @method static \Sourcetoad\RuleHelper\RuleSet concat(...$rule)
+ * @method static \Sourcetoad\RuleHelper\RuleSet push(...$rule)
  * @method static \Sourcetoad\RuleHelper\RuleSet rule($rule)
  *
  * @method static \Sourcetoad\RuleHelper\RuleSet accepted()

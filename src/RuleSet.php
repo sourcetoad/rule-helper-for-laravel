@@ -45,7 +45,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      * @param  \Illuminate\Contracts\Validation\Rule|string $rule
      * @return $this
      */
-    public function concat(...$rule): self
+    public function push(...$rule): self
     {
         $this->rules->push(...$rule);
 
