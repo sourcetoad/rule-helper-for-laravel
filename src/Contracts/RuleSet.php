@@ -75,6 +75,7 @@ interface RuleSet
     public function requiredWithout(string ...$field): self;
     public function requiredWithoutAll(string ...$field): self;
     public function same(string $field): self;
+    public function sequentialValues(bool $allowEqual): self;
     public function size(int $value): self;
     public function sometimes(): self;
     public function startsWith(string ...$value): self;

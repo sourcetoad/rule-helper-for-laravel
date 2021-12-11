@@ -9,6 +9,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Validation\Rule as LaravelRule;
 use Illuminate\Validation\Rules\RequiredIf;
 use InvalidArgumentException;
+use Sourcetoad\RuleHelper\Validation\Rules\SequentialValuesRule;
 
 class Rule extends LaravelRule
 {
@@ -693,6 +694,14 @@ class Rule extends LaravelRule
     public static function same(string $field): string
     {
         return 'same:'.$field;
+    }
+
+    /**
+     * The values contained within the array must be sequential.
+     */
+    public static function sequentialValues(bool $allowEqual = false): \Illuminate\Contracts\Validation\Rule
+    {
+        return (new SequentialValuesRule())->setAllowEqual($allowEqual);
     }
 
     /**

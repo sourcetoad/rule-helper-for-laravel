@@ -726,6 +726,14 @@ class RuleSet implements Contracts\RuleSet, Arrayable
     }
 
     /**
+     * The values contained within the array must be sequential.
+     */
+    public function sequentialValues(bool $allowEqual = false): self
+    {
+        return $this->rule(Rule::sequentialValues($allowEqual));
+    }
+
+    /**
      * The field under validation must have a size matching the given *value*.
      *
      * @link https://laravel.com/docs/8.x/validation#rule-size
