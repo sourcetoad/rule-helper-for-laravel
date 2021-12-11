@@ -18,13 +18,13 @@ use Sourcetoad\RuleHelper\Validation\Rules\Comparators\StringComparator;
 class SequentialValuesRule implements Rule, DataAwareRule, ValidatorAwareRule
 {
     private bool $allowEqual = false;
-    private string $lastMessage = 'sequential_values.not_checked';
     private array $comparators = [
         DateComparator::class,
         NumericComparator::class,
         StringComparator::class,
     ];
     private array $data;
+    private string $lastMessage = 'sequential_values.not_checked';
     private Validator $validator;
 
     public function setData($data): self
