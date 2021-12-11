@@ -19,16 +19,6 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Mime\MimeTypeGuesserInterface;
 use Symfony\Component\Mime\MimeTypes;
 
-/**
- * @covers \Sourcetoad\RuleHelper\Rule
- * @covers \Sourcetoad\RuleHelper\RuleSet
- * @covers \Sourcetoad\RuleHelper\ServiceProvider
- * @covers \Sourcetoad\RuleHelper\Support\Facades\RuleSet
- * @covers \Sourcetoad\RuleHelper\Validation\Rules\SequentialValuesRule
- * @covers \Sourcetoad\RuleHelper\Validation\Rules\Comparators\DateComparator
- * @covers \Sourcetoad\RuleHelper\Validation\Rules\Comparators\NumericComparator
- * @covers \Sourcetoad\RuleHelper\Validation\Rules\Comparators\StringComparator
- */
 class RuleTest extends TestCase
 {
     /**

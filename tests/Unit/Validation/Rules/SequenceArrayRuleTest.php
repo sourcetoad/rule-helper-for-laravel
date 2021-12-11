@@ -11,13 +11,6 @@ use Illuminate\Translation\Translator;
 use Sourcetoad\RuleHelper\Tests\TestCase;
 use Sourcetoad\RuleHelper\Validation\Rules\SequentialValuesRule;
 
-/**
- * @covers \Sourcetoad\RuleHelper\ServiceProvider
- * @covers \Sourcetoad\RuleHelper\Validation\Rules\SequentialValuesRule
- * @covers \Sourcetoad\RuleHelper\Validation\Rules\Comparators\DateComparator
- * @covers \Sourcetoad\RuleHelper\Validation\Rules\Comparators\NumericComparator
- * @covers \Sourcetoad\RuleHelper\Validation\Rules\Comparators\StringComparator
- */
 class SequenceArrayRuleTest extends TestCase
 {
     /** @dataProvider payloadProvider */
