@@ -66,7 +66,7 @@ class SequentialValuesRule implements Rule, DataAwareRule, ValidatorAwareRule
             return true;
         }
 
-        $comparator = $this->determineComparator($attribute, $this->validator->getRules());
+        $comparator = $this->determineComparator($attribute);
 
         foreach ($previousAttributes as $previousAttribute) {
             $previousValue = Arr::get($this->data, $previousAttribute);
@@ -88,15 +88,17 @@ class SequentialValuesRule implements Rule, DataAwareRule, ValidatorAwareRule
         return $this->lastMessage;
     }
 
-    private function determineComparator(string $attribute, array $rules): Comparator
+    private function determineComparator(string $attribute): Comparator
     {
+        $attributeRules = Arr::get($this->validator->getRules(), $attribute, []);
+
         foreach ($this->comparators as $comparatorClass) {
             $comparator = resolve($comparatorClass);
             if (!($comparator instanceof Comparator)) {
                 throw new \RuntimeException('Comparator does not implement '.Comparator::class);
             }
 
-            if ($comparator->canHandle($attribute, $rules)) {
+            if ($comparator->canHandle($attributeRules)) {
                 return $comparator;
             }
         }

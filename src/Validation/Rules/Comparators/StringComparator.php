@@ -6,7 +6,7 @@ namespace Sourcetoad\RuleHelper\Validation\Rules\Comparators;
 
 class StringComparator implements Comparator
 {
-    public function canHandle(string $attribute, array $rules): bool
+    public function canHandle(array $rules): bool
     {
         return true;
     }
