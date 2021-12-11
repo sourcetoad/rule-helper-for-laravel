@@ -17,8 +17,6 @@ use Sourcetoad\RuleHelper\Validation\Rules\Comparators\StringComparator;
 
 class SequentialValuesRule implements Rule, DataAwareRule, ValidatorAwareRule
 {
-    use UsesAttributeIndexes;
-
     private bool $allowEqual = false;
     private string $lastMessage = 'sequential_values.not_checked';
     private array $comparators = [
@@ -113,5 +111,26 @@ class SequentialValuesRule implements Rule, DataAwareRule, ValidatorAwareRule
         }
 
         return $key;
+    }
+
+    private function getPreviousAttributes(string $attribute): ?array
+    {
+        $attributeIndexMatch = '/\.(\d+)(\.[^.]+)?$/';
+        if (!preg_match($attributeIndexMatch, $attribute, $currentIndexMatch)) {
+            return null;
+        }
+
+        $currentIndex = (int)$currentIndexMatch[1];
+        $previousAttributeNames = [];
+
+        foreach (array_keys(array_fill(0, $currentIndex, '')) as $previousIndex) {
+            $previousAttributeNames[] = preg_replace(
+                $attributeIndexMatch,
+                '.'.preg_quote((string)$previousIndex, '/').'${2}',
+                $attribute
+            );
+        }
+
+        return $previousAttributeNames;
     }
 }
