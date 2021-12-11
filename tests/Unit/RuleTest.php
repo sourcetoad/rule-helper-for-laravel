@@ -24,6 +24,10 @@ use Symfony\Component\Mime\MimeTypes;
  * @covers \Sourcetoad\RuleHelper\RuleSet
  * @covers \Sourcetoad\RuleHelper\ServiceProvider
  * @covers \Sourcetoad\RuleHelper\Support\Facades\RuleSet
+ * @covers \Sourcetoad\RuleHelper\Validation\Rules\SequentialValuesRule
+ * @covers \Sourcetoad\RuleHelper\Validation\Rules\Comparators\DateComparator
+ * @covers \Sourcetoad\RuleHelper\Validation\Rules\Comparators\NumericComparator
+ * @covers \Sourcetoad\RuleHelper\Validation\Rules\Comparators\StringComparator
  */
 class RuleTest extends TestCase
 {
@@ -1235,6 +1239,252 @@ class RuleTest extends TestCase
                 ],
                 'rules' => fn() => [
                     'field-a' => RuleSet::create()->same('field-b'),
+                ],
+                'fails' => true,
+            ],
+            'sequentialValues on non array' => [
+                'data' => [
+                    'field-a' => 'a',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->sequentialValues(),
+                ],
+                'fails' => true,
+            ],
+            'sequentialValues string valid' => [
+                'data' => [
+                    'field-a' => [
+                        'a',
+                        'B',
+                        'c',
+                    ],
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->array(),
+                    'field-a.*' => RuleSet::create()->sequentialValues(),
+                ],
+                'fails' => false,
+            ],
+            'sequentialValues string invalid' => [
+                'data' => [
+                    'field-a' => [
+                        'a',
+                        'd',
+                        'c',
+                    ],
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->array(),
+                    'field-a.*' => RuleSet::create()->sequentialValues(),
+                ],
+                'fails' => true,
+            ],
+            'sequentialValues sub string valid' => [
+                'data' => [
+                    'field-a' => [
+                        [
+                            'name' => 'a',
+                        ],
+                        [
+                            'name' => 'B',
+                        ],
+                        [
+                            'name' => 'c',
+                        ],
+                    ],
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->array(),
+                    'field-a.*.name' => RuleSet::create()->sequentialValues(),
+                ],
+                'fails' => false,
+            ],
+            'sequentialValues sub string invalid' => [
+                'data' => [
+                    'field-a' => [
+                        [
+                            'name' => 'a',
+                        ],
+                        [
+                            'name' => 'D',
+                        ],
+                        [
+                            'name' => 'c',
+                        ],
+                    ],
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->array(),
+                    'field-a.*.name' => RuleSet::create()->sequentialValues(),
+                ],
+                'fails' => true,
+            ],
+            'sequentialValues sub string invalid (dates as string)' => [
+                'data' => [
+                    'field-a' => [
+                        [
+                            'scheduled_at' => '2021-06-16T05:00:00+00:00',
+                        ],
+                        [
+                            'scheduled_at' => '2021-06-16T03:00:00-05:00',
+                        ],
+                        [
+                            'scheduled_at' => '2021-06-16T09:00:00+00:00',
+                        ],
+                    ],
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->array(),
+                    'field-a.*.scheduled_at' => RuleSet::create()->sequentialValues(),
+                ],
+                'fails' => true,
+            ],
+            'sequentialValues sub date valid' => [
+                'data' => [
+                    'field-a' => [
+                        [
+                            'scheduled_at' => '2021-06-16T05:00:00+00:00', // 5 UTC
+                        ],
+                        [
+                            'scheduled_at' => '2021-06-16T03:00:00-05:00', // 8 UTC
+                        ],
+                        [
+                            'scheduled_at' => '2021-06-16T09:00:00+00:00', // 9 UTC
+                        ],
+                    ],
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->array(),
+                    'field-a.*.scheduled_at' => RuleSet::create()->date()->sequentialValues(),
+                ],
+                'fails' => false,
+            ],
+            'sequentialValues sub date invalid' => [
+                'data' => [
+                    'field-a' => [
+                        [
+                            'scheduled_at' => '2021-06-16T05:00:00+00:00', // 5 UTC
+                        ],
+                        [
+                            'scheduled_at' => '2021-06-16T05:00:00-05:00', // 10 UTC
+                        ],
+                        [
+                            'scheduled_at' => '2021-06-16T06:00:00+00:00', // 6 UTC
+                        ],
+                    ],
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->array(),
+                    'field-a.*.scheduled_at' => RuleSet::create()->date()->sequentialValues(),
+                ],
+                'fails' => true,
+            ],
+            'sequentialValues sub number valid' => [
+                'data' => [
+                    'field-a' => [
+                        [
+                            'index' => 0,
+                        ],
+                        [
+                            'index' => 1,
+                        ],
+                        [
+                            'index' => 2,
+                        ],
+                    ],
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->array(),
+                    'field-a.*.index' => RuleSet::create()->numeric()->sequentialValues(),
+                ],
+                'fails' => false,
+            ],
+            'sequentialValues sub number invalid' => [
+                'data' => [
+                    'field-a' => [
+                        [
+                            'index' => 1,
+                        ],
+                        [
+                            'index' => 0,
+                        ],
+                        [
+                            'index' => 4,
+                        ],
+                    ],
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->array(),
+                    'field-a.*.index' => RuleSet::create()->numeric()->sequentialValues(),
+                ],
+                'fails' => true,
+            ],
+            'sequentialValues sub number not allowing equal invalid' => [
+                'data' => [
+                    'field-a' => [
+                        [
+                            'index' => 0,
+                        ],
+                        [
+                            'index' => 0,
+                        ],
+                        [
+                            'index' => 1,
+                        ],
+                        [
+                            'index' => 4,
+                        ],
+                    ],
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->array(),
+                    'field-a.*.index' => RuleSet::create()->numeric()->sequentialValues(false),
+                ],
+                'fails' => true,
+            ],
+            'sequentialValues sub number allowing equal valid' => [
+                'data' => [
+                    'field-a' => [
+                        [
+                            'index' => 0,
+                        ],
+                        [
+                            'index' => 0,
+                        ],
+                        [
+                            'index' => 1,
+                        ],
+                        [
+                            'index' => 2,
+                        ],
+                    ],
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->array(),
+                    'field-a.*.index' => RuleSet::create()->numeric()->sequentialValues(true),
+                ],
+                'fails' => false,
+            ],
+            'sequentialValues sub number allowing equal invalid' => [
+                'data' => [
+                    'field-a' => [
+                        [
+                            'index' => 0,
+                        ],
+                        [
+                            'index' => 1,
+                        ],
+                        [
+                            'index' => 0,
+                        ],
+                        [
+                            'index' => 4,
+                        ],
+                    ],
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->array(),
+                    'field-a.*.index' => RuleSet::create()->numeric()->sequentialValues(true),
                 ],
                 'fails' => true,
             ],
