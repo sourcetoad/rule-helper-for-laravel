@@ -38,6 +38,7 @@ use Illuminate\Validation\Rules\RequiredIf;
  * @method static \Sourcetoad\RuleHelper\RuleSet endsWith(string ...$value)
  * @method static \Sourcetoad\RuleHelper\RuleSet excludeIf(string $anotherField, ?string $value)
  * @method static \Sourcetoad\RuleHelper\RuleSet excludeUnless(string $anotherField, ?string $value)
+ * @method static \Sourcetoad\RuleHelper\RuleSet excludeWithout(string $anotherField)
  * @method static \Sourcetoad\RuleHelper\RuleSet file()
  * @method static \Sourcetoad\RuleHelper\RuleSet filled()
  * @method static \Sourcetoad\RuleHelper\RuleSet gt(string $field)

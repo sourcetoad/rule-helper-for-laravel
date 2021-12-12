@@ -1381,6 +1381,37 @@ class RuleTest extends TestCase
                     'field-b' => 'c',
                 ],
             ],
+            'excludeWithout match' => [
+                'data' => [
+                    'field-a' => 'a',
+                    'field-b' => 'b',
+                    'field-c' => 'c',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->excludeWithout('field-b'),
+                    'field-b' => RuleSet::create(),
+                    'field-c' => RuleSet::create(),
+                ],
+                'expected' => [
+                    'field-a' => 'a',
+                    'field-b' => 'b',
+                    'field-c' => 'c',
+                ],
+            ],
+            'excludeWithout not matched' => [
+                'data' => [
+                    'field-a' => 'a',
+                    'field-c' => 'c',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->excludeWithout('field-b'),
+                    'field-b' => RuleSet::create(),
+                    'field-c' => RuleSet::create(),
+                ],
+                'expected' => [
+                    'field-c' => 'c',
+                ],
+            ],
         ];
     }
 

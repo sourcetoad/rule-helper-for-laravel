@@ -38,6 +38,7 @@ interface RuleSet
     public function endsWith(string ...$value): self;
     public function excludeIf(string $anotherField, ?string $value): self;
     public function excludeUnless(string $anotherField, ?string $value): self;
+    public function excludeWithout(string $anotherField): self;
     public function file(): self;
     public function filled(): self;
     public function gt(string $field): self;

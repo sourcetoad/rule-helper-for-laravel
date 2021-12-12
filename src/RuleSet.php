@@ -347,6 +347,17 @@ class RuleSet implements Contracts\RuleSet, Arrayable
     }
 
     /**
+     * The field under validation will be excluded from the request data returned by the *validate* and *validated*
+     * methods if the *anotherField* field is not present.
+     *
+     * @link https://laravel.com/docs/8.x/validation#rule-exclude-without
+     */
+    public function excludeWithout(string $anotherField): self
+    {
+        return $this->rule(Rule::excludeWithout($anotherField));
+    }
+
+    /**
      * The field under validation must be a successfully uploaded file.
      *
      * @link https://laravel.com/docs/8.x/validation#rule-file

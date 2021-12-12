@@ -314,6 +314,17 @@ class Rule extends LaravelRule
     }
 
     /**
+     * The field under validation will be excluded from the request data returned by the *validate* and *validated*
+     * methods if the *anotherField* field is not present.
+     *
+     * @link https://laravel.com/docs/8.x/validation#rule-exclude-without
+     */
+    public static function excludeWithout(string $anotherField): string
+    {
+        return 'exclude_without:'.$anotherField;
+    }
+
+    /**
      * The field under validation must be a successfully uploaded file.
      *
      * @link https://laravel.com/docs/8.x/validation#rule-file
