@@ -592,6 +592,16 @@ class Rule extends LaravelRule
     }
 
     /**
+     * If the field under validation is present, no fields in *anotherField* can be present, even if empty.
+     *
+     * @link https://laravel.com/docs/8.x/validation#rule-prohibits
+     */
+    public static function prohibits(string ...$anotherField): string
+    {
+        return sprintf('prohibits:%s', implode(',', $anotherField));
+    }
+
+    /**
      * The field under validation must match the given regular expression.
      *
      * @link https://laravel.com/docs/8.x/validation#rule-regex

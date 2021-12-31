@@ -65,6 +65,7 @@ interface RuleSet
     public function prohibited(): self;
     public function prohibitedIf(string $anotherField, string ...$value): self;
     public function prohibitedUnless(string $anotherField, string ...$value): self;
+    public function prohibits(): self;
     public function regex(string $pattern): self;
     public function required(): self;
     public function requiredIfAll(RequiredIf ...$rules): self;

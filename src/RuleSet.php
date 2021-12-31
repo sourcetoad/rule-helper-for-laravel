@@ -626,6 +626,16 @@ class RuleSet implements Contracts\RuleSet, Arrayable
     }
 
     /**
+     * If the field under validation is present, no fields in *anotherField* can be present, even if empty.
+     *
+     * @link https://laravel.com/docs/8.x/validation#rule-prohibits
+     */
+    public function prohibits(string ...$anotherField): self
+    {
+        return $this->rule(Rule::prohibits(...$anotherField));
+    }
+
+    /**
      * The field under validation must match the given regular expression.
      *
      * @link https://laravel.com/docs/8.x/validation#rule-regex
