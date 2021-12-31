@@ -325,6 +325,17 @@ class RuleSet implements Contracts\RuleSet, Arrayable
     }
 
     /**
+     * The field under validation will be excluded from the request data returned by the *validate* and *validated*
+     * methods.
+     *
+     * @link https://laravel.com/docs/8.x/validation#rule-exclude
+     */
+    public function exclude(): self
+    {
+        return $this->rule(Rule::exclude());
+    }
+
+    /**
      * The field under validation will be excluded from the request data returned by the *validate* and *validated*.
      * methods if the *anotherField* field is equal to *value*.
      *

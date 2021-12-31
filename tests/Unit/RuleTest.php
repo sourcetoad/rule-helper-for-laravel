@@ -1366,6 +1366,19 @@ class RuleTest extends TestCase
     public function excludeProvider(): array
     {
         return [
+            'exclude' => [
+                'data' => [
+                    'field-a' => 'a',
+                    'field-b' => 'b',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->exclude(),
+                    'field-b' => RuleSet::create(),
+                ],
+                'expected' => [
+                    'field-b' => 'b',
+                ],
+            ],
             'excludeIf match' => [
                 'data' => [
                     'field-a' => 'a',

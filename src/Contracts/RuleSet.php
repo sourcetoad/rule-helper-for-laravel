@@ -36,6 +36,7 @@ interface RuleSet
     public function distinct(bool $strict = false, $ignoreCase = false): self;
     public function email(string ...$validator): self;
     public function endsWith(string ...$value): self;
+    public function exclude(): self;
     public function excludeIf(string $anotherField, ?string $value): self;
     public function excludeUnless(string $anotherField, ?string $value): self;
     public function excludeWithout(string $anotherField): self;
