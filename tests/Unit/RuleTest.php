@@ -1026,6 +1026,45 @@ class RuleTest extends TestCase
                 ],
                 'fails' => true,
             ],
+            'prohibits valid not defined' => [
+                'data' => [
+                    'field-a' => '',
+                    'field-b' => 'd',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->prohibits('field-b', 'field-c'),
+                ],
+                'fails' => false,
+            ],
+            'prohibits valid defined without prohibited' => [
+                'data' => [
+                    'field-a' => 'a',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->prohibits('field-b', 'field-c'),
+                ],
+                'fails' => false,
+            ],
+            'prohibits invalid defined with prohibited' => [
+                'data' => [
+                    'field-a' => 'a',
+                    'field-b' => 'b',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->prohibits('field-b', 'field-c'),
+                ],
+                'fails' => true,
+            ],
+            'prohibits invalid defined with secondary prohibited' => [
+                'data' => [
+                    'field-a' => 'a',
+                    'field-c' => 'c',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->prohibits('field-b', 'field-c'),
+                ],
+                'fails' => true,
+            ],
             'regex valid' => [
                 'data' => 'value-a',
                 'rules' => fn() => RuleSet::create()->regex('/[a-z]+$/'),
@@ -1327,6 +1366,19 @@ class RuleTest extends TestCase
     public function excludeProvider(): array
     {
         return [
+            'exclude' => [
+                'data' => [
+                    'field-a' => 'a',
+                    'field-b' => 'b',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->exclude(),
+                    'field-b' => RuleSet::create(),
+                ],
+                'expected' => [
+                    'field-b' => 'b',
+                ],
+            ],
             'excludeIf match' => [
                 'data' => [
                     'field-a' => 'a',

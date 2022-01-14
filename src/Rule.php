@@ -292,6 +292,17 @@ class Rule extends LaravelRule
     }
 
     /**
+     * The field under validation will be excluded from the request data returned by the *validate* and *validated*
+     * methods.
+     *
+     * @link https://laravel.com/docs/8.x/validation#rule-exclude
+     */
+    public static function exclude(): string
+    {
+        return 'exclude';
+    }
+
+    /**
      * The field under validation will be excluded from the request data returned by the *validate* and *validated*.
      * methods if the *anotherField* field is equal to *value*.
      *
@@ -589,6 +600,16 @@ class Rule extends LaravelRule
     public static function prohibitedUnless(string $anotherField, string ...$value): string
     {
         return sprintf('prohibited_unless:%s,%s', $anotherField, implode(',', $value));
+    }
+
+    /**
+     * If the field under validation is present, no fields in *anotherField* can be present, even if empty.
+     *
+     * @link https://laravel.com/docs/8.x/validation#rule-prohibits
+     */
+    public static function prohibits(string ...$anotherField): string
+    {
+        return sprintf('prohibits:%s', implode(',', $anotherField));
     }
 
     /**

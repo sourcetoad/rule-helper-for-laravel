@@ -36,6 +36,7 @@ interface RuleSet
     public function distinct(bool $strict = false, $ignoreCase = false): self;
     public function email(string ...$validator): self;
     public function endsWith(string ...$value): self;
+    public function exclude(): self;
     public function excludeIf(string $anotherField, ?string $value): self;
     public function excludeUnless(string $anotherField, ?string $value): self;
     public function excludeWithout(string $anotherField): self;
@@ -65,6 +66,7 @@ interface RuleSet
     public function prohibited(): self;
     public function prohibitedIf(string $anotherField, string ...$value): self;
     public function prohibitedUnless(string $anotherField, string ...$value): self;
+    public function prohibits(): self;
     public function regex(string $pattern): self;
     public function required(): self;
     public function requiredIfAll(RequiredIf ...$rules): self;
