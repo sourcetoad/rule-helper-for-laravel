@@ -374,7 +374,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      * name.
      *
      * If you would like to customize the query executed by the validation rule, you may use {@see Rule::exists} with
-     * {@see RuleSet::rule} or pass a callback which accepts an {@see Exists} instance.
+     * {@see RuleSet::rule} or pass a callback which accepts an {@see \Illuminate\Validation\Rules\Exists} instance.
      *
      * @link https://laravel.com/docs/8.x/validation#rule-exists
      */
@@ -837,7 +837,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      * Eloquent model class name.
      *
      * If you would like to customize the query executed by the validation rule, you may use {@see Rule::unique} with
-     * {@see RuleSet::rule} or pass a callback which accepts a {@see Unique} instance.
+     * {@see RuleSet::rule} or pass a callback which accepts a {@see \Illuminate\Validation\Rules\Unique} instance.
      *
      * @link https://laravel.com/docs/8.x/validation#rule-unique
      */
