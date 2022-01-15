@@ -23,7 +23,6 @@ class DatabaseRuleTest extends TestCase
 
         parent::setUp();
 
-        $this->refreshDatabase();
         $this->loadLaravelMigrations();
     }
 
