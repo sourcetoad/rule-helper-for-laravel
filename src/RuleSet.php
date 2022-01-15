@@ -7,7 +7,9 @@ namespace Sourcetoad\RuleHelper;
 use DateTimeInterface;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
+use Illuminate\Validation\Rules\Exists;
 use Illuminate\Validation\Rules\RequiredIf;
+use Illuminate\Validation\Rules\Unique;
 
 class RuleSet implements Contracts\RuleSet, Arrayable
 {
@@ -373,14 +375,15 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      * field name will be used. Instead of specifying the table name directly, you may specify the Eloquent model class
      * name.
      *
-     * If you would like to customize the query executed by the validation rule, you may use {@see Rule::exists} to
-     * fluently define the rule.
+     * If you would like to customize the query executed by the validation rule, you may use {@see Rule::exists} with
+     * {@see RuleSet::rule} or pass a callback which accepts an {@see Exists} instance.
      *
      * @link https://laravel.com/docs/8.x/validation#rule-exists
      */
-    public function exists(string $table, string $column = 'NULL'): self
+    public function exists(string $table, string $column = 'NULL', ?callable $modifier = null): self
     {
-        return $this->rule(Rule::exists($table, $column));
+        $modifier ??= fn(Exists $rule) => $rule;
+        return $this->rule(tap(Rule::exists($table, $column), $modifier));
     }
 
     /**
@@ -830,14 +833,15 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      * specified, the field name will be used. Instead of specifying the table name directly, you may specify the
      * Eloquent model class name.
      *
-     * If you would like to ignore specific IDs or customize the query, you may use {@see Rule::unique} to
-     * fluently define the rule.
+     * If you would like to customize the query executed by the validation rule, you may use {@see Rule::unique} with
+     * {@see RuleSet::rule} or pass a callback which accepts a {@see Unique} instance.
      *
      * @link https://laravel.com/docs/8.x/validation#rule-unique
      */
-    public function unique(string $table, string $column = 'NULL'): self
+    public function unique(string $table, string $column = 'NULL', ?callable $modifier = null): self
     {
-        return $this->rule(Rule::unique($table, $column));
+        $modifier ??= fn(Unique $rule) => $rule;
+        return $this->rule(tap(Rule::unique($table, $column), $modifier));
     }
 
     /**

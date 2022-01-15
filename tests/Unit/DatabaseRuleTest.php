@@ -9,6 +9,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\Exists;
+use Illuminate\Validation\Rules\Unique;
 use Sourcetoad\RuleHelper\Support\Facades\RuleSet;
 use Sourcetoad\RuleHelper\Tests\TestCase;
 
@@ -104,6 +106,44 @@ class DatabaseRuleTest extends TestCase
                 ],
                 'fails' => false,
             ],
+            'does not exist with modifier' => [
+                'createData' => function () {
+                    $email = $this->faker->email;
+                    DB::table('users')->insert([
+                        'name' => $this->faker->name,
+                        'email' => $email,
+                        'password' => $this->faker->password,
+                    ]);
+                    return ['value' => $email];
+                },
+                'rule' => fn() => [
+                    'value' => RuleSet::create()->exists(
+                        'users',
+                        'email',
+                        fn(Exists $exists) => $exists->where('name', 'test')
+                    ),
+                ],
+                'fails' => true,
+            ],
+            'exists with modifier' => [
+                'createData' => function () {
+                    $email = $this->faker->email;
+                    DB::table('users')->insert([
+                        'name' => 'test',
+                        'email' => $email,
+                        'password' => $this->faker->password,
+                    ]);
+                    return ['value' => $email];
+                },
+                'rule' => fn() => [
+                    'value' => RuleSet::create()->exists(
+                        'users',
+                        'email',
+                        fn(Exists $exists) => $exists->where('name', 'test')
+                    ),
+                ],
+                'fails' => false,
+            ],
             'not unique without column' => [
                 'createData' => function () {
                     $email = $this->faker->email;
@@ -145,6 +185,44 @@ class DatabaseRuleTest extends TestCase
                 'createData' => fn() => ['value' => $this->faker->email],
                 'rule' => fn() => [
                     'value' => RuleSet::create()->unique('users', 'email'),
+                ],
+                'fails' => false,
+            ],
+            'not unique with modifier' => [
+                'createData' => function () {
+                    $email = $this->faker->email;
+                    DB::table('users')->insert([
+                        'name' => 'test',
+                        'email' => $email,
+                        'password' => $this->faker->password,
+                    ]);
+                    return ['value' => $email];
+                },
+                'rule' => fn() => [
+                    'value' => RuleSet::create()->unique(
+                        'users',
+                        'email',
+                        fn(Unique $rule) => $rule->where('name', 'test')
+                    ),
+                ],
+                'fails' => true,
+            ],
+            'unique with modifier' => [
+                'createData' => function () {
+                    $email = $this->faker->email;
+                    DB::table('users')->insert([
+                        'name' => $this->faker->name,
+                        'email' => $email,
+                        'password' => $this->faker->password,
+                    ]);
+                    return ['value' => $email];
+                },
+                'rule' => fn() => [
+                    'value' => RuleSet::create()->unique(
+                        'users',
+                        'email',
+                        fn(Unique $rule) => $rule->where('name', 'test')
+                    ),
                 ],
                 'fails' => false,
             ],
