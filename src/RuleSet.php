@@ -7,9 +7,7 @@ namespace Sourcetoad\RuleHelper;
 use DateTimeInterface;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
-use Illuminate\Validation\Rules\Exists;
 use Illuminate\Validation\Rules\RequiredIf;
-use Illuminate\Validation\Rules\Unique;
 
 class RuleSet implements Contracts\RuleSet, Arrayable
 {
@@ -382,8 +380,13 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function exists(string $table, string $column = 'NULL', ?callable $modifier = null): self
     {
-        $modifier ??= fn(Exists $rule) => $rule;
-        return $this->rule(tap(Rule::exists($table, $column), $modifier));
+        $rule = Rule::exists($table, $column);
+
+        if ($modifier) {
+            $modifier($rule);
+        }
+
+        return $this->rule($rule);
     }
 
     /**
@@ -840,8 +843,13 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      */
     public function unique(string $table, string $column = 'NULL', ?callable $modifier = null): self
     {
-        $modifier ??= fn(Unique $rule) => $rule;
-        return $this->rule(tap(Rule::unique($table, $column), $modifier));
+        $rule = Rule::unique($table, $column);
+
+        if ($modifier) {
+            $modifier($rule);
+        }
+
+        return $this->rule($rule);
     }
 
     /**
