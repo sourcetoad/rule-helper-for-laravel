@@ -40,7 +40,7 @@ interface RuleSet
     public function excludeIf(string $anotherField, ?string $value): self;
     public function excludeUnless(string $anotherField, ?string $value): self;
     public function excludeWithout(string $anotherField): self;
-    public function exists(string $table, string $column = 'NULL'): self;
+    public function exists(string $table, string $column = 'NULL', ?callable $modifier = null): self;
     public function file(): self;
     public function filled(): self;
     public function gt(string $field): self;
@@ -84,7 +84,7 @@ interface RuleSet
     public function startsWith(string ...$value): self;
     public function string(): self;
     public function timezone(): self;
-    public function unique(string $table, string $column = 'NULL'): self;
+    public function unique(string $table, string $column = 'NULL', ?callable $modifier = null): self;
     public function url(): self;
     public function uuid(): self;
 }
