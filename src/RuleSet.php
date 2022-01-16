@@ -303,6 +303,9 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      * A ratio constraint should be represented as width divided by height. This can be specified either by a fraction
      * like *3/2* or a float like *1.5*.
      *
+     * If you would like to fluently define the rule, you may use {@see Rule::dimensions} with {@see RuleSet::rule} or
+     * pass a callback which accepts a {@see \Illuminate\Validation\Rules\Dimensions} instance.
+     *
      * @link https://laravel.com/docs/8.x/validation#rule-dimensions
      */
     public function dimensions(array $constraints, ?callable $modifier = null): self
