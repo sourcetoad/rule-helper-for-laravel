@@ -12,6 +12,7 @@ use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rules\Dimensions;
 use Sourcetoad\RuleHelper\Rule;
 use Sourcetoad\RuleHelper\Support\Facades\RuleSet;
 use Sourcetoad\RuleHelper\Tests\TestCase;
@@ -91,7 +92,13 @@ class RuleTest extends TestCase
         $validatorFailed = $validator->fails();
 
         // Assert
-        $this->assertEquals($fails, $validatorFailed, 'Failed asserting that validator failed.');
+        $this->assertEquals(
+            $fails,
+            $validatorFailed,
+            'Failed asserting that validator failed.'.PHP_EOL
+            .'Validation Errors:'.PHP_EOL
+            .$validator->errors()->toJson(JSON_PRETTY_PRINT)
+        );
     }
 
     /**
@@ -110,7 +117,13 @@ class RuleTest extends TestCase
         $validatorFailed = $validator->fails();
 
         // Assert
-        $this->assertEquals($fails, $validatorFailed, 'Failed asserting that validator failed.');
+        $this->assertEquals(
+            $fails,
+            $validatorFailed,
+            'Failed asserting that validator failed.'.PHP_EOL
+            .'Validation Errors:'.PHP_EOL
+            .$validator->errors()->toJson(JSON_PRETTY_PRINT)
+        );
     }
 
     public function ruleDataProvider(): array
@@ -499,6 +512,86 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->digitsBetween(2, 5),
                 'fails' => true,
             ],
+            'dimensions min_width valid' => [
+                'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
+                'rules' => fn() => RuleSet::create()->dimensions(['min_width' => 100]),
+                'fails' => false,
+            ],
+            'dimensions min_width invalid' => [
+                'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
+                'rules' => fn() => RuleSet::create()->dimensions(['min_width' => 101]),
+                'fails' => true,
+            ],
+            'dimensions min_width via modifier valid' => [
+                'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
+                'rules' => fn() => RuleSet::create()->dimensions([], fn(Dimensions $rule) => $rule->minWidth(100)),
+                'fails' => false,
+            ],
+            'dimensions min_width via modifier invalid' => [
+                'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
+                'rules' => fn() => RuleSet::create()->dimensions([], fn(Dimensions $rule) => $rule->minWidth(101)),
+                'fails' => true,
+            ],
+            'dimensions max_width valid' => [
+                'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
+                'rules' => fn() => RuleSet::create()->dimensions(['max_width' => 100]),
+                'fails' => false,
+            ],
+            'dimensions max_width invalid' => [
+                'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
+                'rules' => fn() => RuleSet::create()->dimensions(['max_width' => 99]),
+                'fails' => true,
+            ],
+            'dimensions max_height valid' => [
+                'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
+                'rules' => fn() => RuleSet::create()->dimensions(['max_height' => 50]),
+                'fails' => false,
+            ],
+            'dimensions max_height invalid' => [
+                'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
+                'rules' => fn() => RuleSet::create()->dimensions(['max_height' => 49]),
+                'fails' => true,
+            ],
+            'dimensions width valid' => [
+                'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
+                'rules' => fn() => RuleSet::create()->dimensions(['width' => 100]),
+                'fails' => false,
+            ],
+            'dimensions width invalid' => [
+                'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
+                'rules' => fn() => RuleSet::create()->dimensions(['width' => 99]),
+                'fails' => true,
+            ],
+            'dimensions height valid' => [
+                'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
+                'rules' => fn() => RuleSet::create()->dimensions(['height' => 50]),
+                'fails' => false,
+            ],
+            'dimensions height invalid' => [
+                'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
+                'rules' => fn() => RuleSet::create()->dimensions(['height' => 51]),
+                'fails' => true,
+            ],
+            'dimensions ratio fraction valid' => [
+                'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
+                'rules' => fn() => RuleSet::create()->dimensions(['ratio' => '2/1']),
+                'fails' => false,
+            ],
+            'dimensions ratio fraction invalid' => [
+                'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
+                'rules' => fn() => RuleSet::create()->dimensions(['ratio' => '3/1']),
+                'fails' => true,
+            ],
+            'dimensions ratio decimal valid' => [
+                'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
+                'rules' => fn() => RuleSet::create()->dimensions(['ratio' => '2']),
+                'fails' => false,
+            ],
+            'dimensions ratio decimal invalid' => [
+                'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
+                'rules' => fn() => RuleSet::create()->dimensions(['ratio' => '1.5']),
+                'fails' => true,
+            ],
             'distinct valid' => [
                 'data' => [
                     'field' => ['a', 'b', 'c', 'A'],
@@ -703,6 +796,24 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->image(),
                 'fails' => true,
             ],
+            'in valid' => [
+                'data' => [
+                    'field-a' => 'a',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->in(['a', 'b', 'c']),
+                ],
+                'fails' => false,
+            ],
+            'in invalid' => [
+                'data' => [
+                    'field-a' => 'd',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->in(['a', 'b', 'c']),
+                ],
+                'fails' => true,
+            ],
             'inArray valid' => [
                 'data' => [
                     'field-a' => 'a',
@@ -897,6 +1008,24 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->multipleOf(2),
                 'fails' => true,
             ],
+            'notIn valid' => [
+                'data' => [
+                    'field-a' => 'd',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->notIn(['a', 'b', 'c']),
+                ],
+                'fails' => false,
+            ],
+            'notIn invalid' => [
+                'data' => [
+                    'field-a' => 'a',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->notIn(['a', 'b', 'c']),
+                ],
+                'fails' => true,
+            ],
             'notRegex valid' => [
                 'data' => 'value-1',
                 'rules' => fn() => RuleSet::create()->notRegex('/[a-z]+$/'),
@@ -1085,23 +1214,59 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->required(),
                 'fails' => true,
             ],
-            'requiredIfAnyValue valid' => [
+            'requiredIf bool valid' => [
+                'data' => [
+                    'field-a' => 'a',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->requiredIf(true),
+                ],
+                'fails' => false,
+            ],
+            'requiredIf bool invalid' => [
+                'data' => [
+                    'field-a' => '',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->requiredIf(true),
+                ],
+                'fails' => true,
+            ],
+            'requiredIf callback valid' => [
+                'data' => [
+                    'field-a' => 'a',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->requiredIf(fn() => true),
+                ],
+                'fails' => false,
+            ],
+            'requiredIf callback invalid' => [
+                'data' => [
+                    'field-a' => '',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->requiredIf(fn() => true),
+                ],
+                'fails' => true,
+            ],
+            'requiredIfValue valid' => [
                 'data' => [
                     'field-a' => 'a',
                     'field-b' => 'c',
                 ],
                 'rules' => fn() => [
-                    'field-a' => RuleSet::create()->requiredIfAnyValue('field-b', 'a', 'b', 'c'),
+                    'field-a' => RuleSet::create()->requiredIfValue('field-b', 'a', 'b', 'c'),
                 ],
                 'fails' => false,
             ],
-            'requiredIfAnyValue invalid' => [
+            'requiredIfValue invalid' => [
                 'data' => [
                     'field-a' => '',
                     'field-b' => 'c',
                 ],
                 'rules' => fn() => [
-                    'field-a' => RuleSet::create()->requiredIfAnyValue('field-b', 'a', 'b', 'c'),
+                    'field-a' => RuleSet::create()->requiredIfValue('field-b', 'a', 'b', 'c'),
                 ],
                 'fails' => true,
             ],

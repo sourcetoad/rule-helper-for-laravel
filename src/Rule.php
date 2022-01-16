@@ -657,7 +657,7 @@ class Rule extends LaravelRule
      *
      * @link https://laravel.com/docs/8.x/validation#rule-required-if
      */
-    public static function requiredIfAnyValue(string $anotherField, string ...$value): string
+    public static function requiredIfValue(string $anotherField, string ...$value): string
     {
         return sprintf('required_if:%s,%s', $anotherField, implode(',', $value));
     }

@@ -42,7 +42,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
     /**
      * Append one or more rules to the end of the rule set.
      *
-     * @param  \Illuminate\Contracts\Validation\Rule|string $rule
+     * @param \Illuminate\Contracts\Validation\Rule|string $rule
      * @return $this
      */
     public function push(...$rule): self
@@ -55,7 +55,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
     /**
      * Append a rule to the end of the rule set.
      *
-     * @param  \Illuminate\Contracts\Validation\Rule|string $rule
+     * @param \Illuminate\Contracts\Validation\Rule|string $rule
      * @return $this
      */
     public function rule($rule): self
@@ -295,6 +295,31 @@ class RuleSet implements Contracts\RuleSet, Arrayable
     }
 
     /**
+     * The file under validation must be an image meeting the dimension constraints as specified by the rule's
+     * parameters.
+     *
+     * Available constraints are: *min_width*, *max_width*, *min_height*, *max_height*, *width*, *height*, *ratio*.
+     *
+     * A ratio constraint should be represented as width divided by height. This can be specified either by a fraction
+     * like *3/2* or a float like *1.5*.
+     *
+     * If you would like to fluently define the rule, you may use {@see Rule::dimensions} with {@see RuleSet::rule} or
+     * pass a callback which accepts a {@see \Illuminate\Validation\Rules\Dimensions} instance.
+     *
+     * @link https://laravel.com/docs/8.x/validation#rule-dimensions
+     */
+    public function dimensions(array $constraints, ?callable $modifier = null): self
+    {
+        $rule = Rule::dimensions($constraints);
+
+        if ($modifier) {
+            $modifier($rule);
+        }
+
+        return $this->rule($rule);
+    }
+
+    /**
      * When validating arrays, the field under validation must not have any duplicate values.
      *
      * @link https://laravel.com/docs/8.x/validation#rule-distinct
@@ -440,6 +465,20 @@ class RuleSet implements Contracts\RuleSet, Arrayable
     }
 
     /**
+     * The field under validation must be included in the given list of values.
+     *
+     * When the *in* rule is combined with the *array* rule, each value in the input array must be present within the
+     * list of values provided to the *in* rule.
+     *
+     * @link https://laravel.com/docs/8.x/validation#rule-in
+     * @param Arrayable|array|string $values
+     */
+    public function in($values): self
+    {
+        return $this->rule(Rule::in($values));
+    }
+
+    /**
      * The field under validation must exist in *anotherField*'s values.
      *
      * @link https://laravel.com/docs/8.x/validation#rule-in-array
@@ -566,12 +605,23 @@ class RuleSet implements Contracts\RuleSet, Arrayable
     /**
      * The field under validation must be a multiple of *value*.
      *
-     * @param int|float $value
      * @link https://laravel.com/docs/8.x/validation#multiple-of
+     * @param int|float $value
      */
     public function multipleOf($value): self
     {
         return $this->rule(Rule::multipleOf($value));
+    }
+
+    /**
+     * The field under validation must not be included in the given list of values.
+     *
+     * @link https://laravel.com/docs/8.x/validation#rule-not-in
+     * @param Arrayable|array|string $values
+     */
+    public function notIn($values): self
+    {
+        return $this->rule(Rule::notIn($values));
     }
 
     /**
@@ -688,6 +738,18 @@ class RuleSet implements Contracts\RuleSet, Arrayable
     }
 
     /**
+     * The field under validation must be present in the input data if a true boolean is passed in or the passed in
+     * closure returns true.
+     *
+     * @link https://laravel.com/docs/8.x/validation#rule-required-if
+     * @param callable|bool $callback
+     */
+    public function requiredIf($callback): self
+    {
+        return $this->rule(Rule::requiredIf($callback));
+    }
+
+    /**
      * The field must be present if all the criteria are true.
      */
     public function requiredIfAll(RequiredIf ...$rules): self
@@ -708,9 +770,9 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      *
      * @link https://laravel.com/docs/8.x/validation#rule-required-if
      */
-    public function requiredIfAnyValue(string $anotherField, string ...$value): self
+    public function requiredIfValue(string $anotherField, string ...$value): self
     {
-        return $this->rule(Rule::requiredIfAnyValue($anotherField, ...$value));
+        return $this->rule(Rule::requiredIfValue($anotherField, ...$value));
     }
 
     /**
