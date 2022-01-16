@@ -91,7 +91,13 @@ class RuleTest extends TestCase
         $validatorFailed = $validator->fails();
 
         // Assert
-        $this->assertEquals($fails, $validatorFailed, 'Failed asserting that validator failed.');
+        $this->assertEquals(
+            $fails,
+            $validatorFailed,
+            'Failed asserting that validator failed.'.PHP_EOL
+            .'Validation Errors:'.PHP_EOL
+            .$validator->errors()->toJson(JSON_PRETTY_PRINT)
+        );
     }
 
     /**
@@ -110,7 +116,13 @@ class RuleTest extends TestCase
         $validatorFailed = $validator->fails();
 
         // Assert
-        $this->assertEquals($fails, $validatorFailed, 'Failed asserting that validator failed.');
+        $this->assertEquals(
+            $fails,
+            $validatorFailed,
+            'Failed asserting that validator failed.'.PHP_EOL
+            .'Validation Errors:'.PHP_EOL
+            .$validator->errors()->toJson(JSON_PRETTY_PRINT)
+        );
     }
 
     public function ruleDataProvider(): array
