@@ -75,7 +75,7 @@ interface RuleSet
     public function required(): self;
     public function requiredIfAll(RequiredIf ...$rules): self;
     public function requiredIfAny(RequiredIf ...$rules): self;
-    public function requiredIfAnyValue(string $anotherField, string ...$value): self;
+    public function requiredIfValue(string $anotherField, string ...$value): self;
     public function requiredUnless(string $anotherField, string ...$value): self;
     public function requiredWith(string ...$field): self;
     public function requiredWithAll(string ...$field): self;

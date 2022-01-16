@@ -755,9 +755,9 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      *
      * @link https://laravel.com/docs/8.x/validation#rule-required-if
      */
-    public function requiredIfAnyValue(string $anotherField, string ...$value): self
+    public function requiredIfValue(string $anotherField, string ...$value): self
     {
-        return $this->rule(Rule::requiredIfAnyValue($anotherField, ...$value));
+        return $this->rule(Rule::requiredIfValue($anotherField, ...$value));
     }
 
     /**

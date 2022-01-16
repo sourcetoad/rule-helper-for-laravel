@@ -1214,23 +1214,23 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->required(),
                 'fails' => true,
             ],
-            'requiredIfAnyValue valid' => [
+            'requiredIfValue valid' => [
                 'data' => [
                     'field-a' => 'a',
                     'field-b' => 'c',
                 ],
                 'rules' => fn() => [
-                    'field-a' => RuleSet::create()->requiredIfAnyValue('field-b', 'a', 'b', 'c'),
+                    'field-a' => RuleSet::create()->requiredIfValue('field-b', 'a', 'b', 'c'),
                 ],
                 'fails' => false,
             ],
-            'requiredIfAnyValue invalid' => [
+            'requiredIfValue invalid' => [
                 'data' => [
                     'field-a' => '',
                     'field-b' => 'c',
                 ],
                 'rules' => fn() => [
-                    'field-a' => RuleSet::create()->requiredIfAnyValue('field-b', 'a', 'b', 'c'),
+                    'field-a' => RuleSet::create()->requiredIfValue('field-b', 'a', 'b', 'c'),
                 ],
                 'fails' => true,
             ],
