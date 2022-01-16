@@ -60,6 +60,7 @@ interface RuleSet
     public function mimetypes(string ...$mimeType): self;
     public function min(int $value): self;
     public function multipleOf($value): self;
+    public function notIn($values): self;
     public function notRegex(string $pattern): self;
     public function nullable(): self;
     public function numeric(): self;

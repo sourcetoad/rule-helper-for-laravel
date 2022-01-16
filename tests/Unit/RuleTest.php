@@ -915,6 +915,24 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->multipleOf(2),
                 'fails' => true,
             ],
+            'notIn valid' => [
+                'data' => [
+                    'field-a' => 'd',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->notIn(['a', 'b', 'c']),
+                ],
+                'fails' => false,
+            ],
+            'notIn invalid' => [
+                'data' => [
+                    'field-a' => 'a',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->notIn(['a', 'b', 'c']),
+                ],
+                'fails' => true,
+            ],
             'notRegex valid' => [
                 'data' => 'value-1',
                 'rules' => fn() => RuleSet::create()->notRegex('/[a-z]+$/'),

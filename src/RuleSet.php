@@ -589,6 +589,17 @@ class RuleSet implements Contracts\RuleSet, Arrayable
     }
 
     /**
+     * The field under validation must not be included in the given list of values.
+     *
+     * @link https://laravel.com/docs/8.x/validation#rule-not-in
+     * @param Arrayable|array|string  $values
+     */
+    public function notIn($values): self
+    {
+        return $this->rule(Rule::notIn($values));
+    }
+
+    /**
      * The field under validation must not match the given regular expression.
      *
      * @link https://laravel.com/docs/8.x/validation#rule-not-regex
