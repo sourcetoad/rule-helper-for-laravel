@@ -12,6 +12,7 @@ use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rules\Dimensions;
 use Sourcetoad\RuleHelper\Rule;
 use Sourcetoad\RuleHelper\Support\Facades\RuleSet;
 use Sourcetoad\RuleHelper\Tests\TestCase;
@@ -509,6 +510,86 @@ class RuleTest extends TestCase
             'digitsBetween invalid' => [
                 'data' => '2002021',
                 'rules' => fn() => RuleSet::create()->digitsBetween(2, 5),
+                'fails' => true,
+            ],
+            'dimensions min_width valid' => [
+                'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
+                'rules' => fn() => RuleSet::create()->dimensions(['min_width' => 100]),
+                'fails' => false,
+            ],
+            'dimensions min_width invalid' => [
+                'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
+                'rules' => fn() => RuleSet::create()->dimensions(['min_width' => 101]),
+                'fails' => true,
+            ],
+            'dimensions min_width via modifier valid' => [
+                'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
+                'rules' => fn() => RuleSet::create()->dimensions([], fn (Dimensions $rule) => $rule->minWidth(100)),
+                'fails' => false,
+            ],
+            'dimensions min_width via modifier invalid' => [
+                'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
+                'rules' => fn() => RuleSet::create()->dimensions([], fn (Dimensions $rule) => $rule->minWidth(101)),
+                'fails' => true,
+            ],
+            'dimensions max_width valid' => [
+                'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
+                'rules' => fn() => RuleSet::create()->dimensions(['max_width' => 100]),
+                'fails' => false,
+            ],
+            'dimensions max_width invalid' => [
+                'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
+                'rules' => fn() => RuleSet::create()->dimensions(['max_width' => 99]),
+                'fails' => true,
+            ],
+            'dimensions max_height valid' => [
+                'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
+                'rules' => fn() => RuleSet::create()->dimensions(['max_height' => 50]),
+                'fails' => false,
+            ],
+            'dimensions max_height invalid' => [
+                'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
+                'rules' => fn() => RuleSet::create()->dimensions(['max_height' => 49]),
+                'fails' => true,
+            ],
+            'dimensions width valid' => [
+                'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
+                'rules' => fn() => RuleSet::create()->dimensions(['width' => 100]),
+                'fails' => false,
+            ],
+            'dimensions width invalid' => [
+                'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
+                'rules' => fn() => RuleSet::create()->dimensions(['width' => 99]),
+                'fails' => true,
+            ],
+            'dimensions height valid' => [
+                'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
+                'rules' => fn() => RuleSet::create()->dimensions(['height' => 50]),
+                'fails' => false,
+            ],
+            'dimensions height invalid' => [
+                'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
+                'rules' => fn() => RuleSet::create()->dimensions(['height' => 51]),
+                'fails' => true,
+            ],
+            'dimensions ratio fraction valid' => [
+                'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
+                'rules' => fn() => RuleSet::create()->dimensions(['ratio' => '2/1']),
+                'fails' => false,
+            ],
+            'dimensions ratio fraction invalid' => [
+                'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
+                'rules' => fn() => RuleSet::create()->dimensions(['ratio' => '3/1']),
+                'fails' => true,
+            ],
+            'dimensions ratio decimal valid' => [
+                'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
+                'rules' => fn() => RuleSet::create()->dimensions(['ratio' => '2']),
+                'fails' => false,
+            ],
+            'dimensions ratio decimal invalid' => [
+                'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
+                'rules' => fn() => RuleSet::create()->dimensions(['ratio' => '1.5']),
                 'fails' => true,
             ],
             'distinct valid' => [

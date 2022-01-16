@@ -295,6 +295,28 @@ class RuleSet implements Contracts\RuleSet, Arrayable
     }
 
     /**
+     * The file under validation must be an image meeting the dimension constraints as specified by the rule's
+     * parameters.
+     *
+     * Available constraints are: *min_width*, *max_width*, *min_height*, *max_height*, *width*, *height*, *ratio*.
+     *
+     * A ratio constraint should be represented as width divided by height. This can be specified either by a fraction
+     * like *3/2* or a float like *1.5*.
+     *
+     * @link https://laravel.com/docs/8.x/validation#rule-dimensions
+     */
+    public function dimensions(array $constraints, ?callable $modifier = null): self
+    {
+        $rule = Rule::dimensions($constraints);
+
+        if ($modifier) {
+            $modifier($rule);
+        }
+
+        return $this->rule($rule);
+    }
+
+    /**
      * When validating arrays, the field under validation must not have any duplicate values.
      *
      * @link https://laravel.com/docs/8.x/validation#rule-distinct

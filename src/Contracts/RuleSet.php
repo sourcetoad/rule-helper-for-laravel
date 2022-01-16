@@ -33,6 +33,7 @@ interface RuleSet
     public function different(string $field): self;
     public function digits(int $count): self;
     public function digitsBetween(int $min, int $max): self;
+    public function dimensions(array $constraints, ?callable $modifier = null): self;
     public function distinct(bool $strict = false, $ignoreCase = false): self;
     public function email(string ...$validator): self;
     public function endsWith(string ...$value): self;
