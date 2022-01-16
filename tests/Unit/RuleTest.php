@@ -19,12 +19,6 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Mime\MimeTypeGuesserInterface;
 use Symfony\Component\Mime\MimeTypes;
 
-/**
- * @covers \Sourcetoad\RuleHelper\Rule
- * @covers \Sourcetoad\RuleHelper\RuleSet
- * @covers \Sourcetoad\RuleHelper\ServiceProvider
- * @covers \Sourcetoad\RuleHelper\Support\Facades\RuleSet
- */
 class RuleTest extends TestCase
 {
     /**
@@ -51,7 +45,13 @@ class RuleTest extends TestCase
         $validatorFailed = $validator->fails();
 
         // Assert
-        $this->assertEquals($fails, $validatorFailed, 'Failed asserting that validator failed.');
+        $this->assertEquals(
+            $fails,
+            $validatorFailed,
+            'Failed asserting that validator failed.'.PHP_EOL
+            .'Validation Errors:'.PHP_EOL
+            .$validator->errors()->toJson(JSON_PRETTY_PRINT)
+        );
 
         if ($errors) {
             $this->assertEquals($errors, $validator->errors()->toArray());

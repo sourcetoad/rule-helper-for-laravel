@@ -369,6 +369,27 @@ class RuleSet implements Contracts\RuleSet, Arrayable
     }
 
     /**
+     * The field under validation must exist in a given database table. If the *column* option is not specified, the
+     * field name will be used. Instead of specifying the table name directly, you may specify the Eloquent model class
+     * name.
+     *
+     * If you would like to customize the query executed by the validation rule, you may use {@see Rule::exists} with
+     * {@see RuleSet::rule} or pass a callback which accepts an {@see \Illuminate\Validation\Rules\Exists} instance.
+     *
+     * @link https://laravel.com/docs/8.x/validation#rule-exists
+     */
+    public function exists(string $table, string $column = 'NULL', ?callable $modifier = null): self
+    {
+        $rule = Rule::exists($table, $column);
+
+        if ($modifier) {
+            $modifier($rule);
+        }
+
+        return $this->rule($rule);
+    }
+
+    /**
      * The field under validation must be a successfully uploaded file.
      *
      * @link https://laravel.com/docs/8.x/validation#rule-file
@@ -808,6 +829,27 @@ class RuleSet implements Contracts\RuleSet, Arrayable
     public function timezone(): self
     {
         return $this->rule(Rule::timezone());
+    }
+
+    /**
+     * The field under validation must not exist within the given database table. If the *column* option is not
+     * specified, the field name will be used. Instead of specifying the table name directly, you may specify the
+     * Eloquent model class name.
+     *
+     * If you would like to customize the query executed by the validation rule, you may use {@see Rule::unique} with
+     * {@see RuleSet::rule} or pass a callback which accepts a {@see \Illuminate\Validation\Rules\Unique} instance.
+     *
+     * @link https://laravel.com/docs/8.x/validation#rule-unique
+     */
+    public function unique(string $table, string $column = 'NULL', ?callable $modifier = null): self
+    {
+        $rule = Rule::unique($table, $column);
+
+        if ($modifier) {
+            $modifier($rule);
+        }
+
+        return $this->rule($rule);
     }
 
     /**
