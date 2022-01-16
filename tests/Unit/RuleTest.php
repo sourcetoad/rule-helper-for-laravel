@@ -524,12 +524,12 @@ class RuleTest extends TestCase
             ],
             'dimensions min_width via modifier valid' => [
                 'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
-                'rules' => fn() => RuleSet::create()->dimensions([], fn (Dimensions $rule) => $rule->minWidth(100)),
+                'rules' => fn() => RuleSet::create()->dimensions([], fn(Dimensions $rule) => $rule->minWidth(100)),
                 'fails' => false,
             ],
             'dimensions min_width via modifier invalid' => [
                 'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
-                'rules' => fn() => RuleSet::create()->dimensions([], fn (Dimensions $rule) => $rule->minWidth(101)),
+                'rules' => fn() => RuleSet::create()->dimensions([], fn(Dimensions $rule) => $rule->minWidth(101)),
                 'fails' => true,
             ],
             'dimensions max_width valid' => [

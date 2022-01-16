@@ -42,7 +42,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
     /**
      * Append one or more rules to the end of the rule set.
      *
-     * @param  \Illuminate\Contracts\Validation\Rule|string $rule
+     * @param \Illuminate\Contracts\Validation\Rule|string $rule
      * @return $this
      */
     public function push(...$rule): self
@@ -55,7 +55,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
     /**
      * Append a rule to the end of the rule set.
      *
-     * @param  \Illuminate\Contracts\Validation\Rule|string $rule
+     * @param \Illuminate\Contracts\Validation\Rule|string $rule
      * @return $this
      */
     public function rule($rule): self
@@ -468,7 +468,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      * list of values provided to the *in* rule.
      *
      * @link https://laravel.com/docs/8.x/validation#rule-in
-     * @param Arrayable|array|string  $values
+     * @param Arrayable|array|string $values
      */
     public function in($values): self
     {
@@ -614,7 +614,7 @@ class RuleSet implements Contracts\RuleSet, Arrayable
      * The field under validation must not be included in the given list of values.
      *
      * @link https://laravel.com/docs/8.x/validation#rule-not-in
-     * @param Arrayable|array|string  $values
+     * @param Arrayable|array|string $values
      */
     public function notIn($values): self
     {
