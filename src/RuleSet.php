@@ -440,6 +440,20 @@ class RuleSet implements Contracts\RuleSet, Arrayable
     }
 
     /**
+     * The field under validation must be included in the given list of values.
+     *
+     * When the *in* rule is combined with the *array* rule, each value in the input array must be present within the
+     * list of values provided to the *in* rule.
+     *
+     * @link https://laravel.com/docs/8.x/validation#rule-in
+     * @param Arrayable|array|string  $values
+     */
+    public function in($values): self
+    {
+        return $this->rule(Rule::in($values));
+    }
+
+    /**
      * The field under validation must exist in *anotherField*'s values.
      *
      * @link https://laravel.com/docs/8.x/validation#rule-in-array

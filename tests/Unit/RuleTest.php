@@ -703,6 +703,24 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->image(),
                 'fails' => true,
             ],
+            'in valid' => [
+                'data' => [
+                    'field-a' => 'a',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->in(['a', 'b', 'c']),
+                ],
+                'fails' => false,
+            ],
+            'in invalid' => [
+                'data' => [
+                    'field-a' => 'd',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->in(['a', 'b', 'c']),
+                ],
+                'fails' => true,
+            ],
             'inArray valid' => [
                 'data' => [
                     'field-a' => 'a',

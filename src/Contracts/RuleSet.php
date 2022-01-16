@@ -46,6 +46,7 @@ interface RuleSet
     public function gt(string $field): self;
     public function gte(string $field): self;
     public function image(): self;
+    public function in($values): self;
     public function inArray(string $anotherField): self;
     public function integer(): self;
     public function ip(): self;
