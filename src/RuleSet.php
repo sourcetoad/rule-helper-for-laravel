@@ -602,8 +602,8 @@ class RuleSet implements Contracts\RuleSet, Arrayable
     /**
      * The field under validation must be a multiple of *value*.
      *
-     * @param int|float $value
      * @link https://laravel.com/docs/8.x/validation#multiple-of
+     * @param int|float $value
      */
     public function multipleOf($value): self
     {
