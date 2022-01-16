@@ -21,15 +21,5 @@
         "psr-4": {
             "Sourcetoad\\RuleHelper\\Tests\\": "tests/"
         }
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Sourcetoad\\RuleHelper\\ServiceProvider"
-            ],
-            "aliases": {
-                "RuleSet": "Sourcetoad\\RuleHelper\\Support\\Facades\\RuleSet"
-            }
-        }
     }
 }

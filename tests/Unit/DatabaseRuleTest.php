@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Exists;
 use Illuminate\Validation\Rules\Unique;
-use Sourcetoad\RuleHelper\Support\Facades\RuleSet;
+use Sourcetoad\RuleHelper\RuleSet;
 use Sourcetoad\RuleHelper\Tests\TestCase;
 
 class DatabaseRuleTest extends TestCase
