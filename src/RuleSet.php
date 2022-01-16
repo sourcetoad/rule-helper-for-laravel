@@ -735,6 +735,18 @@ class RuleSet implements Contracts\RuleSet, Arrayable
     }
 
     /**
+     * The field under validation must be present in the input data if a true boolean is passed in or the passed in
+     * closure returns true.
+     *
+     * @link https://laravel.com/docs/8.x/validation#rule-required-if
+     * @param callable|bool $callback
+     */
+    public function requiredIf($callback): self
+    {
+        return $this->rule(Rule::requiredIf($callback));
+    }
+
+    /**
      * The field must be present if all the criteria are true.
      */
     public function requiredIfAll(RequiredIf ...$rules): self
