@@ -21,18 +21,9 @@ class DatabaseRuleTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->createSqliteFile();
-
         parent::setUp();
 
         $this->loadLaravelMigrations();
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-
-        $this->destroySqliteFile();
     }
 
     /**
@@ -227,30 +218,5 @@ class DatabaseRuleTest extends TestCase
                 'fails' => false,
             ],
         ];
-    }
-
-    private function getSqliteDatabasePath(): ?string
-    {
-        if (env('DB_CONNECTION') !== 'sqlite') {
-            return null;
-        }
-
-        return dirname(__DIR__, 2).DIRECTORY_SEPARATOR.env('DB_DATABASE');
-    }
-
-    private function createSqliteFile(): void
-    {
-        $path = $this->getSqliteDatabasePath();
-        if ($path && !file_exists($path)) {
-            file_put_contents($path, '');
-        }
-    }
-
-    private function destroySqliteFile(): void
-    {
-        $path = $this->getSqliteDatabasePath();
-        if ($path && file_exists($path)) {
-            unlink($path);
-        }
     }
 }
