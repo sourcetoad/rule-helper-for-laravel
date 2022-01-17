@@ -9,7 +9,7 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\Rules\RequiredIf;
 
-class RuleSet implements Contracts\RuleSet, Arrayable
+class RuleSet implements Arrayable
 {
     private Collection $rules;
 

@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Dimensions;
 use Sourcetoad\RuleHelper\Rule;
-use Sourcetoad\RuleHelper\Support\Facades\RuleSet;
+use Sourcetoad\RuleHelper\RuleSet;
 use Sourcetoad\RuleHelper\Tests\TestCase;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Mime\MimeTypeGuesserInterface;
