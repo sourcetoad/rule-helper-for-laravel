@@ -472,6 +472,46 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->dateFormat('d-M-Y'),
                 'fails' => true,
             ],
+            'declined valid' => [
+                'data' => '0',
+                'rules' => fn() => RuleSet::create()->declined(),
+                'fails' => false,
+            ],
+            'declined invalid' => [
+                'data' => '1',
+                'rules' => fn() => RuleSet::create()->declined(),
+                'fails' => true,
+            ],
+            'declinedIf declined' => [
+                'data' => [
+                    'field-a' => '0',
+                    'field-b' => 'B',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->declinedIf('field-b', 'A', 'B', 'C'),
+                ],
+                'fails' => false,
+            ],
+            'declinedIf decline not needed' => [
+                'data' => [
+                    'field-a' => '1',
+                    'field-b' => 'D',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->declinedIf('field-b', 'A', 'B', 'C'),
+                ],
+                'fails' => false,
+            ],
+            'declinedIf decline needed' => [
+                'data' => [
+                    'field-a' => '1',
+                    'field-b' => 'B',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->declinedIf('field-b', 'A', 'B'),
+                ],
+                'fails' => true,
+            ],
             'different valid' => [
                 'data' => [
                     'field-a' => 'a',

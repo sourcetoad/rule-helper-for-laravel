@@ -24,7 +24,7 @@ class Rule extends LaravelRule
     }
 
     /**
-     * The field under validation must be "yes", "on", 1, or true if *another field* under validation is equal to a
+     * The field under validation must be "yes", "on", 1, or true if *anotherField* under validation is equal to a
      * specified *value*. This is useful for validating "Terms of Service" acceptance or similar fields.
      *
      * @link https://laravel.com/docs/8.x/validation#rule-accepted-if
@@ -217,6 +217,27 @@ class Rule extends LaravelRule
     public static function dateFormat(string $dateFormat): string
     {
         return 'date_format:'.$dateFormat;
+    }
+
+    /**
+     * The field under validation must be *"no"*, *"off"*, *0*, or *false*.
+     *
+     * @link https://laravel.com/docs/8.x/validation#rule-declined
+     */
+    public static function declined(): string
+    {
+        return 'declined';
+    }
+
+    /**
+     * The field under validation must be *"no"*, *"off"*, *0*, or *false* if *anotherField* under validation is equal
+     * to a specified value.
+     *
+     * @link https://laravel.com/docs/8.x/validation#rule-declined-if
+     */
+    public static function declinedIf(string $anotherField, string ...$value): string
+    {
+        return sprintf('declined_if:%s,%s', $anotherField, implode(',', $value));
     }
 
     /**
