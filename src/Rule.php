@@ -490,6 +490,16 @@ class Rule extends LaravelRule
     }
 
     /**
+     * The field under validation must be a MAC address.
+     *
+     * @link https://laravel.com/docs/8.x/validation#rule-mac
+     */
+    public static function macAddress(): string
+    {
+        return 'mac_address';
+    }
+
+    /**
      * The field under validation must be less than or equal to a maximum *value*.
      *
      * @link https://laravel.com/docs/8.x/validation#rule-max
