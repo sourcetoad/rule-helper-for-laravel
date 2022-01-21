@@ -583,6 +583,16 @@ class RuleSet implements Arrayable
     }
 
     /**
+     * The field under validation must be a MAC address.
+     *
+     * @link https://laravel.com/docs/8.x/validation#rule-mac
+     */
+    public function macAddress(): self
+    {
+        return $this->rule(Rule::macAddress());
+    }
+
+    /**
      * The field under validation must be less than or equal to a maximum *value*.
      *
      * @link https://laravel.com/docs/8.x/validation#rule-max

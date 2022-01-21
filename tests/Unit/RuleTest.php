@@ -970,6 +970,16 @@ class RuleTest extends TestCase
                 ],
                 'fails' => true,
             ],
+            'mac address valid' => [
+                'data' => '00-11-22-33-44-55',
+                'rules' => fn() => RuleSet::create()->macAddress(),
+                'fails' => false,
+            ],
+            'mac address invalid' => [
+                'data' => 'a',
+                'rules' => fn() => RuleSet::create()->macAddress(),
+                'fails' => true,
+            ],
             'max valid with string' => [
                 'data' => str_repeat('.', 10),
                 'rules' => fn() => RuleSet::create()->max(10),
