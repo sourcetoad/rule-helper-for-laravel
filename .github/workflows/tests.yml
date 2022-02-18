@@ -32,7 +32,7 @@ jobs:
           restore-keys: ${{ runner.os }}-${{ matrix.php }}-composer-
 
       - name: Install Composer dependencies
-        run: composer install --${{ matrix.stability }} --prefer-dist --no-interaction --no-progress  --no-suggest --optimize-autoloader
+        run: composer update --${{ matrix.stability }} --prefer-dist --no-interaction --no-progress  --no-suggest --optimize-autoloader
 
       - name: Check code style
         run: vendor/bin/phpcs
