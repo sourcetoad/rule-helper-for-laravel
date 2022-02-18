@@ -697,7 +697,7 @@ class RuleTest extends TestCase
                 'fails' => true,
             ],
             'email rfc valid' => [
-                'data' => 'someone@'.Str::repeat('example', 100).'.com',
+                'data' => 'someone@example.com',
                 'rules' => fn() => RuleSet::create()->email('rfc'),
                 'fails' => false,
             ],
