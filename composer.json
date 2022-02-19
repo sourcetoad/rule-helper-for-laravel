@@ -5,6 +5,7 @@
     "minimum-stability": "stable",
     "require": {
         "php": "^7.4|^8.0",
+        "egulias/email-validator": "^2.1.21",
         "laravel/framework": "^8.77"
     },
     "require-dev": {
