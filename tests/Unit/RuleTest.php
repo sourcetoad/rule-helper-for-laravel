@@ -1106,26 +1106,6 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->numeric(),
                 'fails' => true,
             ],
-            'password valid' => [
-                'data' => 'password-one',
-                'rules' => function () {
-                    $this->mockUserAuth('password-one', null);
-
-                    /** @noinspection PhpDeprecationInspection */
-                    return RuleSet::create()->password();
-                },
-                'fails' => false,
-            ],
-            'password invalid' => [
-                'data' => 'password-one',
-                'rules' => function () {
-                    $this->mockUserAuth('password-two', null);
-
-                    /** @noinspection PhpDeprecationInspection */
-                    return RuleSet::create()->password();
-                },
-                'fails' => true,
-            ],
             'present valid' => [
                 'data' => [
                     'field-a' => '',
