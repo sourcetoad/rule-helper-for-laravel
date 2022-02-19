@@ -583,17 +583,6 @@ class Rule extends LaravelRule
     }
 
     /**
-     * The field under validation must match the authenticated user's password.
-     *
-     * @link https://laravel.com/docs/8.x/validation#rule-password
-     * @deprecated To be removed in 9.0, use currentPassword instead.
-     */
-    public static function password(): string
-    {
-        return 'password';
-    }
-
-    /**
      * The field under validation must be present in the input data but can be empty.
      *
      * @link https://laravel.com/docs/8.x/validation#rule-present
