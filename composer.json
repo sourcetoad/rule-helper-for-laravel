@@ -1,5 +1,6 @@
 {
     "name": "sourcetoad/rule-helper-for-laravel",
+    "description": "Rule helper for Laravel",
     "type": "library",
     "license": "MIT",
     "minimum-stability": "stable",
