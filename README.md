@@ -5,7 +5,6 @@ Adds helpers to make building Laravel rule arrays easier by providing helper met
 ## Installation
 
 ```shell
-$ composer config repositories.sourcetoad/rule-helper-for-laravel.git vcs https://github.com/sourcetoad/rule-helper-for-laravel.git
 $ composer require sourcetoad/rule-helper-for-laravel
 ```
 
