@@ -769,6 +769,14 @@ class RuleSet implements Arrayable
     }
 
     /**
+     * The field under validation must be an array and must contain at least the specified keys.
+     */
+    public function requiredArrayKeys(string ...$key): self
+    {
+        return $this->rule(Rule::requiredArrayKeys(...$key));
+    }
+
+    /**
      * The field under validation must be present in the input data if a true boolean is passed in or the passed in
      * closure returns true.
      *
