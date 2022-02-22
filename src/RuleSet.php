@@ -758,6 +758,8 @@ class RuleSet implements Arrayable
 
     /**
      * The field under validation must be an array and must contain at least the specified keys.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-required-array-keys
      */
     public function requiredArrayKeys(string ...$key): self
     {
