@@ -1244,6 +1244,16 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->required(),
                 'fails' => true,
             ],
+            'requiredArrayKeys valid' => [
+                'data' => ['field' => ['a' => '1', 'b' => '2', 'c' => '3']],
+                'rules' => fn() => ['field' => RuleSet::create()->requiredArrayKeys('a', 'b', 'c')],
+                'fails' => false,
+            ],
+            'requiredArrayKeys invalid' => [
+                'data' => ['field' => ['a' => '1', 'c' => '3']],
+                'rules' => fn() => ['field' => RuleSet::create()->requiredArrayKeys('a', 'b', 'c')],
+                'fails' => true,
+            ],
             'requiredIf bool valid' => [
                 'data' => [
                     'field-a' => 'a',

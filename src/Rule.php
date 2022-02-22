@@ -653,6 +653,14 @@ class Rule extends LaravelRule
     }
 
     /**
+     * The field under validation must be an array and must contain at least the specified keys.
+     */
+    public static function requiredArrayKeys(string ...$key): string
+    {
+        return sprintf('required_array_keys:%s', implode(',', $key));
+    }
+
+    /**
      * The field must be present if all the criteria are true.
      */
     public static function requiredIfAll(RequiredIf ...$rules): RequiredIf
