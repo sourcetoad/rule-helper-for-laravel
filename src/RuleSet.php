@@ -101,9 +101,8 @@ class RuleSet implements Arrayable
      * The field under validation must be a value after a given date.
      *
      * @link https://laravel.com/docs/9.x/validation#rule-after
-     * @param string|DateTimeInterface $date A date parseable by 'strtotime'
      */
-    public function after($date): self
+    public function after(string|DateTimeInterface $date): self
     {
         return $this->rule(Rule::after($date));
     }
@@ -112,9 +111,8 @@ class RuleSet implements Arrayable
      * The field under validation must be a value after or equal to the given date.
      *
      * @link https://laravel.com/docs/9.x/validation#rule-after-or-equal
-     * @param string|DateTimeInterface $date A date parseable by 'strtotime'
      */
-    public function afterOrEqual($date): self
+    public function afterOrEqual(string|DateTimeInterface $date): self
     {
         return $this->rule(Rule::afterOrEqual($date));
     }
@@ -173,9 +171,8 @@ class RuleSet implements Arrayable
      * The field under validation must be a value preceding the given date.
      *
      * @link https://laravel.com/docs/9.x/validation#rule-before
-     * @param string|DateTimeInterface $date A date parseable by 'strtotime'
      */
-    public function before($date): self
+    public function before(string|DateTimeInterface $date): self
     {
         return $this->rule(Rule::before($date));
     }
@@ -184,9 +181,8 @@ class RuleSet implements Arrayable
      * The field under validation must be a value preceding or equal to the given date.
      *
      * @link https://laravel.com/docs/9.x/validation#rule-before-or-equal
-     * @param string|DateTimeInterface $date A date parseable by 'strtotime'
      */
-    public function beforeOrEqual($date): self
+    public function beforeOrEqual(string|DateTimeInterface $date): self
     {
         return $this->rule(Rule::beforeOrEqual($date));
     }
@@ -245,9 +241,8 @@ class RuleSet implements Arrayable
      * The field under validation must be equal to the given date.
      *
      * @link https://laravel.com/docs/9.x/validation#rule-date-equals
-     * @param string|DateTimeInterface $date A date parseable by 'strtotime'
      */
-    public function dateEquals($date): self
+    public function dateEquals(string|DateTimeInterface $date): self
     {
         return $this->rule(Rule::dateEquals($date));
     }

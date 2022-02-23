@@ -48,9 +48,8 @@ class Rule extends LaravelRule
      * The field under validation must be a value after a given date.
      *
      * @link https://laravel.com/docs/9.x/validation#rule-after
-     * @param string|DateTimeInterface $date A date parseable by 'strtotime'
      */
-    public static function after($date): string
+    public static function after(string|DateTimeInterface $date): string
     {
         return 'after:'.static::convertDateForRule($date);
     }
@@ -59,9 +58,8 @@ class Rule extends LaravelRule
      * The field under validation must be a value after or equal to the given date.
      *
      * @link https://laravel.com/docs/9.x/validation#rule-after-or-equal
-     * @param string|DateTimeInterface $date A date parseable by 'strtotime'
      */
-    public static function afterOrEqual($date): string
+    public static function afterOrEqual(string|DateTimeInterface $date): string
     {
         return 'after_or_equal:'.static::convertDateForRule($date);
     }
@@ -124,9 +122,8 @@ class Rule extends LaravelRule
      * The field under validation must be a value preceding the given date.
      *
      * @link https://laravel.com/docs/9.x/validation#rule-before
-     * @param string|DateTimeInterface $date A date parseable by 'strtotime'
      */
-    public static function before($date): string
+    public static function before(string|DateTimeInterface $date): string
     {
         return 'before:'.static::convertDateForRule($date);
     }
@@ -135,9 +132,8 @@ class Rule extends LaravelRule
      * The field under validation must be a value preceding or equal to the given date.
      *
      * @link https://laravel.com/docs/9.x/validation#rule-before-or-equal
-     * @param string|DateTimeInterface $date A date parseable by 'strtotime'
      */
-    public static function beforeOrEqual($date): string
+    public static function beforeOrEqual(string|DateTimeInterface $date): string
     {
         return 'before_or_equal:'.static::convertDateForRule($date);
     }
@@ -200,9 +196,8 @@ class Rule extends LaravelRule
      * The field under validation must be equal to the given date.
      *
      * @link https://laravel.com/docs/9.x/validation#rule-date-equals
-     * @param string|DateTimeInterface $date A date parseable by 'strtotime'
      */
-    public static function dateEquals($date): string
+    public static function dateEquals(string|DateTimeInterface $date): string
     {
         return 'date_equals:'.static::convertDateForRule($date, 'Y-m-d');
     }
@@ -830,13 +825,10 @@ class Rule extends LaravelRule
         return 'uuid';
     }
 
-    /**
-     * @param string|DateTimeInterface $date
-     * @param string $format
-     * @return string
-     */
-    private static function convertDateForRule($date, string $format = DateTimeInterface::RFC3339): string
-    {
+    private static function convertDateForRule(
+        string|DateTimeInterface $date,
+        string $format = DateTimeInterface::RFC3339
+    ): string {
         if (is_string($date)) {
             return $date;
         }
