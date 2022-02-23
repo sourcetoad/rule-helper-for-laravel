@@ -487,9 +487,8 @@ class RuleSet implements Arrayable
      * list of values provided to the *in* rule.
      *
      * @link https://laravel.com/docs/9.x/validation#rule-in
-     * @param Arrayable|array|string $values
      */
-    public function in($values): self
+    public function in(Arrayable|array|string $values): self
     {
         return $this->rule(Rule::in($values));
     }
@@ -642,9 +641,8 @@ class RuleSet implements Arrayable
      * The field under validation must not be included in the given list of values.
      *
      * @link https://laravel.com/docs/9.x/validation#rule-not-in
-     * @param Arrayable|array|string $values
      */
-    public function notIn($values): self
+    public function notIn(Arrayable|array|string $values): self
     {
         return $this->rule(Rule::notIn($values));
     }
