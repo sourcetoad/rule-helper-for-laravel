@@ -58,7 +58,7 @@ class RuleSet implements Arrayable
      * @param \Illuminate\Contracts\Validation\Rule|string $rule
      * @return $this
      */
-    public function rule($rule): self
+    public function rule(mixed $rule): self
     {
         $this->rules->push($rule);
 
@@ -765,7 +765,7 @@ class RuleSet implements Arrayable
      * @link https://laravel.com/docs/9.x/validation#rule-required-if
      * @param callable|bool $callback
      */
-    public function requiredIf($callback): self
+    public function requiredIf(mixed $callback): self
     {
         return $this->rule(Rule::requiredIf($callback));
     }
