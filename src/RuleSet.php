@@ -58,7 +58,7 @@ class RuleSet implements Arrayable
      * @param \Illuminate\Contracts\Validation\Rule|string $rule
      * @return $this
      */
-    public function rule($rule): self
+    public function rule(mixed $rule): self
     {
         $this->rules->push($rule);
 
@@ -69,7 +69,7 @@ class RuleSet implements Arrayable
      * The field under validation must be "yes", "on", 1, or true. This is useful for validating "Terms of Service"
      * acceptance or similar fields.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-accepted
+     * @link https://laravel.com/docs/9.x/validation#rule-accepted
      */
     public function accepted(): self
     {
@@ -80,7 +80,7 @@ class RuleSet implements Arrayable
      * The field under validation must be "yes", "on", 1, or true if *anotherField* under validation is equal to a
      * specified *value*. This is useful for validating "Terms of Service" acceptance or similar fields.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-accepted-if
+     * @link https://laravel.com/docs/9.x/validation#rule-accepted-if
      */
     public function acceptedIf(string $anotherField, string ...$value): self
     {
@@ -90,7 +90,7 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must have a valid A or AAAA record according to the *dns_get_record* PHP function.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-active-url
+     * @link https://laravel.com/docs/9.x/validation#rule-active-url
      */
     public function activeUrl(): self
     {
@@ -100,10 +100,9 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must be a value after a given date.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-after
-     * @param string|DateTimeInterface $date A date parseable by 'strtotime'
+     * @link https://laravel.com/docs/9.x/validation#rule-after
      */
-    public function after($date): self
+    public function after(string|DateTimeInterface $date): self
     {
         return $this->rule(Rule::after($date));
     }
@@ -111,10 +110,9 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must be a value after or equal to the given date.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-after-or-equal
-     * @param string|DateTimeInterface $date A date parseable by 'strtotime'
+     * @link https://laravel.com/docs/9.x/validation#rule-after-or-equal
      */
-    public function afterOrEqual($date): self
+    public function afterOrEqual(string|DateTimeInterface $date): self
     {
         return $this->rule(Rule::afterOrEqual($date));
     }
@@ -122,7 +120,7 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must be entirely alphabetic characters.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-alpha
+     * @link https://laravel.com/docs/9.x/validation#rule-alpha
      */
     public function alpha(): self
     {
@@ -132,7 +130,7 @@ class RuleSet implements Arrayable
     /**
      * The field under validation may have alpha-numeric characters, as well as dashes and underscores.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-alpha-dash
+     * @link https://laravel.com/docs/9.x/validation#rule-alpha-dash
      */
     public function alphaDash(): self
     {
@@ -142,7 +140,7 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must be entirely alpha-numeric characters.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-alpha-num
+     * @link https://laravel.com/docs/9.x/validation#rule-alpha-num
      */
     public function alphaNum(): self
     {
@@ -152,7 +150,7 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must be a PHP *array*.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-array
+     * @link https://laravel.com/docs/9.x/validation#rule-array
      */
     public function array(string ...$requiredKey): self
     {
@@ -162,7 +160,7 @@ class RuleSet implements Arrayable
     /**
      * Stop running validation rules for the field after the first validation failure.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-bail
+     * @link https://laravel.com/docs/9.x/validation#rule-bail
      */
     public function bail(): self
     {
@@ -172,10 +170,9 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must be a value preceding the given date.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-before
-     * @param string|DateTimeInterface $date A date parseable by 'strtotime'
+     * @link https://laravel.com/docs/9.x/validation#rule-before
      */
-    public function before($date): self
+    public function before(string|DateTimeInterface $date): self
     {
         return $this->rule(Rule::before($date));
     }
@@ -183,10 +180,9 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must be a value preceding or equal to the given date.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-before-or-equal
-     * @param string|DateTimeInterface $date A date parseable by 'strtotime'
+     * @link https://laravel.com/docs/9.x/validation#rule-before-or-equal
      */
-    public function beforeOrEqual($date): self
+    public function beforeOrEqual(string|DateTimeInterface $date): self
     {
         return $this->rule(Rule::beforeOrEqual($date));
     }
@@ -194,7 +190,7 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must have a size between the given *min* and *max*.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-between
+     * @link https://laravel.com/docs/9.x/validation#rule-between
      */
     public function between(int $min, int $max): self
     {
@@ -204,7 +200,7 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must be able to be cast as boolean.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-boolean
+     * @link https://laravel.com/docs/9.x/validation#rule-boolean
      */
     public function boolean(): self
     {
@@ -214,7 +210,7 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must have a matching field of *{field}_confirmation*.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-confirmed
+     * @link https://laravel.com/docs/9.x/validation#rule-confirmed
      */
     public function confirmed(): self
     {
@@ -224,7 +220,7 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must match the authenticated user's password.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-current-password
+     * @link https://laravel.com/docs/9.x/validation#rule-current-password
      */
     public function currentPassword(?string $authenticationGuard = null): self
     {
@@ -234,7 +230,7 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must be a valid, non-relative date according to the 'strtotime' PHP function.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-date
+     * @link https://laravel.com/docs/9.x/validation#rule-date
      */
     public function date(): self
     {
@@ -244,10 +240,9 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must be equal to the given date.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-date-equals
-     * @param string|DateTimeInterface $date A date parseable by 'strtotime'
+     * @link https://laravel.com/docs/9.x/validation#rule-date-equals
      */
-    public function dateEquals($date): self
+    public function dateEquals(string|DateTimeInterface $date): self
     {
         return $this->rule(Rule::dateEquals($date));
     }
@@ -255,7 +250,7 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must match the given *format*.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-date-format
+     * @link https://laravel.com/docs/9.x/validation#rule-date-format
      * @link https://www.php.net/manual/en/datetime.format.php
      * @param string $dateFormat A format supported by the *DateTime* class
      */
@@ -267,7 +262,7 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must be *"no"*, *"off"*, *0*, or *false*.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-declined
+     * @link https://laravel.com/docs/9.x/validation#rule-declined
      */
     public function declined(): self
     {
@@ -278,7 +273,7 @@ class RuleSet implements Arrayable
      * The field under validation must be *"no"*, *"off"*, *0*, or *false* if *anotherField* under validation is equal
      * to a specified value.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-declined-if
+     * @link https://laravel.com/docs/9.x/validation#rule-declined-if
      */
     public function declinedIf(string $anotherField, string ...$value): self
     {
@@ -288,7 +283,7 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must have a different value than *field*.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-different
+     * @link https://laravel.com/docs/9.x/validation#rule-different
      */
     public function different(string $field): self
     {
@@ -298,7 +293,7 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must be numeric and must have an exact length of *value*.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-digits
+     * @link https://laravel.com/docs/9.x/validation#rule-digits
      */
     public function digits(int $count): self
     {
@@ -308,7 +303,7 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must be numeric and must have a length between the given *min* and *max*.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-digits-between
+     * @link https://laravel.com/docs/9.x/validation#rule-digits-between
      */
     public function digitsBetween(int $min, int $max): self
     {
@@ -327,7 +322,7 @@ class RuleSet implements Arrayable
      * If you would like to fluently define the rule, you may use {@see Rule::dimensions} with {@see RuleSet::rule} or
      * pass a callback which accepts a {@see \Illuminate\Validation\Rules\Dimensions} instance.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-dimensions
+     * @link https://laravel.com/docs/9.x/validation#rule-dimensions
      */
     public function dimensions(array $constraints, ?callable $modifier = null): self
     {
@@ -343,7 +338,7 @@ class RuleSet implements Arrayable
     /**
      * When validating arrays, the field under validation must not have any duplicate values.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-distinct
+     * @link https://laravel.com/docs/9.x/validation#rule-distinct
      */
     public function distinct(bool $strict = false, $ignoreCase = false): self
     {
@@ -353,7 +348,7 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must be formatted as an email address.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-email
+     * @link https://laravel.com/docs/9.x/validation#rule-email
      */
     public function email(string ...$validator): self
     {
@@ -363,7 +358,7 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must end with one of the given values.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-ends-with
+     * @link https://laravel.com/docs/9.x/validation#rule-ends-with
      */
     public function endsWith(string ...$value): self
     {
@@ -374,7 +369,7 @@ class RuleSet implements Arrayable
      * The field under validation will be excluded from the request data returned by the *validate* and *validated*
      * methods.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-exclude
+     * @link https://laravel.com/docs/9.x/validation#rule-exclude
      */
     public function exclude(): self
     {
@@ -385,7 +380,7 @@ class RuleSet implements Arrayable
      * The field under validation will be excluded from the request data returned by the *validate* and *validated*.
      * methods if the *anotherField* field is equal to *value*.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-exclude-if
+     * @link https://laravel.com/docs/9.x/validation#rule-exclude-if
      */
     public function excludeIf(string $anotherField, ?string $value): self
     {
@@ -396,7 +391,7 @@ class RuleSet implements Arrayable
      * The field under validation will be excluded from the request data returned by the *validate* and *validated*
      * methods unless *anotherField*'s field is equal to *value*.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-exclude-unless
+     * @link https://laravel.com/docs/9.x/validation#rule-exclude-unless
      */
     public function excludeUnless(string $anotherField, ?string $value): self
     {
@@ -407,7 +402,7 @@ class RuleSet implements Arrayable
      * The field under validation will be excluded from the request data returned by the *validate* and *validated*
      * methods if the *anotherField* field is not present.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-exclude-without
+     * @link https://laravel.com/docs/9.x/validation#rule-exclude-without
      */
     public function excludeWithout(string $anotherField): self
     {
@@ -422,7 +417,7 @@ class RuleSet implements Arrayable
      * If you would like to customize the query executed by the validation rule, you may use {@see Rule::exists} with
      * {@see RuleSet::rule} or pass a callback which accepts an {@see \Illuminate\Validation\Rules\Exists} instance.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-exists
+     * @link https://laravel.com/docs/9.x/validation#rule-exists
      */
     public function exists(string $table, string $column = 'NULL', ?callable $modifier = null): self
     {
@@ -438,7 +433,7 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must be a successfully uploaded file.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-file
+     * @link https://laravel.com/docs/9.x/validation#rule-file
      */
     public function file(): self
     {
@@ -448,7 +443,7 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must not be empty when it is present.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-filled
+     * @link https://laravel.com/docs/9.x/validation#rule-filled
      */
     public function filled(): self
     {
@@ -458,7 +453,7 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must be greater than the given *field*.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-gt
+     * @link https://laravel.com/docs/9.x/validation#rule-gt
      */
     public function gt(string $field): self
     {
@@ -468,7 +463,7 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must be greater than or equal to the given *field*.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-gte
+     * @link https://laravel.com/docs/9.x/validation#rule-gte
      */
     public function gte(string $field): self
     {
@@ -478,7 +473,7 @@ class RuleSet implements Arrayable
     /**
      * The file under validation must be an image (jpg, jpeg, png, bmp, gif, svg, or webp).
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-image
+     * @link https://laravel.com/docs/9.x/validation#rule-image
      */
     public function image(): self
     {
@@ -491,10 +486,9 @@ class RuleSet implements Arrayable
      * When the *in* rule is combined with the *array* rule, each value in the input array must be present within the
      * list of values provided to the *in* rule.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-in
-     * @param Arrayable|array|string $values
+     * @link https://laravel.com/docs/9.x/validation#rule-in
      */
-    public function in($values): self
+    public function in(Arrayable|array|string $values): self
     {
         return $this->rule(Rule::in($values));
     }
@@ -502,7 +496,7 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must exist in *anotherField*'s values.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-in-array
+     * @link https://laravel.com/docs/9.x/validation#rule-in-array
      */
     public function inArray(string $anotherField): self
     {
@@ -515,7 +509,7 @@ class RuleSet implements Arrayable
      * NOTE: This validation rule does not verify that the input is of the "integer" variable type, only that the input
      * is of a type accepted by PHP's FILTER_VALIDATE_INT rule.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-integer
+     * @link https://laravel.com/docs/9.x/validation#rule-integer
      */
     public function integer(): self
     {
@@ -525,7 +519,7 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must be an IP address.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-ip
+     * @link https://laravel.com/docs/9.x/validation#rule-ip
      */
     public function ip(): self
     {
@@ -535,7 +529,7 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must be an IPv4 address.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-ipv4
+     * @link https://laravel.com/docs/9.x/validation#ipv4
      */
     public function ipv4(): self
     {
@@ -545,7 +539,7 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must be an IPv6 address.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-ipv6
+     * @link https://laravel.com/docs/9.x/validation#ipv6
      */
     public function ipv6(): self
     {
@@ -555,7 +549,7 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must be a valid JSON string.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-json
+     * @link https://laravel.com/docs/9.x/validation#rule-json
      */
     public function json(): self
     {
@@ -565,7 +559,7 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must be less than the given *field*.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-lt
+     * @link https://laravel.com/docs/9.x/validation#rule-lt
      */
     public function lt(string $field): self
     {
@@ -575,7 +569,7 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must be less than or equal to the given *field*.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-lte
+     * @link https://laravel.com/docs/9.x/validation#rule-lte
      */
     public function lte(string $field): self
     {
@@ -585,7 +579,7 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must be a MAC address.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-mac
+     * @link https://laravel.com/docs/9.x/validation#rule-mac
      */
     public function macAddress(): self
     {
@@ -595,7 +589,7 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must be less than or equal to a maximum *value*.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-max
+     * @link https://laravel.com/docs/9.x/validation#rule-max
      */
     public function max(int $value): self
     {
@@ -605,7 +599,7 @@ class RuleSet implements Arrayable
     /**
      * The file under validation must have a MIME type corresponding to one of the listed extensions.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-mimes
+     * @link https://laravel.com/docs/9.x/validation#rule-mimes
      * @link https://svn.apache.org/repos/asf/httpd/httpd/trunk/docs/conf/mime.types
      */
     public function mimes(string ...$extension): self
@@ -616,7 +610,7 @@ class RuleSet implements Arrayable
     /**
      * The file under validation must match one of the given MIME types.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-mimetypes
+     * @link https://laravel.com/docs/9.x/validation#rule-mimetypes
      */
     public function mimetypes(string ...$mimeType): self
     {
@@ -626,7 +620,7 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must have a minimum *value*.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-min
+     * @link https://laravel.com/docs/9.x/validation#rule-min
      */
     public function min(int $value): self
     {
@@ -636,10 +630,9 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must be a multiple of *value*.
      *
-     * @link https://laravel.com/docs/8.x/validation#multiple-of
-     * @param int|float $value
+     * @link https://laravel.com/docs/9.x/validation#multiple-of
      */
-    public function multipleOf($value): self
+    public function multipleOf(int|float $value): self
     {
         return $this->rule(Rule::multipleOf($value));
     }
@@ -647,10 +640,9 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must not be included in the given list of values.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-not-in
-     * @param Arrayable|array|string $values
+     * @link https://laravel.com/docs/9.x/validation#rule-not-in
      */
-    public function notIn($values): self
+    public function notIn(Arrayable|array|string $values): self
     {
         return $this->rule(Rule::notIn($values));
     }
@@ -658,7 +650,7 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must not match the given regular expression.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-not-regex
+     * @link https://laravel.com/docs/9.x/validation#rule-not-regex
      */
     public function notRegex(string $pattern): self
     {
@@ -668,7 +660,7 @@ class RuleSet implements Arrayable
     /**
      * The field under validation may be *null*.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-nullable
+     * @link https://laravel.com/docs/9.x/validation#rule-nullable
      */
     public function nullable(): self
     {
@@ -678,7 +670,7 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must be numeric.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-numeric
+     * @link https://laravel.com/docs/9.x/validation#rule-numeric
      * @link https://www.php.net/manual/en/function.is-numeric.php
      */
     public function numeric(): self
@@ -687,21 +679,9 @@ class RuleSet implements Arrayable
     }
 
     /**
-     * The field under validation must match the authenticated user's password.
-     *
-     * @link https://laravel.com/docs/8.x/validation#rule-password
-     * @deprecated To be removed in 9.0, use currentPassword instead.
-     */
-    public function password(): self
-    {
-        /** @noinspection PhpDeprecationInspection */
-        return $this->rule(Rule::password());
-    }
-
-    /**
      * The field under validation must be present in the input data but can be empty.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-present
+     * @link https://laravel.com/docs/9.x/validation#rule-present
      */
     public function present(): self
     {
@@ -711,7 +691,7 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must be empty or not present.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-prohibited
+     * @link https://laravel.com/docs/9.x/validation#rule-prohibited
      */
     public function prohibited(): self
     {
@@ -721,7 +701,7 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must be empty or not present if the *anotherField* field is equal to any *value*.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-prohibited-if
+     * @link https://laravel.com/docs/9.x/validation#rule-prohibited-if
      */
     public function prohibitedIf(string $anotherField, string ...$value): self
     {
@@ -731,7 +711,7 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must be empty or not present unless the *anotherField* field is equal to any *value*.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-prohibited-unless
+     * @link https://laravel.com/docs/9.x/validation#rule-prohibited-unless
      */
     public function prohibitedUnless(string $anotherField, string ...$value): self
     {
@@ -741,7 +721,7 @@ class RuleSet implements Arrayable
     /**
      * If the field under validation is present, no fields in *anotherField* can be present, even if empty.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-prohibits
+     * @link https://laravel.com/docs/9.x/validation#rule-prohibits
      */
     public function prohibits(string ...$anotherField): self
     {
@@ -751,7 +731,7 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must match the given regular expression.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-regex
+     * @link https://laravel.com/docs/9.x/validation#rule-regex
      */
     public function regex(string $pattern): self
     {
@@ -761,7 +741,7 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must be present in the input data and not empty.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-required
+     * @link https://laravel.com/docs/9.x/validation#rule-required
      */
     public function required(): self
     {
@@ -770,6 +750,8 @@ class RuleSet implements Arrayable
 
     /**
      * The field under validation must be an array and must contain at least the specified keys.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-required-array-keys
      */
     public function requiredArrayKeys(string ...$key): self
     {
@@ -780,10 +762,10 @@ class RuleSet implements Arrayable
      * The field under validation must be present in the input data if a true boolean is passed in or the passed in
      * closure returns true.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-required-if
+     * @link https://laravel.com/docs/9.x/validation#rule-required-if
      * @param callable|bool $callback
      */
-    public function requiredIf($callback): self
+    public function requiredIf(mixed $callback): self
     {
         return $this->rule(Rule::requiredIf($callback));
     }
@@ -807,7 +789,7 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must be present and not empty if the *anotherField* field is equal to any *value*.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-required-if
+     * @link https://laravel.com/docs/9.x/validation#rule-required-if
      */
     public function requiredIfValue(string $anotherField, string ...$value): self
     {
@@ -818,7 +800,7 @@ class RuleSet implements Arrayable
      * The field under validation must be present and not empty unless the *anotherField* field is equal to any
      * *value*.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-required-unless
+     * @link https://laravel.com/docs/9.x/validation#rule-required-unless
      */
     public function requiredUnless(string $anotherField, string ...$value): self
     {
@@ -829,7 +811,7 @@ class RuleSet implements Arrayable
      * The field under validation must be present and not empty *only if* any of the other specified fields are present
      * and not empty.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-required-with
+     * @link https://laravel.com/docs/9.x/validation#rule-required-with
      */
     public function requiredWith(string ...$field): self
     {
@@ -840,7 +822,7 @@ class RuleSet implements Arrayable
      * The field under validation must be present and not empty *only if* all the other specified fields are present
      * and not empty.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-required-with-all
+     * @link https://laravel.com/docs/9.x/validation#rule-required-with-all
      */
     public function requiredWithAll(string ...$field): self
     {
@@ -851,7 +833,7 @@ class RuleSet implements Arrayable
      * The field under validation must be present and not empty *only when* any of the other specified fields are empty
      * or not present.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-required-without
+     * @link https://laravel.com/docs/9.x/validation#rule-required-without
      */
     public function requiredWithout(string ...$field): self
     {
@@ -862,7 +844,7 @@ class RuleSet implements Arrayable
      * The field under validation must be present and not empty *only when* all the other specified fields are empty or
      * not present.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-required-without-all
+     * @link https://laravel.com/docs/9.x/validation#rule-required-without-all
      */
     public function requiredWithoutAll(string ...$field): self
     {
@@ -872,7 +854,7 @@ class RuleSet implements Arrayable
     /**
      * The given *field* must match the field under validation.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-same
+     * @link https://laravel.com/docs/9.x/validation#rule-same
      */
     public function same(string $field): self
     {
@@ -882,7 +864,7 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must have a size matching the given *value*.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-size
+     * @link https://laravel.com/docs/9.x/validation#rule-size
      */
     public function size(int $value): self
     {
@@ -894,7 +876,7 @@ class RuleSet implements Arrayable
      *
      * Note: Must be used with other rules to have any effect.
      *
-     * @link https://laravel.com/docs/8.x/validation#validating-when-present
+     * @link https://laravel.com/docs/9.x/validation#validating-when-present
      */
     public function sometimes(): self
     {
@@ -904,7 +886,7 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must start with one of the given values.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-starts-with
+     * @link https://laravel.com/docs/9.x/validation#rule-starts-with
      */
     public function startsWith(string ...$value): self
     {
@@ -914,7 +896,7 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must be a string.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-string
+     * @link https://laravel.com/docs/9.x/validation#rule-string
      */
     public function string(): self
     {
@@ -925,7 +907,7 @@ class RuleSet implements Arrayable
      * The field under validation must be a valid timezone identifier according to the *timezone_identifiers_list* PHP
      * function.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-timezone
+     * @link https://laravel.com/docs/9.x/validation#rule-timezone
      */
     public function timezone(): self
     {
@@ -940,7 +922,7 @@ class RuleSet implements Arrayable
      * If you would like to customize the query executed by the validation rule, you may use {@see Rule::unique} with
      * {@see RuleSet::rule} or pass a callback which accepts a {@see \Illuminate\Validation\Rules\Unique} instance.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-unique
+     * @link https://laravel.com/docs/9.x/validation#rule-unique
      */
     public function unique(string $table, string $column = 'NULL', ?callable $modifier = null): self
     {
@@ -956,7 +938,7 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must be a valid URL.
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-url
+     * @link https://laravel.com/docs/9.x/validation#rule-url
      */
     public function url(): self
     {
@@ -966,7 +948,7 @@ class RuleSet implements Arrayable
     /**
      * The field under validation must be a valid RFC 4122 (version 1, 3, 4, or 5) universally unique identifier (UUID).
      *
-     * @link https://laravel.com/docs/8.x/validation#rule-uuid
+     * @link https://laravel.com/docs/9.x/validation#rule-uuid
      */
     public function uuid(): self
     {

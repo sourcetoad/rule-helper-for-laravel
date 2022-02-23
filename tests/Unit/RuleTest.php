@@ -697,7 +697,7 @@ class RuleTest extends TestCase
                 'fails' => true,
             ],
             'email rfc valid' => [
-                'data' => 'someone@'.Str::repeat('example', 100).'.com',
+                'data' => 'someone@example.com',
                 'rules' => fn() => RuleSet::create()->email('rfc'),
                 'fails' => false,
             ],
@@ -1104,26 +1104,6 @@ class RuleTest extends TestCase
             'numeric invalid' => [
                 'data' => 'a',
                 'rules' => fn() => RuleSet::create()->numeric(),
-                'fails' => true,
-            ],
-            'password valid' => [
-                'data' => 'password-one',
-                'rules' => function () {
-                    $this->mockUserAuth('password-one', null);
-
-                    /** @noinspection PhpDeprecationInspection */
-                    return RuleSet::create()->password();
-                },
-                'fails' => false,
-            ],
-            'password invalid' => [
-                'data' => 'password-one',
-                'rules' => function () {
-                    $this->mockUserAuth('password-two', null);
-
-                    /** @noinspection PhpDeprecationInspection */
-                    return RuleSet::create()->password();
-                },
                 'fails' => true,
             ],
             'present valid' => [
