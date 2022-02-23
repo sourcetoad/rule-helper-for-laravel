@@ -538,10 +538,9 @@ class Rule extends LaravelRule
     /**
      * The field under validation must be a multiple of *value*.
      *
-     * @param int|float $value
      * @link https://laravel.com/docs/9.x/validation#multiple-of
      */
-    public static function multipleOf($value): string
+    public static function multipleOf(int|float $value): string
     {
         return 'multiple_of:'.$value;
     }

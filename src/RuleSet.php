@@ -632,9 +632,8 @@ class RuleSet implements Arrayable
      * The field under validation must be a multiple of *value*.
      *
      * @link https://laravel.com/docs/9.x/validation#multiple-of
-     * @param int|float $value
      */
-    public function multipleOf($value): self
+    public function multipleOf(int|float $value): self
     {
         return $this->rule(Rule::multipleOf($value));
     }
