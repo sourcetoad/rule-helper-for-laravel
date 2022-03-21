@@ -22,5 +22,12 @@
         "psr-4": {
             "Sourcetoad\\RuleHelper\\Tests\\": "tests/"
         }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Sourcetoad\\RuleHelper\\RuleHelperServiceProvider"
+            ]
+        }
     }
 }

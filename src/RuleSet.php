@@ -35,6 +35,22 @@ class RuleSet implements Arrayable
     }
 
     /**
+     * Defines a rule set to be re-used later.
+     */
+    public static function define(string $name): RuleSet
+    {
+        return static::getDefinedRuleSets()->define($name);
+    }
+
+    /**
+     * Uses a previously defined rule set.
+     */
+    public static function useDefined(string $name): RuleSet
+    {
+        return static::getDefinedRuleSets()->useDefined($name);
+    }
+
+    /**
      * Append one or more rules to the end of the rule set.
      *
      * @param \Illuminate\Contracts\Validation\Rule|string $rule
@@ -946,5 +962,10 @@ class RuleSet implements Arrayable
     public function uuid(): self
     {
         return $this->rule(Rule::uuid());
+    }
+
+    private static function getDefinedRuleSets(): Contracts\DefinedRuleSets
+    {
+        return resolve(Contracts\DefinedRuleSets::class);
     }
 }
