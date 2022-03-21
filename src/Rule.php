@@ -8,7 +8,6 @@ use DateTimeInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\Rule as LaravelRule;
 use Illuminate\Validation\Rules\RequiredIf;
-use InvalidArgumentException;
 
 class Rule extends LaravelRule
 {
@@ -830,13 +829,9 @@ class Rule extends LaravelRule
     ): string {
         if (is_string($date)) {
             return $date;
-        }
-
-        if ($date instanceof DateTimeInterface) {
+        } else {
             return $date->format($format);
         }
-
-        throw new InvalidArgumentException('Invalid date type supplied');
     }
 
     private static function getRuleResults(array $rules): Collection
