@@ -1224,6 +1224,17 @@ class RuleTest extends TestCase
                 ],
                 'fails' => true,
             ],
+            'push adds to set' => [
+                'data' => 11,
+                'rules' => fn() => RuleSet::create()->string()->push('max:1'),
+                'fails' => true,
+                'errors' => [
+                    'field' => [
+                        'The field must be a string.',
+                        'The field must not be greater than 1 characters.',
+                    ],
+                ],
+            ],
             'regex valid' => [
                 'data' => 'value-a',
                 'rules' => fn() => RuleSet::create()->regex('/[a-z]+$/'),
