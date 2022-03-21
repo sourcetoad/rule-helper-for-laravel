@@ -20,8 +20,6 @@ class RuleSet implements Arrayable
 
     /**
      * Get the rule set as an array.
-     *
-     * @return array
      */
     public function toArray(): array
     {
@@ -30,9 +28,6 @@ class RuleSet implements Arrayable
 
     /**
      * Create a new rule set.
-     *
-     * @param array $rules
-     * @return static
      */
     public static function create(array $rules = []): self
     {
@@ -43,7 +38,6 @@ class RuleSet implements Arrayable
      * Append one or more rules to the end of the rule set.
      *
      * @param \Illuminate\Contracts\Validation\Rule|string $rule
-     * @return $this
      */
     public function push(...$rule): self
     {
@@ -56,7 +50,6 @@ class RuleSet implements Arrayable
      * Append a rule to the end of the rule set.
      *
      * @param \Illuminate\Contracts\Validation\Rule|string $rule
-     * @return $this
      */
     public function rule(mixed $rule): self
     {
