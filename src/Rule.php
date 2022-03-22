@@ -269,7 +269,7 @@ class Rule extends LaravelRule
      *
      * @link https://laravel.com/docs/9.x/validation#rule-distinct
      */
-    public static function distinct(bool $strict = false, $ignoreCase = false): string
+    public static function distinct(bool $strict = false, bool $ignoreCase = false): string
     {
         if ($ignoreCase) {
             return 'distinct:ignore_case';
