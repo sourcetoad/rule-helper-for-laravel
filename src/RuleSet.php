@@ -6,33 +6,24 @@ namespace Sourcetoad\RuleHelper;
 
 use DateTimeInterface;
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Support\Collection;
 use Illuminate\Validation\Rules\RequiredIf;
 
 class RuleSet implements Arrayable
 {
-    private Collection $rules;
-
-    public function __construct(array $rules = [])
+    public function __construct(private array $rules = [])
     {
-        $this->rules = collect($rules);
     }
 
     /**
      * Get the rule set as an array.
-     *
-     * @return array
      */
     public function toArray(): array
     {
-        return $this->rules->toArray();
+        return $this->rules;
     }
 
     /**
      * Create a new rule set.
-     *
-     * @param array $rules
-     * @return static
      */
     public static function create(array $rules = []): self
     {
@@ -40,29 +31,39 @@ class RuleSet implements Arrayable
     }
 
     /**
+     * Defines a rule set to be re-used later.
+     */
+    public static function define(string $name, RuleSet $ruleSet): void
+    {
+        static::getDefinedRuleSets()->define($name, $ruleSet);
+    }
+
+    /**
+     * Uses a previously defined rule set.
+     */
+    public static function useDefined(string $name): RuleSet
+    {
+        return static::getDefinedRuleSets()->useDefined($name);
+    }
+
+    /**
      * Append one or more rules to the end of the rule set.
      *
      * @param \Illuminate\Contracts\Validation\Rule|string $rule
-     * @return $this
      */
-    public function push(...$rule): self
+    public function concat(...$rule): self
     {
-        $this->rules->push(...$rule);
-
-        return $this;
+        return static::create([...$this->rules, ...$rule]);
     }
 
     /**
      * Append a rule to the end of the rule set.
      *
      * @param \Illuminate\Contracts\Validation\Rule|string $rule
-     * @return $this
      */
     public function rule(mixed $rule): self
     {
-        $this->rules->push($rule);
-
-        return $this;
+        return static::create([...$this->rules, $rule]);
     }
 
     /**
@@ -953,5 +954,10 @@ class RuleSet implements Arrayable
     public function uuid(): self
     {
         return $this->rule(Rule::uuid());
+    }
+
+    private static function getDefinedRuleSets(): Contracts\DefinedRuleSets
+    {
+        return resolve(Contracts\DefinedRuleSets::class);
     }
 }
