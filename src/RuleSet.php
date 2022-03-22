@@ -10,7 +10,7 @@ use Illuminate\Validation\Rules\RequiredIf;
 
 class RuleSet implements Arrayable
 {
-    public function __construct(private array $rules = [])
+    public function __construct(protected array $rules = [])
     {
     }
 
@@ -956,7 +956,7 @@ class RuleSet implements Arrayable
         return $this->rule(Rule::uuid());
     }
 
-    private static function getDefinedRuleSets(): Contracts\DefinedRuleSets
+    protected static function getDefinedRuleSets(): Contracts\DefinedRuleSets
     {
         return resolve(Contracts\DefinedRuleSets::class);
     }

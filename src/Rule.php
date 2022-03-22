@@ -823,7 +823,7 @@ class Rule extends LaravelRule
         return 'uuid';
     }
 
-    private static function convertDateForRule(
+    protected static function convertDateForRule(
         string|DateTimeInterface $date,
         string $format = DateTimeInterface::RFC3339
     ): string {
@@ -834,7 +834,7 @@ class Rule extends LaravelRule
         }
     }
 
-    private static function getRuleResults(array $rules): Collection
+    protected static function getRuleResults(array $rules): Collection
     {
         return collect($rules)
             ->map(
