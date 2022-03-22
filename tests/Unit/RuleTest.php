@@ -1224,9 +1224,9 @@ class RuleTest extends TestCase
                 ],
                 'fails' => true,
             ],
-            'push adds to set' => [
+            'concat adds to set' => [
                 'data' => 11,
-                'rules' => fn() => RuleSet::create()->string()->push('max:1'),
+                'rules' => fn() => RuleSet::create()->string()->concat('max:1'),
                 'fails' => true,
                 'errors' => [
                     'field' => [

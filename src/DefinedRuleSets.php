@@ -9,9 +9,9 @@ class DefinedRuleSets implements Contracts\DefinedRuleSets
     /** @var array<string, RuleSet> */
     private array $definedRules = [];
 
-    public function define(string $name): RuleSet
+    public function define(string $name, RuleSet $ruleSet): void
     {
-        return $this->definedRules[$name] = RuleSet::create();
+        $this->definedRules[$name] = $ruleSet;
     }
 
     public function useDefined(string $name): RuleSet
@@ -20,6 +20,6 @@ class DefinedRuleSets implements Contracts\DefinedRuleSets
             throw new \InvalidArgumentException('No rule defined with name '.$name);
         }
 
-        return RuleSet::create($this->definedRules[$name]->toArray());
+        return $this->definedRules[$name];
     }
 }

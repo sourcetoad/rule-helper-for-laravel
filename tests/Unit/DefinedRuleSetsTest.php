@@ -25,7 +25,7 @@ class DefinedRuleSetsTest extends TestCase
     public function testCanUseRulesDefinedOutsideOfCurrentRuleSet(): void
     {
         // Arrange
-        resolve(DefinedRuleSets::class)->define('user.email')->email();
+        resolve(DefinedRuleSets::class)->define('user.email', RuleSet::create()->email());
 
         $validator = Validator::make([
             'field-a' => $this->faker->name(),
@@ -45,7 +45,7 @@ class DefinedRuleSetsTest extends TestCase
     public function testModifyingDuringUseDoesNotModifyStoredCopy(): void
     {
         // Arrange
-        RuleSet::define('user.email')->email();
+        RuleSet::define('user.email', RuleSet::create()->email());
 
         $validator = Validator::make([], [
             'field-a' => RuleSet::useDefined('user.email')->required(),

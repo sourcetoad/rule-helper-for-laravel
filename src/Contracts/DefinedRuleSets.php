@@ -8,6 +8,6 @@ use Sourcetoad\RuleHelper\RuleSet;
 
 interface DefinedRuleSets
 {
-    public function define(string $name): RuleSet;
+    public function define(string $name, RuleSet $ruleSet): void;
     public function useDefined(string $name): RuleSet;
 }
