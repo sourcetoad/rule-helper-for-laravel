@@ -70,6 +70,31 @@ class CreateBlogRequest extends FormRequest
 
 ### Additional helpers
 
+#### Defined rule sets
+
+The `RuleSet` class contains methods to define and reuse rule sets across the project.
+
+To define a rule set call `RuleSet::define` in your app service provider's boot method.
+
+```php
+    public function boot(): void
+    {
+        RuleSet::define('existing_email', RuleSet::create()->email()->exists('users'));
+    }
+```
+
+The defined set can then be used in rules using `RuleSet::useDefined`.
+
+```php
+    public function rules(): array
+    {
+        return [
+            'to' => RuleSet::useDefined('existing_email')->required(),
+            'bcc' => RuleSet::useDefined('existing_email'),
+        ];
+    }
+```
+
 #### requiredIfAll
 
 Accepts multiple `RequiredIf` rules and only marks as required if all return true.

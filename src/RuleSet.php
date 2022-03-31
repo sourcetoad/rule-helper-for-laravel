@@ -10,7 +10,7 @@ use Illuminate\Validation\Rules\RequiredIf;
 
 class RuleSet implements Arrayable
 {
-    public function __construct(private array $rules = [])
+    public function __construct(protected array $rules = [])
     {
     }
 
@@ -341,7 +341,7 @@ class RuleSet implements Arrayable
      *
      * @link https://laravel.com/docs/9.x/validation#rule-distinct
      */
-    public function distinct(bool $strict = false, $ignoreCase = false): self
+    public function distinct(bool $strict = false, bool $ignoreCase = false): self
     {
         return $this->rule(Rule::distinct($strict, $ignoreCase));
     }
@@ -956,7 +956,7 @@ class RuleSet implements Arrayable
         return $this->rule(Rule::uuid());
     }
 
-    private static function getDefinedRuleSets(): Contracts\DefinedRuleSets
+    protected static function getDefinedRuleSets(): Contracts\DefinedRuleSets
     {
         return resolve(Contracts\DefinedRuleSets::class);
     }
