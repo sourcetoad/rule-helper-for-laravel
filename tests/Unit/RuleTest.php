@@ -1145,23 +1145,23 @@ class RuleTest extends TestCase
                 ],
                 'fails' => true,
             ],
-            'prohibitedIf valid' => [
+            'prohibitedIfValue valid' => [
                 'data' => [
                     'field-a' => '',
                     'field-b' => 'b',
                 ],
                 'rules' => fn() => [
-                    'field-a' => RuleSet::create()->prohibitedIf('field-b', 'a', 'b', 'c'),
+                    'field-a' => RuleSet::create()->prohibitedIfValue('field-b', 'a', 'b', 'c'),
                 ],
                 'fails' => false,
             ],
-            'prohibitedIf invalid' => [
+            'prohibitedIfValue invalid' => [
                 'data' => [
                     'field-a' => 'a',
                     'field-b' => 'b',
                 ],
                 'rules' => fn() => [
-                    'field-a' => RuleSet::create()->prohibitedIf('field-b', 'a', 'b', 'c'),
+                    'field-a' => RuleSet::create()->prohibitedIfValue('field-b', 'a', 'b', 'c'),
                 ],
                 'fails' => true,
             ],
@@ -1595,26 +1595,26 @@ class RuleTest extends TestCase
                     'field-b' => 'b',
                 ],
             ],
-            'excludeIf match' => [
+            'excludeIfValue match' => [
                 'data' => [
                     'field-a' => 'a',
                     'field-b' => 'b',
                 ],
                 'rules' => fn() => [
-                    'field-a' => RuleSet::create()->excludeIf('field-b', 'b'),
+                    'field-a' => RuleSet::create()->excludeIfValue('field-b', 'b'),
                     'field-b' => RuleSet::create(),
                 ],
                 'expected' => [
                     'field-b' => 'b',
                 ],
             ],
-            'excludeIf not matched' => [
+            'excludeIfValue not matched' => [
                 'data' => [
                     'field-a' => 'a',
                     'field-b' => 'c',
                 ],
                 'rules' => fn() => [
-                    'field-a' => RuleSet::create()->excludeIf('field-b', 'b'),
+                    'field-a' => RuleSet::create()->excludeIfValue('field-b', 'b'),
                     'field-b' => RuleSet::create(),
                 ],
                 'expected' => [

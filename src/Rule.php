@@ -323,7 +323,7 @@ class Rule extends LaravelRule
      *
      * @link https://laravel.com/docs/9.x/validation#rule-exclude-if
      */
-    public static function excludeIf(string $anotherField, ?string $value): string
+    public static function excludeIfValue(string $anotherField, ?string $value): string
     {
         return sprintf('exclude_if:%s,%s', $anotherField, $value ?? 'null');
     }
@@ -600,7 +600,7 @@ class Rule extends LaravelRule
      *
      * @link https://laravel.com/docs/9.x/validation#rule-prohibited-if
      */
-    public static function prohibitedIf(string $anotherField, string ...$value): string
+    public static function prohibitedIfValue(string $anotherField, string ...$value): string
     {
         return sprintf('prohibited_if:%s,%s', $anotherField, implode(',', $value));
     }

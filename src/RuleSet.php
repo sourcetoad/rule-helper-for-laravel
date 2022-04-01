@@ -383,9 +383,9 @@ class RuleSet implements Arrayable
      *
      * @link https://laravel.com/docs/9.x/validation#rule-exclude-if
      */
-    public function excludeIf(string $anotherField, ?string $value): self
+    public function excludeIfValue(string $anotherField, ?string $value): self
     {
-        return $this->rule(Rule::excludeIf($anotherField, $value));
+        return $this->rule(Rule::excludeIfValue($anotherField, $value));
     }
 
     /**
@@ -704,9 +704,9 @@ class RuleSet implements Arrayable
      *
      * @link https://laravel.com/docs/9.x/validation#rule-prohibited-if
      */
-    public function prohibitedIf(string $anotherField, string ...$value): self
+    public function prohibitedIfValue(string $anotherField, string ...$value): self
     {
-        return $this->rule(Rule::prohibitedIf($anotherField, ...$value));
+        return $this->rule(Rule::prohibitedIfValue($anotherField, ...$value));
     }
 
     /**
