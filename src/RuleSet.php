@@ -378,6 +378,18 @@ class RuleSet implements Arrayable
     }
 
     /**
+     * The field under validation will be excluded from the request data returned by the *validate* and *validated*
+     * methods if a true boolean is passed in or the passed in closure returns true.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-exclude-if
+     * @param callable|bool $callback
+     */
+    public function excludeIf(mixed $callback): self
+    {
+        return $this->rule(Rule::excludeIf($callback));
+    }
+
+    /**
      * The field under validation will be excluded from the request data returned by the *validate* and *validated*.
      * methods if the *anotherField* field is equal to *value*.
      *
@@ -697,6 +709,18 @@ class RuleSet implements Arrayable
     public function prohibited(): self
     {
         return $this->rule(Rule::prohibited());
+    }
+
+    /**
+     * The field under validation must be empty or not present in the input data if a true boolean is passed in or the
+     * passed in closure returns true.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-prohibited-if
+     * @param callable|bool $callback
+     */
+    public function prohibitedIf(mixed $callback): self
+    {
+        return $this->rule(Rule::prohibitedIf($callback));
     }
 
     /**

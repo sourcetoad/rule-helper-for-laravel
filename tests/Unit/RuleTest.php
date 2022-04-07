@@ -1145,6 +1145,26 @@ class RuleTest extends TestCase
                 ],
                 'fails' => true,
             ],
+            'prohibitedIf valid' => [
+                'data' => [
+                    'field-a' => '',
+                    'field-b' => 'b',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->prohibitedIf(true),
+                ],
+                'fails' => false,
+            ],
+            'prohibitedIf invalid' => [
+                'data' => [
+                    'field-a' => 'a',
+                    'field-b' => 'b',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->prohibitedIf(true),
+                ],
+                'fails' => true,
+            ],
             'prohibitedIfValue valid' => [
                 'data' => [
                     'field-a' => '',
@@ -1593,6 +1613,33 @@ class RuleTest extends TestCase
                 ],
                 'expected' => [
                     'field-b' => 'b',
+                ],
+            ],
+            'excludeIf match' => [
+                'data' => [
+                    'field-a' => 'a',
+                    'field-b' => 'b',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->excludeIf(true),
+                    'field-b' => RuleSet::create(),
+                ],
+                'expected' => [
+                    'field-b' => 'b',
+                ],
+            ],
+            'excludeIf not matched' => [
+                'data' => [
+                    'field-a' => 'a',
+                    'field-b' => 'c',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->excludeIf(false),
+                    'field-b' => RuleSet::create(),
+                ],
+                'expected' => [
+                    'field-a' => 'a',
+                    'field-b' => 'c',
                 ],
             ],
             'excludeIfValue match' => [

@@ -5,11 +5,19 @@ declare(strict_types=1);
 namespace Sourcetoad\RuleHelper;
 
 use DateTimeInterface;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\Rule as LaravelRule;
+use Illuminate\Validation\Rules\Dimensions;
+use Illuminate\Validation\Rules\ExcludeIf;
+use Illuminate\Validation\Rules\Exists;
+use Illuminate\Validation\Rules\In;
+use Illuminate\Validation\Rules\NotIn;
+use Illuminate\Validation\Rules\ProhibitedIf;
 use Illuminate\Validation\Rules\RequiredIf;
+use Illuminate\Validation\Rules\Unique;
 
-class Rule extends LaravelRule
+class Rule
 {
     /**
      * The field under validation must be "yes", "on", 1, or true. This is useful for validating "Terms of Service"
@@ -265,6 +273,22 @@ class Rule extends LaravelRule
     }
 
     /**
+     * The file under validation must be an image meeting the dimension constraints as specified by the rule's
+     * parameters.
+     *
+     * Available constraints are: *min_width*, *max_width*, *min_height*, *max_height*, *width*, *height*, *ratio*.
+     *
+     * A ratio constraint should be represented as width divided by height. This can be specified either by a fraction
+     * like *3/2* or a float like *1.5*.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-dimensions
+     */
+    public static function dimensions(array $constraints = []): Dimensions
+    {
+        return LaravelRule::dimensions($constraints);
+    }
+
+    /**
      * When validating arrays, the field under validation must not have any duplicate values.
      *
      * @link https://laravel.com/docs/9.x/validation#rule-distinct
@@ -318,7 +342,19 @@ class Rule extends LaravelRule
     }
 
     /**
-     * The field under validation will be excluded from the request data returned by the *validate* and *validated*.
+     * The field under validation will be excluded from the request data returned by the *validate* and *validated*
+     * methods if a true boolean is passed in or the passed in closure returns true.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-exclude-if
+     * @param callable|bool $callback
+     */
+    public static function excludeIf(mixed $callback): ExcludeIf
+    {
+        return LaravelRule::excludeIf($callback);
+    }
+
+    /**
+     * The field under validation will be excluded from the request data returned by the *validate* and *validated*
      * methods if the *anotherField* field is equal to *value*.
      *
      * @link https://laravel.com/docs/9.x/validation#rule-exclude-if
@@ -348,6 +384,18 @@ class Rule extends LaravelRule
     public static function excludeWithout(string $anotherField): string
     {
         return 'exclude_without:'.$anotherField;
+    }
+
+    /**
+     * The field under validation must exist in a given database table. If the *column* option is not specified, the
+     * field name will be used. Instead of specifying the table name directly, you may specify the Eloquent model class
+     * name.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-exists
+     */
+    public static function exists(string $table, string $column = 'NULL'): Exists
+    {
+        return LaravelRule::exists($table, $column);
     }
 
     /**
@@ -398,6 +446,19 @@ class Rule extends LaravelRule
     public static function image(): string
     {
         return 'image';
+    }
+
+    /**
+     * The field under validation must be included in the given list of values.
+     *
+     * When the *in* rule is combined with the *array* rule, each value in the input array must be present within the
+     * list of values provided to the *in* rule.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-in
+     */
+    public static function in(Arrayable|array|string $values): In
+    {
+        return LaravelRule::in($values);
     }
 
     /**
@@ -545,6 +606,16 @@ class Rule extends LaravelRule
     }
 
     /**
+     * The field under validation must not be included in the given list of values.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-not-in
+     */
+    public static function notIn(Arrayable|array|string $values): NotIn
+    {
+        return LaravelRule::notIn($values);
+    }
+
+    /**
      * The field under validation must not match the given regular expression.
      *
      * @link https://laravel.com/docs/9.x/validation#rule-not-regex
@@ -593,6 +664,18 @@ class Rule extends LaravelRule
     public static function prohibited(): string
     {
         return 'prohibited';
+    }
+
+    /**
+     * The field under validation must be empty or not present in the input data if a true boolean is passed in or the
+     * passed in closure returns true.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-prohibited-if
+     * @param callable|bool $callback
+     */
+    public static function prohibitedIf(mixed $callback): ProhibitedIf
+    {
+        return LaravelRule::prohibitedIf($callback);
     }
 
     /**
@@ -653,6 +736,18 @@ class Rule extends LaravelRule
     public static function requiredArrayKeys(string ...$key): string
     {
         return sprintf('required_array_keys:%s', implode(',', $key));
+    }
+
+    /**
+     * The field under validation must be present in the input data if a true boolean is passed in or the passed in
+     * closure returns true.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-required-if
+     * @param callable|bool $callback
+     */
+    public static function requiredIf(mixed $callback): RequiredIf
+    {
+        return LaravelRule::requiredIf($callback);
     }
 
     /**
@@ -801,6 +896,18 @@ class Rule extends LaravelRule
     public static function timezone(): string
     {
         return 'timezone';
+    }
+
+    /**
+     * The field under validation must not exist within the given database table. If the *column* option is not
+     * specified, the field name will be used. Instead of specifying the table name directly, you may specify the
+     * Eloquent model class name.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-unique
+     */
+    public static function unique(string $table, string $column = 'NULL'): Unique
+    {
+        return LaravelRule::unique($table, $column);
     }
 
     /**

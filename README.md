@@ -41,8 +41,8 @@ class CreateBlogRequest extends FormRequest
 
 ### Rule
 
-The `Rule` class is an extension of the Laravel `\Illuminate\Validation\Rule` class to expose the rest of the built-in
-rules via static methods.
+The `Rule` class provides the same methods as the Laravel `\Illuminate\Validation\Rule` class, with the rest of the
+built-in rules exposed via static methods.
 
 #### Basic usage
 
