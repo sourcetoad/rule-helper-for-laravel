@@ -7,6 +7,7 @@ namespace Sourcetoad\RuleHelper;
 use DateTimeInterface;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
+use Illuminate\Validation\ConditionalRules;
 use Illuminate\Validation\Rule as LaravelRule;
 use Illuminate\Validation\Rules\Dimensions;
 use Illuminate\Validation\Rules\ExcludeIf;
@@ -939,6 +940,23 @@ class Rule
     public static function uuid(): string
     {
         return 'uuid';
+    }
+
+    /**
+     * Create a new conditional rule set.
+     */
+    public static function when(
+        mixed $condition,
+        array|string|RuleSet $rules,
+        array|string|RuleSet $defaultRules = []
+    ): ConditionalRules {
+        if ($rules instanceof RuleSet) {
+            $rules = $rules->toArray();
+        }
+        if ($defaultRules instanceof RuleSet) {
+            $defaultRules = $defaultRules->toArray();
+        }
+        return new ConditionalRules($condition, $rules, $defaultRules);
     }
 
     protected static function convertDateForRule(

@@ -1596,6 +1596,25 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->uuid(),
                 'fails' => true,
             ],
+            'when valid' => [
+                'data' => 9,
+                'rules' => fn() => RuleSet::create()->when(fn() => false, RuleSet::create()->min(10)),
+                'fails' => false,
+            ],
+            'when invalid' => [
+                'data' => 9,
+                'rules' => fn() => RuleSet::create()->when(fn() => true, RuleSet::create()->min(10)),
+                'fails' => true,
+            ],
+            'when invalid fallback' => [
+                'data' => 9,
+                'rules' => fn() => RuleSet::create()->when(
+                    fn() => false,
+                    RuleSet::create()->numeric(),
+                    RuleSet::create()->string()
+                ),
+                'fails' => true,
+            ],
         ];
     }
 

@@ -991,6 +991,14 @@ class RuleSet implements Arrayable
         return $this->rule(Rule::uuid());
     }
 
+    /**
+     * Create a new conditional rule set.
+     */
+    public function when(mixed $condition, array|string|RuleSet $rules, array|string|RuleSet $defaultRules = []): self
+    {
+        return $this->rule(Rule::when($condition, $rules, $defaultRules));
+    }
+
     protected static function getDefinedRuleSets(): Contracts\DefinedRuleSets
     {
         return resolve(Contracts\DefinedRuleSets::class);
