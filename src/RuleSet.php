@@ -413,6 +413,17 @@ class RuleSet implements Arrayable
 
     /**
      * The field under validation will be excluded from the request data returned by the *validate* and *validated*
+     * methods if the *anotherField* field is present.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-exclude-with
+     */
+    public function excludeWith(string $anotherField): self
+    {
+        return $this->rule(Rule::excludeWith($anotherField));
+    }
+
+    /**
+     * The field under validation will be excluded from the request data returned by the *validate* and *validated*
      * methods if the *anotherField* field is not present.
      *
      * @link https://laravel.com/docs/9.x/validation#rule-exclude-without

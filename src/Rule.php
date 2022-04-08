@@ -377,6 +377,17 @@ class Rule
 
     /**
      * The field under validation will be excluded from the request data returned by the *validate* and *validated*
+     * methods if the *anotherField* field is present.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-exclude-with
+     */
+    public static function excludeWith(string $anotherField): string
+    {
+        return 'exclude_with:'.$anotherField;
+    }
+
+    /**
+     * The field under validation will be excluded from the request data returned by the *validate* and *validated*
      * methods if the *anotherField* field is not present.
      *
      * @link https://laravel.com/docs/9.x/validation#rule-exclude-without
