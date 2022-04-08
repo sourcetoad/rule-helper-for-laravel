@@ -8,6 +8,7 @@ use DateTimeInterface;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\ConditionalRules;
+use Illuminate\Validation\NestedRules;
 use Illuminate\Validation\Rule as LaravelRule;
 use Illuminate\Validation\Rules\Dimensions;
 use Illuminate\Validation\Rules\ExcludeIf;
@@ -428,6 +429,32 @@ class Rule
     public static function filled(): string
     {
         return 'filled';
+    }
+
+    /**
+     * Create a new nested rule set.
+     *
+     * @link https://laravel.com/docs/9.x/validation#accessing-nested-array-data
+     */
+    public static function forEach(callable $callback): NestedRules
+    {
+        return new NestedRules(function ($value, $attribute, $data = null) use ($callback) {
+            $rules = $callback($value, $attribute, $data);
+
+            if ($rules instanceof RuleSet) {
+                $rules = $rules->toArray();
+            }
+
+            if (is_array($rules)) {
+                foreach ($rules as $index => $ruleSet) {
+                    if ($ruleSet instanceof RuleSet) {
+                        $rules[$index] = $ruleSet->toArray();
+                    }
+                }
+            }
+
+            return $rules;
+        });
     }
 
     /**

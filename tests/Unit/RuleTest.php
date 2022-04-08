@@ -786,6 +786,82 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->filled(),
                 'fails' => true,
             ],
+            'forEach valid' => [
+                'data' => [
+                    'values' => [
+                        [
+                            'type' => 'post',
+                            'name' => 'Test Post',
+                        ],
+                        [
+                            'type' => 'comment',
+                            'content' => 'Test Comment',
+                        ],
+                    ],
+                ],
+                'rules' => fn() => [
+                    'values.*' => RuleSet::create()->forEach(fn($value) => match ($value['type']) {
+                        'post' => [
+                            'name' => RuleSet::create()->required(),
+                        ],
+                        'comment' => [
+                            'content' => RuleSet::create()->required(),
+                        ],
+                    }),
+                ],
+                'fails' => false,
+            ],
+            'forEach invalid' => [
+                'data' => [
+                    'values' => [
+                        [
+                            'type' => 'post',
+                            'name' => 'Test Post',
+                        ],
+                        [
+                            'type' => 'comment',
+                            'name' => 'Test Comment',
+                        ],
+                    ],
+                ],
+                'rules' => fn() => [
+                    'values.*' => RuleSet::create()->forEach(fn($value) => match ($value['type']) {
+                        'post' => [
+                            'name' => RuleSet::create()->required(),
+                        ],
+                        'comment' => [
+                            'content' => RuleSet::create()->required(),
+                        ],
+                    }),
+                ],
+                'fails' => true,
+            ],
+            'forEach element valid' => [
+                'data' => [
+                    'values' => [
+                        [
+                            'id' => 2,
+                        ],
+                    ],
+                ],
+                'rules' => fn() => [
+                    'values.*.id' => RuleSet::create()->forEach(fn($id) => RuleSet::create()->prohibitedIf($id === 3)),
+                ],
+                'fails' => false,
+            ],
+            'forEach element invalid' => [
+                'data' => [
+                    'values' => [
+                        [
+                            'id' => 3,
+                        ],
+                    ],
+                ],
+                'rules' => fn() => [
+                    'values.*.id' => RuleSet::create()->forEach(fn($id) => RuleSet::create()->prohibitedIf($id === 3)),
+                ],
+                'fails' => true,
+            ],
             'gt valid' => [
                 'data' => [
                     'field-a' => '2',
