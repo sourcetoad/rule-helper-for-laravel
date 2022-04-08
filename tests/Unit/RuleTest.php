@@ -786,6 +786,82 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->filled(),
                 'fails' => true,
             ],
+            'forEach valid' => [
+                'data' => [
+                    'values' => [
+                        [
+                            'type' => 'post',
+                            'name' => 'Test Post',
+                        ],
+                        [
+                            'type' => 'comment',
+                            'content' => 'Test Comment',
+                        ],
+                    ],
+                ],
+                'rules' => fn() => [
+                    'values.*' => RuleSet::create()->forEach(fn($value) => match ($value['type']) {
+                        'post' => [
+                            'name' => RuleSet::create()->required(),
+                        ],
+                        'comment' => [
+                            'content' => RuleSet::create()->required(),
+                        ],
+                    }),
+                ],
+                'fails' => false,
+            ],
+            'forEach invalid' => [
+                'data' => [
+                    'values' => [
+                        [
+                            'type' => 'post',
+                            'name' => 'Test Post',
+                        ],
+                        [
+                            'type' => 'comment',
+                            'name' => 'Test Comment',
+                        ],
+                    ],
+                ],
+                'rules' => fn() => [
+                    'values.*' => RuleSet::create()->forEach(fn($value) => match ($value['type']) {
+                        'post' => [
+                            'name' => RuleSet::create()->required(),
+                        ],
+                        'comment' => [
+                            'content' => RuleSet::create()->required(),
+                        ],
+                    }),
+                ],
+                'fails' => true,
+            ],
+            'forEach element valid' => [
+                'data' => [
+                    'values' => [
+                        [
+                            'id' => 2,
+                        ],
+                    ],
+                ],
+                'rules' => fn() => [
+                    'values.*.id' => RuleSet::create()->forEach(fn($id) => RuleSet::create()->prohibitedIf($id === 3)),
+                ],
+                'fails' => false,
+            ],
+            'forEach element invalid' => [
+                'data' => [
+                    'values' => [
+                        [
+                            'id' => 3,
+                        ],
+                    ],
+                ],
+                'rules' => fn() => [
+                    'values.*.id' => RuleSet::create()->forEach(fn($id) => RuleSet::create()->prohibitedIf($id === 3)),
+                ],
+                'fails' => true,
+            ],
             'gt valid' => [
                 'data' => [
                     'field-a' => '2',
@@ -1151,7 +1227,7 @@ class RuleTest extends TestCase
                     'field-b' => 'b',
                 ],
                 'rules' => fn() => [
-                    'field-a' => RuleSet::create()->prohibitedIf('field-b', 'a', 'b', 'c'),
+                    'field-a' => RuleSet::create()->prohibitedIf(true),
                 ],
                 'fails' => false,
             ],
@@ -1161,7 +1237,27 @@ class RuleTest extends TestCase
                     'field-b' => 'b',
                 ],
                 'rules' => fn() => [
-                    'field-a' => RuleSet::create()->prohibitedIf('field-b', 'a', 'b', 'c'),
+                    'field-a' => RuleSet::create()->prohibitedIf(true),
+                ],
+                'fails' => true,
+            ],
+            'prohibitedIfValue valid' => [
+                'data' => [
+                    'field-a' => '',
+                    'field-b' => 'b',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->prohibitedIfValue('field-b', 'a', 'b', 'c'),
+                ],
+                'fails' => false,
+            ],
+            'prohibitedIfValue invalid' => [
+                'data' => [
+                    'field-a' => 'a',
+                    'field-b' => 'b',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->prohibitedIfValue('field-b', 'a', 'b', 'c'),
                 ],
                 'fails' => true,
             ],
@@ -1576,6 +1672,25 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->uuid(),
                 'fails' => true,
             ],
+            'when valid' => [
+                'data' => 9,
+                'rules' => fn() => RuleSet::create()->when(fn() => false, RuleSet::create()->min(10)),
+                'fails' => false,
+            ],
+            'when invalid' => [
+                'data' => 9,
+                'rules' => fn() => RuleSet::create()->when(fn() => true, RuleSet::create()->min(10)),
+                'fails' => true,
+            ],
+            'when invalid fallback' => [
+                'data' => 9,
+                'rules' => fn() => RuleSet::create()->when(
+                    fn() => false,
+                    RuleSet::create()->numeric(),
+                    RuleSet::create()->string()
+                ),
+                'fails' => true,
+            ],
         ];
     }
 
@@ -1601,7 +1716,7 @@ class RuleTest extends TestCase
                     'field-b' => 'b',
                 ],
                 'rules' => fn() => [
-                    'field-a' => RuleSet::create()->excludeIf('field-b', 'b'),
+                    'field-a' => RuleSet::create()->excludeIf(true),
                     'field-b' => RuleSet::create(),
                 ],
                 'expected' => [
@@ -1614,7 +1729,34 @@ class RuleTest extends TestCase
                     'field-b' => 'c',
                 ],
                 'rules' => fn() => [
-                    'field-a' => RuleSet::create()->excludeIf('field-b', 'b'),
+                    'field-a' => RuleSet::create()->excludeIf(false),
+                    'field-b' => RuleSet::create(),
+                ],
+                'expected' => [
+                    'field-a' => 'a',
+                    'field-b' => 'c',
+                ],
+            ],
+            'excludeIfValue match' => [
+                'data' => [
+                    'field-a' => 'a',
+                    'field-b' => 'b',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->excludeIfValue('field-b', 'b'),
+                    'field-b' => RuleSet::create(),
+                ],
+                'expected' => [
+                    'field-b' => 'b',
+                ],
+            ],
+            'excludeIfValue not matched' => [
+                'data' => [
+                    'field-a' => 'a',
+                    'field-b' => 'c',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->excludeIfValue('field-b', 'b'),
                     'field-b' => RuleSet::create(),
                 ],
                 'expected' => [
@@ -1647,6 +1789,37 @@ class RuleTest extends TestCase
                 ],
                 'expected' => [
                     'field-b' => 'c',
+                ],
+            ],
+            'excludeWith match' => [
+                'data' => [
+                    'field-a' => 'a',
+                    'field-b' => 'b',
+                    'field-c' => 'c',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->excludeWith('field-b'),
+                    'field-b' => RuleSet::create(),
+                    'field-c' => RuleSet::create(),
+                ],
+                'expected' => [
+                    'field-b' => 'b',
+                    'field-c' => 'c',
+                ],
+            ],
+            'excludeWith not matched' => [
+                'data' => [
+                    'field-a' => 'a',
+                    'field-c' => 'c',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->excludeWith('field-b'),
+                    'field-b' => RuleSet::create(),
+                    'field-c' => RuleSet::create(),
+                ],
+                'expected' => [
+                    'field-a' => 'a',
+                    'field-c' => 'c',
                 ],
             ],
             'excludeWithout match' => [

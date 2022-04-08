@@ -378,14 +378,26 @@ class RuleSet implements Arrayable
     }
 
     /**
+     * The field under validation will be excluded from the request data returned by the *validate* and *validated*
+     * methods if a true boolean is passed in or the passed in closure returns true.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-exclude-if
+     * @param callable|bool $callback
+     */
+    public function excludeIf(mixed $callback): self
+    {
+        return $this->rule(Rule::excludeIf($callback));
+    }
+
+    /**
      * The field under validation will be excluded from the request data returned by the *validate* and *validated*.
      * methods if the *anotherField* field is equal to *value*.
      *
      * @link https://laravel.com/docs/9.x/validation#rule-exclude-if
      */
-    public function excludeIf(string $anotherField, ?string $value): self
+    public function excludeIfValue(string $anotherField, ?string $value): self
     {
-        return $this->rule(Rule::excludeIf($anotherField, $value));
+        return $this->rule(Rule::excludeIfValue($anotherField, $value));
     }
 
     /**
@@ -397,6 +409,17 @@ class RuleSet implements Arrayable
     public function excludeUnless(string $anotherField, ?string $value): self
     {
         return $this->rule(Rule::excludeUnless($anotherField, $value));
+    }
+
+    /**
+     * The field under validation will be excluded from the request data returned by the *validate* and *validated*
+     * methods if the *anotherField* field is present.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-exclude-with
+     */
+    public function excludeWith(string $anotherField): self
+    {
+        return $this->rule(Rule::excludeWith($anotherField));
     }
 
     /**
@@ -449,6 +472,16 @@ class RuleSet implements Arrayable
     public function filled(): self
     {
         return $this->rule(Rule::filled());
+    }
+
+    /**
+     * Create a new nested rule set.
+     *
+     * @link https://laravel.com/docs/9.x/validation#accessing-nested-array-data
+     */
+    public function forEach(callable $callback): self
+    {
+        return $this->rule(Rule::forEach($callback));
     }
 
     /**
@@ -700,13 +733,25 @@ class RuleSet implements Arrayable
     }
 
     /**
+     * The field under validation must be empty or not present in the input data if a true boolean is passed in or the
+     * passed in closure returns true.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-prohibited-if
+     * @param callable|bool $callback
+     */
+    public function prohibitedIf(mixed $callback): self
+    {
+        return $this->rule(Rule::prohibitedIf($callback));
+    }
+
+    /**
      * The field under validation must be empty or not present if the *anotherField* field is equal to any *value*.
      *
      * @link https://laravel.com/docs/9.x/validation#rule-prohibited-if
      */
-    public function prohibitedIf(string $anotherField, string ...$value): self
+    public function prohibitedIfValue(string $anotherField, string ...$value): self
     {
-        return $this->rule(Rule::prohibitedIf($anotherField, ...$value));
+        return $this->rule(Rule::prohibitedIfValue($anotherField, ...$value));
     }
 
     /**
@@ -954,6 +999,14 @@ class RuleSet implements Arrayable
     public function uuid(): self
     {
         return $this->rule(Rule::uuid());
+    }
+
+    /**
+     * Create a new conditional rule set.
+     */
+    public function when(mixed $condition, array|string|RuleSet $rules, array|string|RuleSet $defaultRules = []): self
+    {
+        return $this->rule(Rule::when($condition, $rules, $defaultRules));
     }
 
     protected static function getDefinedRuleSets(): Contracts\DefinedRuleSets
