@@ -76,4 +76,16 @@ class DefinedRuleSetsTest extends TestCase
         // Assert
         // No assertions, only expectations.
     }
+
+    public function testConcatDefinedRuleSet(): void
+    {
+        // Arrange
+        RuleSet::define('user.email', RuleSet::create()->email());
+
+        // Act
+        $ruleSet = RuleSet::create()->required()->concatDefined('user.email');
+
+        // Assert
+        $this->assertSame(['required', 'email'], $ruleSet->toArray());
+    }
 }
