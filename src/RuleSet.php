@@ -4,14 +4,21 @@ declare(strict_types=1);
 
 namespace Sourcetoad\RuleHelper;
 
+use ArrayIterator;
 use DateTimeInterface;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Validation\Rules\RequiredIf;
+use IteratorAggregate;
 
-class RuleSet implements Arrayable
+class RuleSet implements Arrayable, IteratorAggregate
 {
     public function __construct(protected array $rules = [])
     {
+    }
+
+    public function getIterator(): ArrayIterator
+    {
+        return new ArrayIterator($this->rules);
     }
 
     /**

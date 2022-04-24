@@ -95,6 +95,12 @@ The defined set can then be used in rules using `RuleSet::useDefined`.
     }
 ```
 
+To concatenate a defined ruleset you can spread the ruleset as arguments for the concat method.
+
+```php
+RuleSet::create()->required()->concat(...RuleSet::useDefined('existing_email'));
+```
+
 #### requiredIfAll
 
 Accepts multiple `RequiredIf` rules and only marks as required if all return true.
