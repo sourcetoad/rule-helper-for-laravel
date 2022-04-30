@@ -64,6 +64,16 @@ class RuleSet implements Arrayable, IteratorAggregate
     }
 
     /**
+     * Append all rules from a defined rule set.
+     *
+     * @param string $name
+     */
+    public function concatDefined(string $name): self
+    {
+        return $this->concat(...static::useDefined($name)->toArray());
+    }
+
+    /**
      * Append a rule to the end of the rule set.
      *
      * @param \Illuminate\Contracts\Validation\Rule|string $rule
