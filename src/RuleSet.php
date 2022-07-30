@@ -364,6 +364,16 @@ class RuleSet implements Arrayable, IteratorAggregate
     }
 
     /**
+     * The field under validation must not start with one of the given values.
+     *
+     * @link TODO
+     */
+    public function doesntStartWith(string ...$value): self
+    {
+        return $this->rule(Rule::doesntStartWith(...$value));
+    }
+
+    /**
      * The field under validation must be formatted as an email address.
      *
      * @link https://laravel.com/docs/9.x/validation#rule-email

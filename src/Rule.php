@@ -309,6 +309,16 @@ class Rule
     }
 
     /**
+     * The field under validation must not start with one of the given values.
+     *
+     * @link TODO
+     */
+    public static function doesntStartWith(string ...$value): string
+    {
+        return 'doesnt_start_with:'.implode(',', $value);
+    }
+
+    /**
      * The field under validation must be formatted as an email address.
      *
      * @link https://laravel.com/docs/9.x/validation#rule-email

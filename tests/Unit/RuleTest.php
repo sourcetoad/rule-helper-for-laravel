@@ -686,6 +686,26 @@ class RuleTest extends TestCase
                 ],
                 'fails' => true,
             ],
+            'doesntStartWith valid' => [
+                'data' => 'a-string',
+                'rules' => fn() => RuleSet::create()->doesntStartWith('s'),
+                'fails' => false,
+            ],
+            'doesntStartWith invalid' => [
+                'data' => 'string',
+                'rules' => fn() => RuleSet::create()->doesntStartWith('s'),
+                'fails' => true,
+            ],
+            'doesntStartWith any valid' => [
+                'data' => 'd-string',
+                'rules' => fn() => RuleSet::create()->doesntStartWith('a', 'b', 'c'),
+                'fails' => false,
+            ],
+            'doesntStartWith any invalid' => [
+                'data' => 'c-string',
+                'rules' => fn() => RuleSet::create()->doesntStartWith('a', 'b', 'c'),
+                'fails' => true,
+            ],
             'email valid' => [
                 'data' => 'someone@example.com',
                 'rules' => fn() => RuleSet::create()->email(),
