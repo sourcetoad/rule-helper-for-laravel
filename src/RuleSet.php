@@ -364,6 +364,26 @@ class RuleSet implements Arrayable, IteratorAggregate
     }
 
     /**
+     * The field under validation must not end with one of the given values.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-doesnt-end-with
+     */
+    public function doesntEndWith(string ...$value): self
+    {
+        return $this->rule(Rule::doesntEndWith(...$value));
+    }
+
+    /**
+     * The field under validation must not start with one of the given values.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-doesnt-start-with
+     */
+    public function doesntStartWith(string ...$value): self
+    {
+        return $this->rule(Rule::doesntStartWith(...$value));
+    }
+
+    /**
      * The field under validation must be formatted as an email address.
      *
      * @link https://laravel.com/docs/9.x/validation#rule-email

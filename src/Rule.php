@@ -309,6 +309,26 @@ class Rule
     }
 
     /**
+     * The field under validation must not end with one of the given values.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-doesnt-end-with
+     */
+    public static function doesntEndWith(string ...$value): string
+    {
+        return 'doesnt_end_with:'.implode(',', $value);
+    }
+
+    /**
+     * The field under validation must not start with one of the given values.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-doesnt-start-with
+     */
+    public static function doesntStartWith(string ...$value): string
+    {
+        return 'doesnt_start_with:'.implode(',', $value);
+    }
+
+    /**
      * The field under validation must be formatted as an email address.
      *
      * @link https://laravel.com/docs/9.x/validation#rule-email
