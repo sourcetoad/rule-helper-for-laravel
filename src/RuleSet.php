@@ -864,6 +864,16 @@ class RuleSet implements Arrayable, IteratorAggregate
     }
 
     /**
+     * The field must be present if the other specified field is accepted.
+     *
+     * @see RuleSet::accepted() for accepted criteria
+     */
+    public function requiredIfAccepted(string $field): self
+    {
+        return $this->rule(Rule::requiredIfAccepted($field));
+    }
+
+    /**
      * The field must be present if all the criteria are true.
      */
     public function requiredIfAll(RequiredIf ...$rules): self

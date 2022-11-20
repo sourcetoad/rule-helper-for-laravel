@@ -1381,6 +1381,26 @@ class RuleTest extends TestCase
                 ],
                 'fails' => true,
             ],
+            'requiredIfAccepted valid' => [
+                'data' => [
+                    'field-a' => '',
+                    'field-b' => '',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->requiredIfAccepted('field-b'),
+                ],
+                'fails' => false,
+            ],
+            'requiredIfAccepted invalid' => [
+                'data' => [
+                    'field-a' => '',
+                    'field-b' => '1',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->requiredIfAccepted('field-b'),
+                ],
+                'fails' => true,
+            ],
             'requiredIfValue valid' => [
                 'data' => [
                     'field-a' => 'a',

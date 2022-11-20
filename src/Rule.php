@@ -803,6 +803,16 @@ class Rule
     }
 
     /**
+     * The field must be present if the other specified field is accepted.
+     *
+     * @see Rule::accepted() for accepted criteria
+     */
+    public static function requiredIfAccepted(string $field): string
+    {
+        return 'required_if_accepted:'.$field;
+    }
+
+    /**
      * The field must be present if all the criteria are true.
      */
     public static function requiredIfAll(RequiredIf ...$rules): RequiredIf
