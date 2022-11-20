@@ -1120,6 +1120,16 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->max(2),
                 'fails' => true,
             ],
+            'maxDigits valid' => [
+                'data' => 123,
+                'rules' => fn() => RuleSet::create()->maxDigits(3),
+                'fails' => false,
+            ],
+            'maxDigits invalid' => [
+                'data' => 123,
+                'rules' => fn() => RuleSet::create()->maxDigits(2),
+                'fails' => true,
+            ],
             'mimes valid' => [
                 'data' => fn() => $this->mockFile('/code/document.odf'),
                 'rules' => fn() => RuleSet::create()->mimes('pdf', 'odf'),
@@ -1162,6 +1172,16 @@ class RuleTest extends TestCase
                     'field' => ['a', 'b', 'c'],
                 ],
                 'rules' => fn() => RuleSet::create()->min(4),
+                'fails' => true,
+            ],
+            'minDigits valid' => [
+                'data' => 123,
+                'rules' => fn() => RuleSet::create()->minDigits(3),
+                'fails' => false,
+            ],
+            'minDigits invalid' => [
+                'data' => 12,
+                'rules' => fn() => RuleSet::create()->minDigits(3),
                 'fails' => true,
             ],
             'multipleOf valid' => [

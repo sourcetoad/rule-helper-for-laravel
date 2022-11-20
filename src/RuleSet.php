@@ -668,6 +668,16 @@ class RuleSet implements Arrayable, IteratorAggregate
     }
 
     /**
+     * The integer under validation must have a maximum length of *value*.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-max-digits
+     */
+    public function maxDigits(int $value): self
+    {
+        return $this->rule(Rule::maxDigits($value));
+    }
+
+    /**
      * The file under validation must have a MIME type corresponding to one of the listed extensions.
      *
      * @link https://laravel.com/docs/9.x/validation#rule-mimes
@@ -696,6 +706,16 @@ class RuleSet implements Arrayable, IteratorAggregate
     public function min(int $value): self
     {
         return $this->rule(Rule::min($value));
+    }
+
+    /**
+     * The integer under validation must have a minimum length of *value*.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-min-digits
+     */
+    public function minDigits(int $value): self
+    {
+        return $this->rule(Rule::minDigits($value));
     }
 
     /**

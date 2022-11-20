@@ -624,6 +624,16 @@ class Rule
     }
 
     /**
+     * The integer under validation must have a maximum length of *value*.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-max-digits
+     */
+    public static function maxDigits(int $value): string
+    {
+        return 'max_digits:'.$value;
+    }
+
+    /**
      * The file under validation must have a MIME type corresponding to one of the listed extensions.
      *
      * @link https://laravel.com/docs/9.x/validation#rule-mimes
@@ -652,6 +662,16 @@ class Rule
     public static function min(int $value): string
     {
         return 'min:'.$value;
+    }
+
+    /**
+     * The integer under validation must have a minimum length of *value*.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-min-digits
+     */
+    public static function minDigits(int $value): string
+    {
+        return 'min_digits:'.$value;
     }
 
     /**
