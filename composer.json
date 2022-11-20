@@ -6,7 +6,7 @@
     "minimum-stability": "stable",
     "require": {
         "php": "^8.0",
-        "laravel/framework": "^9.29"
+        "laravel/framework": "^9.40"
     },
     "require-dev": {
         "ext-json": "*",

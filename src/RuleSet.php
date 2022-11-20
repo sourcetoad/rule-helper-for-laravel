@@ -618,6 +618,16 @@ class RuleSet implements Arrayable, IteratorAggregate
     }
 
     /**
+     * The field under validation must be lowercase.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-lowercase
+     */
+    public function lowercase(): self
+    {
+        return $this->rule(Rule::lowercase());
+    }
+
+    /**
      * The field under validation must be less than the given *field*.
      *
      * @link https://laravel.com/docs/9.x/validation#rule-lt
@@ -1036,6 +1046,16 @@ class RuleSet implements Arrayable, IteratorAggregate
         }
 
         return $this->rule($rule);
+    }
+
+    /**
+     * The field under validation must be uppercase.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-uppercase
+     */
+    public function uppercase(): self
+    {
+        return $this->rule(Rule::uppercase());
     }
 
     /**

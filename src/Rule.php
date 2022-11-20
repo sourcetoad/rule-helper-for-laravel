@@ -557,6 +557,16 @@ class Rule
     }
 
     /**
+     * The field under validation must be lowercase.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-lowercase
+     */
+    public static function lowercase(): string
+    {
+        return 'lowercase';
+    }
+
+    /**
      * The field under validation must be less than the given *field*.
      *
      * @link https://laravel.com/docs/9.x/validation#rule-lt
@@ -970,6 +980,16 @@ class Rule
     public static function unique(string $table, string $column = 'NULL'): Unique
     {
         return LaravelRule::unique($table, $column);
+    }
+
+    /**
+     * The field under validation must be uppercase.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-uppercase
+     */
+    public static function uppercase(): string
+    {
+        return 'uppercase';
     }
 
     /**

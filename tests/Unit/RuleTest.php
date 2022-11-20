@@ -970,6 +970,16 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->json(),
                 'fails' => true,
             ],
+            'lowercase valid' => [
+                'data' => 'lowercase',
+                'rules' => fn() => RuleSet::create()->lowercase(),
+                'fails' => false,
+            ],
+            'lowercase invalid' => [
+                'data' => 'Lowercase',
+                'rules' => fn() => RuleSet::create()->lowercase(),
+                'fails' => true,
+            ],
             'lt valid' => [
                 'data' => [
                     'field-a' => '1',
@@ -1654,6 +1664,16 @@ class RuleTest extends TestCase
             'timezone invalid' => [
                 'data' => 'not a timezone',
                 'rules' => fn() => RuleSet::create()->timezone(),
+                'fails' => true,
+            ],
+            'uppercase valid' => [
+                'data' => 'UPPERCASE',
+                'rules' => fn() => RuleSet::create()->uppercase(),
+                'fails' => false,
+            ],
+            'uppercase invalid' => [
+                'data' => 'Uppercase',
+                'rules' => fn() => RuleSet::create()->uppercase(),
                 'fails' => true,
             ],
             'url valid' => [
