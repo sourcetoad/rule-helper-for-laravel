@@ -512,16 +512,6 @@ class RuleSet implements Arrayable, IteratorAggregate
     }
 
     /**
-     * Create a new nested rule set.
-     *
-     * @link https://laravel.com/docs/9.x/validation#accessing-nested-array-data
-     */
-    public function forEach(callable $callback): self
-    {
-        return $this->rule(Rule::forEach($callback));
-    }
-
-    /**
      * The field under validation must be greater than the given *field*.
      *
      * @link https://laravel.com/docs/9.x/validation#rule-gt
