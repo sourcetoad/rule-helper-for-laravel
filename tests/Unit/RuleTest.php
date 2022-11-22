@@ -826,82 +826,6 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->filled(),
                 'fails' => true,
             ],
-            'forEach valid' => [
-                'data' => [
-                    'values' => [
-                        [
-                            'type' => 'post',
-                            'name' => 'Test Post',
-                        ],
-                        [
-                            'type' => 'comment',
-                            'content' => 'Test Comment',
-                        ],
-                    ],
-                ],
-                'rules' => fn() => [
-                    'values.*' => RuleSet::create()->forEach(fn($value) => match ($value['type']) {
-                        'post' => [
-                            'name' => RuleSet::create()->required(),
-                        ],
-                        'comment' => [
-                            'content' => RuleSet::create()->required(),
-                        ],
-                    }),
-                ],
-                'fails' => false,
-            ],
-            'forEach invalid' => [
-                'data' => [
-                    'values' => [
-                        [
-                            'type' => 'post',
-                            'name' => 'Test Post',
-                        ],
-                        [
-                            'type' => 'comment',
-                            'name' => 'Test Comment',
-                        ],
-                    ],
-                ],
-                'rules' => fn() => [
-                    'values.*' => RuleSet::create()->forEach(fn($value) => match ($value['type']) {
-                        'post' => [
-                            'name' => RuleSet::create()->required(),
-                        ],
-                        'comment' => [
-                            'content' => RuleSet::create()->required(),
-                        ],
-                    }),
-                ],
-                'fails' => true,
-            ],
-            'forEach element valid' => [
-                'data' => [
-                    'values' => [
-                        [
-                            'id' => 2,
-                        ],
-                    ],
-                ],
-                'rules' => fn() => [
-                    'values.*.id' => RuleSet::create()->forEach(fn($id) => RuleSet::create()->prohibitedIf($id === 3)),
-                ],
-                'fails' => false,
-            ],
-            'forEach element invalid' => [
-                'data' => [
-                    'values' => [
-                        [
-                            'id' => 3,
-                        ],
-                    ],
-                ],
-                'rules' => fn() => [
-                    'values.*.id' => RuleSet::create()->forEach(fn($id) => RuleSet::create()->prohibitedIf($id === 3)),
-                ],
-                'fails' => true,
-            ],
             'gt valid' => [
                 'data' => [
                     'field-a' => '2',
@@ -1046,6 +970,16 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->json(),
                 'fails' => true,
             ],
+            'lowercase valid' => [
+                'data' => 'lowercase',
+                'rules' => fn() => RuleSet::create()->lowercase(),
+                'fails' => false,
+            ],
+            'lowercase invalid' => [
+                'data' => 'Lowercase',
+                'rules' => fn() => RuleSet::create()->lowercase(),
+                'fails' => true,
+            ],
             'lt valid' => [
                 'data' => [
                     'field-a' => '1',
@@ -1120,6 +1054,16 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->max(2),
                 'fails' => true,
             ],
+            'maxDigits valid' => [
+                'data' => 123,
+                'rules' => fn() => RuleSet::create()->maxDigits(3),
+                'fails' => false,
+            ],
+            'maxDigits invalid' => [
+                'data' => 123,
+                'rules' => fn() => RuleSet::create()->maxDigits(2),
+                'fails' => true,
+            ],
             'mimes valid' => [
                 'data' => fn() => $this->mockFile('/code/document.odf'),
                 'rules' => fn() => RuleSet::create()->mimes('pdf', 'odf'),
@@ -1162,6 +1106,16 @@ class RuleTest extends TestCase
                     'field' => ['a', 'b', 'c'],
                 ],
                 'rules' => fn() => RuleSet::create()->min(4),
+                'fails' => true,
+            ],
+            'minDigits valid' => [
+                'data' => 123,
+                'rules' => fn() => RuleSet::create()->minDigits(3),
+                'fails' => false,
+            ],
+            'minDigits invalid' => [
+                'data' => 12,
+                'rules' => fn() => RuleSet::create()->minDigits(3),
                 'fails' => true,
             ],
             'multipleOf valid' => [
@@ -1437,6 +1391,26 @@ class RuleTest extends TestCase
                 ],
                 'fails' => true,
             ],
+            'requiredIfAccepted valid' => [
+                'data' => [
+                    'field-a' => '',
+                    'field-b' => '',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->requiredIfAccepted('field-b'),
+                ],
+                'fails' => false,
+            ],
+            'requiredIfAccepted invalid' => [
+                'data' => [
+                    'field-a' => '',
+                    'field-b' => '1',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->requiredIfAccepted('field-b'),
+                ],
+                'fails' => true,
+            ],
             'requiredIfValue valid' => [
                 'data' => [
                     'field-a' => 'a',
@@ -1690,6 +1664,16 @@ class RuleTest extends TestCase
             'timezone invalid' => [
                 'data' => 'not a timezone',
                 'rules' => fn() => RuleSet::create()->timezone(),
+                'fails' => true,
+            ],
+            'uppercase valid' => [
+                'data' => 'UPPERCASE',
+                'rules' => fn() => RuleSet::create()->uppercase(),
+                'fails' => false,
+            ],
+            'uppercase invalid' => [
+                'data' => 'Uppercase',
+                'rules' => fn() => RuleSet::create()->uppercase(),
                 'fails' => true,
             ],
             'url valid' => [

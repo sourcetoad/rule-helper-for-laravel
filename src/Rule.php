@@ -8,7 +8,6 @@ use DateTimeInterface;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\ConditionalRules;
-use Illuminate\Validation\NestedRules;
 use Illuminate\Validation\Rule as LaravelRule;
 use Illuminate\Validation\Rules\Dimensions;
 use Illuminate\Validation\Rules\ExcludeIf;
@@ -452,32 +451,6 @@ class Rule
     }
 
     /**
-     * Create a new nested rule set.
-     *
-     * @link https://laravel.com/docs/9.x/validation#accessing-nested-array-data
-     */
-    public static function forEach(callable $callback): NestedRules
-    {
-        return new NestedRules(function ($value, $attribute, $data = null) use ($callback) {
-            $rules = $callback($value, $attribute, $data);
-
-            if ($rules instanceof RuleSet) {
-                $rules = $rules->toArray();
-            }
-
-            if (is_array($rules)) {
-                foreach ($rules as $index => $ruleSet) {
-                    if ($ruleSet instanceof RuleSet) {
-                        $rules[$index] = $ruleSet->toArray();
-                    }
-                }
-            }
-
-            return $rules;
-        });
-    }
-
-    /**
      * The field under validation must be greater than the given *field*.
      *
      * @link https://laravel.com/docs/9.x/validation#rule-gt
@@ -584,6 +557,16 @@ class Rule
     }
 
     /**
+     * The field under validation must be lowercase.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-lowercase
+     */
+    public static function lowercase(): string
+    {
+        return 'lowercase';
+    }
+
+    /**
      * The field under validation must be less than the given *field*.
      *
      * @link https://laravel.com/docs/9.x/validation#rule-lt
@@ -624,6 +607,16 @@ class Rule
     }
 
     /**
+     * The integer under validation must have a maximum length of *value*.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-max-digits
+     */
+    public static function maxDigits(int $value): string
+    {
+        return 'max_digits:'.$value;
+    }
+
+    /**
      * The file under validation must have a MIME type corresponding to one of the listed extensions.
      *
      * @link https://laravel.com/docs/9.x/validation#rule-mimes
@@ -652,6 +645,16 @@ class Rule
     public static function min(int $value): string
     {
         return 'min:'.$value;
+    }
+
+    /**
+     * The integer under validation must have a minimum length of *value*.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-min-digits
+     */
+    public static function minDigits(int $value): string
+    {
+        return 'min_digits:'.$value;
     }
 
     /**
@@ -807,6 +810,16 @@ class Rule
     public static function requiredIf(mixed $callback): RequiredIf
     {
         return LaravelRule::requiredIf($callback);
+    }
+
+    /**
+     * The field must be present if the other specified field is accepted.
+     *
+     * @see Rule::accepted() for accepted criteria
+     */
+    public static function requiredIfAccepted(string $field): string
+    {
+        return 'required_if_accepted:'.$field;
     }
 
     /**
@@ -967,6 +980,16 @@ class Rule
     public static function unique(string $table, string $column = 'NULL'): Unique
     {
         return LaravelRule::unique($table, $column);
+    }
+
+    /**
+     * The field under validation must be uppercase.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-uppercase
+     */
+    public static function uppercase(): string
+    {
+        return 'uppercase';
     }
 
     /**

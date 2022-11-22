@@ -512,16 +512,6 @@ class RuleSet implements Arrayable, IteratorAggregate
     }
 
     /**
-     * Create a new nested rule set.
-     *
-     * @link https://laravel.com/docs/9.x/validation#accessing-nested-array-data
-     */
-    public function forEach(callable $callback): self
-    {
-        return $this->rule(Rule::forEach($callback));
-    }
-
-    /**
      * The field under validation must be greater than the given *field*.
      *
      * @link https://laravel.com/docs/9.x/validation#rule-gt
@@ -628,6 +618,16 @@ class RuleSet implements Arrayable, IteratorAggregate
     }
 
     /**
+     * The field under validation must be lowercase.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-lowercase
+     */
+    public function lowercase(): self
+    {
+        return $this->rule(Rule::lowercase());
+    }
+
+    /**
      * The field under validation must be less than the given *field*.
      *
      * @link https://laravel.com/docs/9.x/validation#rule-lt
@@ -668,6 +668,16 @@ class RuleSet implements Arrayable, IteratorAggregate
     }
 
     /**
+     * The integer under validation must have a maximum length of *value*.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-max-digits
+     */
+    public function maxDigits(int $value): self
+    {
+        return $this->rule(Rule::maxDigits($value));
+    }
+
+    /**
      * The file under validation must have a MIME type corresponding to one of the listed extensions.
      *
      * @link https://laravel.com/docs/9.x/validation#rule-mimes
@@ -696,6 +706,16 @@ class RuleSet implements Arrayable, IteratorAggregate
     public function min(int $value): self
     {
         return $this->rule(Rule::min($value));
+    }
+
+    /**
+     * The integer under validation must have a minimum length of *value*.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-min-digits
+     */
+    public function minDigits(int $value): self
+    {
+        return $this->rule(Rule::minDigits($value));
     }
 
     /**
@@ -851,6 +871,16 @@ class RuleSet implements Arrayable, IteratorAggregate
     public function requiredIf(mixed $callback): self
     {
         return $this->rule(Rule::requiredIf($callback));
+    }
+
+    /**
+     * The field must be present if the other specified field is accepted.
+     *
+     * @see RuleSet::accepted() for accepted criteria
+     */
+    public function requiredIfAccepted(string $field): self
+    {
+        return $this->rule(Rule::requiredIfAccepted($field));
     }
 
     /**
@@ -1016,6 +1046,16 @@ class RuleSet implements Arrayable, IteratorAggregate
         }
 
         return $this->rule($rule);
+    }
+
+    /**
+     * The field under validation must be uppercase.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-uppercase
+     */
+    public function uppercase(): self
+    {
+        return $this->rule(Rule::uppercase());
     }
 
     /**
