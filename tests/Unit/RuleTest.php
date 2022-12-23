@@ -487,6 +487,26 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->dateFormat('d-M-Y'),
                 'fails' => true,
             ],
+            'decimal valid' => [
+                'data' => '1.1',
+                'rules' => fn() => RuleSet::create()->decimal(1),
+                'fails' => false,
+            ],
+            'decimal invalid not decimal' => [
+                'data' => '1',
+                'rules' => fn() => RuleSet::create()->decimal(1),
+                'fails' => true,
+            ],
+            'decimal invalid wrong precision' => [
+                'data' => '1.01',
+                'rules' => fn() => RuleSet::create()->decimal(1),
+                'fails' => true,
+            ],
+            'decimal invalid with max' => [
+                'data' => '1.12345',
+                'rules' => fn() => RuleSet::create()->decimal(1, 4),
+                'fails' => true,
+            ],
             'declined valid' => [
                 'data' => '0',
                 'rules' => fn() => RuleSet::create()->declined(),

@@ -233,6 +233,16 @@ class Rule
     }
 
     /**
+     * The field under validation must be numeric and must contain the specified number of decimal places.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-decimal
+     */
+    public static function decimal(int $precision, ?int $maxPrecision = null): string
+    {
+        return 'decimal:'.$precision.($maxPrecision !== null ? ','.$maxPrecision : '');
+    }
+
+    /**
      * The field under validation must be *"no"*, *"off"*, *0*, or *false*.
      *
      * @link https://laravel.com/docs/9.x/validation#rule-declined

@@ -288,6 +288,16 @@ class RuleSet implements Arrayable, IteratorAggregate
     }
 
     /**
+     * The field under validation must be numeric and must contain the specified number of decimal places.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-decimal
+     */
+    public function decimal(int $precision, ?int $maxPrecision = null): self
+    {
+        return $this->rule(Rule::decimal($precision, $maxPrecision));
+    }
+
+    /**
      * The field under validation must be *"no"*, *"off"*, *0*, or *false*.
      *
      * @link https://laravel.com/docs/9.x/validation#rule-declined
