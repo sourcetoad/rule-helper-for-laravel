@@ -295,6 +295,21 @@ class RuleTest extends TestCase
                 ],
                 'fails' => true,
             ],
+            'ascii valid' => [
+                'data' => 'Ascii',
+                'rules' => fn() => RuleSet::create()->ascii(),
+                'fails' => false,
+            ],
+            'ascii invalid non-breaking space' => [
+                'data' => 'Ascii with NBSP',
+                'rules' => fn() => RuleSet::create()->ascii(),
+                'fails' => true,
+            ],
+            'ascii invalid utf-8' => [
+                'data' => 'アスキー',
+                'rules' => fn() => RuleSet::create()->ascii(),
+                'fails' => true,
+            ],
             'bail not set' => [
                 'data' => 11,
                 'rules' => fn() => RuleSet::create()->max(1)->string(),
@@ -1664,6 +1679,16 @@ class RuleTest extends TestCase
             'timezone invalid' => [
                 'data' => 'not a timezone',
                 'rules' => fn() => RuleSet::create()->timezone(),
+                'fails' => true,
+            ],
+            'ulid valid' => [
+                'data' => Str::ulid()->toBase32(),
+                'rules' => fn() => RuleSet::create()->ulid(),
+                'fails' => false,
+            ],
+            'ulid invalid' => [
+                'data' => Str::uuid()->toString(),
+                'rules' => fn() => RuleSet::create()->ulid(),
                 'fails' => true,
             ],
             'uppercase valid' => [

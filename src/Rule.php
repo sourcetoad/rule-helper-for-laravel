@@ -117,6 +117,16 @@ class Rule
     }
 
     /**
+     * The field under validation must be entirely 7-bit ASCII characters.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-ascii
+     */
+    public static function ascii(): string
+    {
+        return 'ascii';
+    }
+
+    /**
      * Stop running validation rules for the field after the first validation failure.
      *
      * @link https://laravel.com/docs/9.x/validation#rule-bail
@@ -968,6 +978,17 @@ class Rule
     public static function timezone(): string
     {
         return 'timezone';
+    }
+
+    /**
+     * The field under validation must be a valid Universally Unique Lexicographically Sortable Identifier (ULID).
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-ulid
+     * @link https://github.com/ulid/spec
+     */
+    public static function ulid(): string
+    {
+        return 'ulid';
     }
 
     /**
