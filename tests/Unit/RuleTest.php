@@ -295,6 +295,21 @@ class RuleTest extends TestCase
                 ],
                 'fails' => true,
             ],
+            'ascii valid' => [
+                'data' => 'Ascii',
+                'rules' => fn() => RuleSet::create()->ascii(),
+                'fails' => false,
+            ],
+            'ascii invalid non-breaking space' => [
+                'data' => 'Ascii with NBSP',
+                'rules' => fn() => RuleSet::create()->ascii(),
+                'fails' => true,
+            ],
+            'ascii invalid utf-8' => [
+                'data' => 'アスキー',
+                'rules' => fn() => RuleSet::create()->ascii(),
+                'fails' => true,
+            ],
             'bail not set' => [
                 'data' => 11,
                 'rules' => fn() => RuleSet::create()->max(1)->string(),
@@ -470,6 +485,26 @@ class RuleTest extends TestCase
             'dateFormat invalid' => [
                 'data' => '2021-01-01',
                 'rules' => fn() => RuleSet::create()->dateFormat('d-M-Y'),
+                'fails' => true,
+            ],
+            'decimal valid' => [
+                'data' => '1.1',
+                'rules' => fn() => RuleSet::create()->decimal(1),
+                'fails' => false,
+            ],
+            'decimal invalid not decimal' => [
+                'data' => '1',
+                'rules' => fn() => RuleSet::create()->decimal(1),
+                'fails' => true,
+            ],
+            'decimal invalid wrong precision' => [
+                'data' => '1.01',
+                'rules' => fn() => RuleSet::create()->decimal(1),
+                'fails' => true,
+            ],
+            'decimal invalid with max' => [
+                'data' => '1.12345',
+                'rules' => fn() => RuleSet::create()->decimal(1, 4),
                 'fails' => true,
             ],
             'declined valid' => [
@@ -1664,6 +1699,16 @@ class RuleTest extends TestCase
             'timezone invalid' => [
                 'data' => 'not a timezone',
                 'rules' => fn() => RuleSet::create()->timezone(),
+                'fails' => true,
+            ],
+            'ulid valid' => [
+                'data' => Str::ulid()->toBase32(),
+                'rules' => fn() => RuleSet::create()->ulid(),
+                'fails' => false,
+            ],
+            'ulid invalid' => [
+                'data' => Str::uuid()->toString(),
+                'rules' => fn() => RuleSet::create()->ulid(),
                 'fails' => true,
             ],
             'uppercase valid' => [

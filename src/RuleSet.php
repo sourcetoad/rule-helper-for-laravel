@@ -176,6 +176,16 @@ class RuleSet implements Arrayable, IteratorAggregate
     }
 
     /**
+     * The field under validation must be entirely 7-bit ASCII characters.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-ascii
+     */
+    public function ascii(): self
+    {
+        return $this->rule(Rule::ascii());
+    }
+
+    /**
      * Stop running validation rules for the field after the first validation failure.
      *
      * @link https://laravel.com/docs/9.x/validation#rule-bail
@@ -275,6 +285,16 @@ class RuleSet implements Arrayable, IteratorAggregate
     public function dateFormat(string $dateFormat): self
     {
         return $this->rule(Rule::dateFormat($dateFormat));
+    }
+
+    /**
+     * The field under validation must be numeric and must contain the specified number of decimal places.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-decimal
+     */
+    public function decimal(int $precision, ?int $maxPrecision = null): self
+    {
+        return $this->rule(Rule::decimal($precision, $maxPrecision));
     }
 
     /**
@@ -1025,6 +1045,17 @@ class RuleSet implements Arrayable, IteratorAggregate
     public function timezone(): self
     {
         return $this->rule(Rule::timezone());
+    }
+
+    /**
+     * The field under validation must be a valid Universally Unique Lexicographically Sortable Identifier (ULID).
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-ulid
+     * @link https://github.com/ulid/spec
+     */
+    public function ulid(): self
+    {
+        return $this->rule(Rule::ulid());
     }
 
     /**
