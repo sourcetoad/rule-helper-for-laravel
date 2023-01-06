@@ -492,6 +492,16 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->decimal(1),
                 'fails' => false,
             ],
+            'decimal signed positive' => [
+                'data' => '+1.1',
+                'rules' => fn() => RuleSet::create()->decimal(1),
+                'fails' => false,
+            ],
+            'decimal signed negative' => [
+                'data' => '-1.1',
+                'rules' => fn() => RuleSet::create()->decimal(1),
+                'fails' => false,
+            ],
             'decimal invalid not decimal' => [
                 'data' => '1',
                 'rules' => fn() => RuleSet::create()->decimal(1),
