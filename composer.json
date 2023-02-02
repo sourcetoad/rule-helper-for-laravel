@@ -3,14 +3,14 @@
     "description": "Rule helper for Laravel",
     "type": "library",
     "license": "MIT",
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "require": {
         "php": "^8.0",
-        "laravel/framework": "^9.45"
+        "laravel/framework": "^9.45|^10.x-dev"
     },
     "require-dev": {
         "ext-json": "*",
-        "orchestra/testbench": "^7.0",
+        "orchestra/testbench": "^7.0|^8.x-dev",
         "squizlabs/php_codesniffer": "^3.6"
     },
     "autoload": {
