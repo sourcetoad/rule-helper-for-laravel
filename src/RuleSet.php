@@ -739,6 +739,56 @@ class RuleSet implements Arrayable, IteratorAggregate
     }
 
     /**
+     * The field under validation must not be present in the input data.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-missing
+     */
+    public function missing(): self
+    {
+        return $this->rule(Rule::missing());
+    }
+
+    /**
+     * The field under validation must not be present if the *anotherField* field is equal to any *value*.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-missing-if
+     */
+    public function missingIf(string $anotherField, string ...$value): self
+    {
+        return $this->rule(Rule::missingIf($anotherField, ...$value));
+    }
+
+    /**
+     * The field under validation must not be present unless the *anotherField* field is equal to any *value*.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-missing-unless
+     */
+    public function missingUnless(string $anotherField, string ...$value): self
+    {
+        return $this->rule(Rule::missingUnless($anotherField, ...$value));
+    }
+
+    /**
+     * The field under validation must not be present *only if* any of the other specified fields are present.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-missing-with
+     */
+    public function missingWith(string ...$field): self
+    {
+        return $this->rule(Rule::missingWith(...$field));
+    }
+
+    /**
+     * The field under validation must not be present *only if* all of the other specified fields are present.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-missing-with-all
+     */
+    public function missingWithAll(string ...$field): self
+    {
+        return $this->rule(Rule::missingWithAll(...$field));
+    }
+
+    /**
      * The field under validation must be a multiple of *value*.
      *
      * @link https://laravel.com/docs/9.x/validation#multiple-of

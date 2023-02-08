@@ -492,6 +492,16 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->decimal(1),
                 'fails' => false,
             ],
+            'decimal signed positive' => [
+                'data' => '+1.1',
+                'rules' => fn() => RuleSet::create()->decimal(1),
+                'fails' => false,
+            ],
+            'decimal signed negative' => [
+                'data' => '-1.1',
+                'rules' => fn() => RuleSet::create()->decimal(1),
+                'fails' => false,
+            ],
             'decimal invalid not decimal' => [
                 'data' => '1',
                 'rules' => fn() => RuleSet::create()->decimal(1),
@@ -1151,6 +1161,84 @@ class RuleTest extends TestCase
             'minDigits invalid' => [
                 'data' => 12,
                 'rules' => fn() => RuleSet::create()->minDigits(3),
+                'fails' => true,
+            ],
+            'missing valid' => [
+                'data' => [
+                    'field-b' => '',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->missing(),
+                ],
+                'fails' => false,
+            ],
+            'missing invalid' => [
+                'data' => [
+                    'field-a' => '',
+                    'field-b' => '',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->missing(),
+                ],
+                'fails' => true,
+            ],
+            'missingIf valid' => [
+                'data' => [
+                    'field-a' => '',
+                    'field-b' => 'mock',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->missingIf('field-b', 'test'),
+                ],
+                'fails' => false,
+            ],
+            'missingIf invalid' => [
+                'data' => [
+                    'field-a' => '',
+                    'field-b' => 'test',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->missingIf('field-b', 'test'),
+                ],
+                'fails' => true,
+            ],
+            'missingUnless valid' => [
+                'data' => [
+                    'field-a' => '',
+                    'field-b' => 'mock',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->missingUnless('field-b', 'mock'),
+                ],
+                'fails' => false,
+            ],
+            'missingUnless invalid' => [
+                'data' => [
+                    'field-a' => '',
+                    'field-b' => 'test',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->missingUnless('field-b', 'mock'),
+                ],
+                'fails' => true,
+            ],
+            'missingWith valid' => [
+                'data' => [
+                    'field-c' => 'mock',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->missingWith('field-b', 'field-c'),
+                ],
+                'fails' => false,
+            ],
+            'missingWith invalid' => [
+                'data' => [
+                    'field-a' => '',
+                    'field-c' => 'test',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->missingWith('field-b', 'field-c'),
+                ],
                 'fails' => true,
             ],
             'multipleOf valid' => [

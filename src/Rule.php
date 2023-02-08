@@ -678,6 +678,56 @@ class Rule
     }
 
     /**
+     * The field under validation must not be present in the input data.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-missing
+     */
+    public static function missing(): string
+    {
+        return 'missing';
+    }
+
+    /**
+     * The field under validation must not be present if the *anotherField* field is equal to any *value*.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-missing-if
+     */
+    public static function missingIf(string $anotherField, string ...$value): string
+    {
+        return sprintf('missing_if:%s,%s', $anotherField, implode(',', $value));
+    }
+
+    /**
+     * The field under validation must not be present unless the *anotherField* field is equal to any *value*.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-missing-unless
+     */
+    public static function missingUnless(string $anotherField, string ...$value): string
+    {
+        return sprintf('missing_unless:%s,%s', $anotherField, implode(',', $value));
+    }
+
+    /**
+     * The field under validation must not be present *only if* any of the other specified fields are present.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-missing-with
+     */
+    public static function missingWith(string ...$field): string
+    {
+        return sprintf('missing_with:%s', implode(',', $field));
+    }
+
+    /**
+     * The field under validation must not be present *only if* all of the other specified fields are present.
+     *
+     * @link https://laravel.com/docs/9.x/validation#rule-missing-with-all
+     */
+    public static function missingWithAll(string ...$field): string
+    {
+        return sprintf('missing_with_all:%s', implode(',', $field));
+    }
+
+    /**
      * The field under validation must be a multiple of *value*.
      *
      * @link https://laravel.com/docs/9.x/validation#multiple-of
