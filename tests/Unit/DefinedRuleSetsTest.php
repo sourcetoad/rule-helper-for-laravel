@@ -31,6 +31,9 @@ class DefinedRuleSetsTest extends TestCase
             'field-a' => $this->faker->name(),
         ], [
             'field-a' => RuleSet::useDefined('user.email'),
+        ], [
+            // TODO Remove these message overrides when we're no longer supporting 9.x
+            'email' => 'The :attribute field must be a valid email address.',
         ]);
 
         // Act
@@ -39,7 +42,7 @@ class DefinedRuleSetsTest extends TestCase
 
         // Assert
         $this->assertTrue($fails, 'Failed asserting that RuleSet used defined rule.');
-        $this->assertEquals(['field-a' => ['The field-a must be a valid email address.']], $messages->toArray());
+        $this->assertEquals(['field-a' => ['The field-a field must be a valid email address.']], $messages->toArray());
     }
 
     public function testModifyingDuringUseDoesNotModifyStoredCopy(): void

@@ -40,7 +40,11 @@ class RuleTest extends TestCase
             $rules = ['field' => $rules];
         }
 
-        $validator = Validator::make($data, $rules);
+        $validator = Validator::make($data, $rules, [
+            // TODO Remove these message overrides when we're no longer supporting 9.x
+            'max' => 'The :attribute field must not be greater than 1 characters.',
+            'string' => 'The :attribute field must be a string.',
+        ]);
 
         // Act
         $validatorFailed = $validator->fails();
@@ -316,8 +320,8 @@ class RuleTest extends TestCase
                 'fails' => true,
                 'errors' => [
                     'field' => [
-                        'The field must not be greater than 1 characters.',
-                        'The field must be a string.',
+                        'The field field must not be greater than 1 characters.',
+                        'The field field must be a string.',
                     ],
                 ],
             ],
@@ -327,7 +331,7 @@ class RuleTest extends TestCase
                 'fails' => true,
                 'errors' => [
                     'field' => [
-                        'The field must not be greater than 1 characters.',
+                        'The field field must not be greater than 1 characters.',
                     ],
                 ],
             ],
@@ -1443,8 +1447,8 @@ class RuleTest extends TestCase
                 'fails' => true,
                 'errors' => [
                     'field' => [
-                        'The field must be a string.',
-                        'The field must not be greater than 1 characters.',
+                        'The field field must be a string.',
+                        'The field field must not be greater than 1 characters.',
                     ],
                 ],
             ],
