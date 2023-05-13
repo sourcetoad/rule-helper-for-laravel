@@ -5,15 +5,18 @@ declare(strict_types=1);
 namespace Sourcetoad\RuleHelper\Tests\Unit;
 
 use Carbon\CarbonImmutable;
+use Closure;
 use DateTime;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Hashing\Hasher;
+use Illuminate\Contracts\Translation\Translator;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Dimensions;
 use Illuminate\Validation\Rules\Password;
+use Mockery\MockInterface;
 use Sourcetoad\RuleHelper\Rule;
 use Sourcetoad\RuleHelper\RuleSet;
 use Sourcetoad\RuleHelper\Tests\TestCase;
@@ -33,10 +36,10 @@ class RuleTest extends TestCase
     /**
      * @dataProvider ruleDataProvider
      */
-    public function testRuleIntegration($data, \Closure $rules, bool $fails, ?array $errors = null): void
+    public function testRuleIntegration($data, Closure $rules, bool $fails, ?array $errors = null): void
     {
         // Arrange
-        if ($data instanceof \Closure) {
+        if ($data instanceof Closure) {
             $data = $data->call($this);
         }
         if (!is_array($data)) {
@@ -48,11 +51,31 @@ class RuleTest extends TestCase
             $rules = ['field' => $rules];
         }
 
-        $validator = Validator::make($data, $rules, [
-            // TODO Remove these message overrides when we're no longer supporting 9.x
-            'max' => 'The :attribute field must not be greater than 1 characters.',
-            'string' => 'The :attribute field must be a string.',
-        ]);
+        // TODO Remove this translator override when we're no longer supporting 9.x. We replace the translator rather
+        //      than passing in message overrides due to Password pulling its translations from the translator layer
+        //      instead of the validator layer.
+        /**
+         * @var Translator $translator
+         */
+        $translator = $this->app['translator'];
+        /**
+         * @var Translator|MockInterface $mockTranslator
+         */
+        $mockTranslator = $this->mock(Translator::class);
+        $mockTranslator
+            ->shouldReceive('get')
+            ->andReturnUsing(
+                fn($key, array $replace = [], $locale = null) => [
+                    'validation.max.string' => 'The :attribute field must not be greater than :max characters.',
+                    'validation.min.string' => 'The :attribute field must be at least :min characters.',
+                    'validation.password.numbers' => 'The :attribute field must contain at least one number.',
+                    'validation.password.symbols' => 'The :attribute field must contain at least one symbol.',
+                    'validation.string' => 'The :attribute field must be a string.',
+                ][$key] ?? $translator->get($key, $replace, $locale),
+            );
+        $this->app['translator'] = $mockTranslator;
+
+        $validator = Validator::make($data, $rules);
 
         // Act
         $validatorFailed = $validator->fails();
@@ -74,7 +97,7 @@ class RuleTest extends TestCase
     /**
      * @dataProvider excludeProvider
      */
-    public function testExcludeRuleIntegration($data, \Closure $rules, array $expected): void
+    public function testExcludeRuleIntegration($data, Closure $rules, array $expected): void
     {
         // Arrange
         $rules = $rules->call($this);
@@ -91,7 +114,7 @@ class RuleTest extends TestCase
     /**
      * @dataProvider requireIfProvider
      */
-    public function testRequiredIfExtensions(string $data, \Closure $rule, bool $fails): void
+    public function testRequiredIfExtensions(string $data, Closure $rule, bool $fails): void
     {
         // Arrange
         $validator = Validator::make([
