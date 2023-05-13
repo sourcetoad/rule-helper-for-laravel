@@ -8,6 +8,7 @@ use ArrayIterator;
 use DateTimeInterface;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Validation\Rules\RequiredIf;
+use Illuminate\Validation\Rules\Password;
 use IteratorAggregate;
 
 class RuleSet implements Arrayable, IteratorAggregate
@@ -835,6 +836,26 @@ class RuleSet implements Arrayable, IteratorAggregate
     public function numeric(): self
     {
         return $this->rule(Rule::numeric());
+    }
+
+    /**
+     * The field under validation must be a string with an adequate level of complexity for a password. Defaults to a
+     * minimum of 8 characters if no size is provided and {@see Password::defaults} was not used.
+     *
+     * If you would like to customize the password rule, you may use {@see Password::defaults} and pass no options,
+     * use {@see Rule::password} with {@see RuleSet::rule}, or pass a callback which accepts a {@see Password} instance.
+     *
+     * @link https://laravel.com/docs/10.x/validation#validating-passwords
+     */
+    public function password(?int $size = null, ?callable $modifier = null): self
+    {
+        $rule = Rule::password($size);
+
+        if ($modifier) {
+            $modifier($rule);
+        }
+
+        return $this->rule($rule);
     }
 
     /**

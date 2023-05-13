@@ -13,6 +13,7 @@ use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Dimensions;
+use Illuminate\Validation\Rules\Password;
 use Sourcetoad\RuleHelper\Rule;
 use Sourcetoad\RuleHelper\RuleSet;
 use Sourcetoad\RuleHelper\Tests\TestCase;
@@ -22,6 +23,13 @@ use Symfony\Component\Mime\MimeTypes;
 
 class RuleTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        Password::$defaultCallback = null;
+    }
+
     /**
      * @dataProvider ruleDataProvider
      */
@@ -1323,6 +1331,74 @@ class RuleTest extends TestCase
                 'data' => 'a',
                 'rules' => fn() => RuleSet::create()->numeric(),
                 'fails' => true,
+            ],
+            'password using default valid' => [
+                'data' => 'pass1!',
+                'rules' => function () {
+                    Password::defaults(Password::min(6)->letters()->numbers()->symbols());
+
+                    return RuleSet::create()->password();
+                },
+                'fails' => false,
+            ],
+            'password using default invalid' => [
+                'data' => 'passwordWithoutNumbersOrSymbols',
+                'rules' => function () {
+                    Password::defaults(Password::min(10)->letters()->numbers()->symbols());
+
+                    return RuleSet::create()->password();
+                },
+                'fails' => true,
+                'errors' => [
+                    'field' => [
+                        'The field field must contain at least one symbol.',
+                        'The field field must contain at least one number.',
+                    ],
+                ],
+            ],
+            'password overriding default valid' => [
+                'data' => 'password',
+                'rules' => function () {
+                    // Set a default password rule set.
+                    Password::defaults(Password::min(10)->letters()->numbers()->symbols());
+
+                    // Make our rule less strict to pass.
+                    return RuleSet::create()->password(8);
+                },
+                'fails' => false,
+            ],
+            'password overriding default invalid' => [
+                'data' => 'password',
+                'rules' => function () {
+                    // Set a default password rule set.
+                    Password::defaults(Password::min(9)->letters()->numbers());
+
+                    // Make our rule more strict to fail and ensure both our error and the default were included.
+                    return RuleSet::create()->password(null, fn(Password $rule) => $rule->symbols());
+                },
+                'fails' => true,
+                'errors' => [
+                    'field' => [
+                        'The field field must be at least 9 characters.',
+                        'The field field must contain at least one symbol.',
+                        'The field field must contain at least one number.',
+                    ],
+                ],
+            ],
+            'password valid' => [
+                'data' => 'password',
+                'rules' => fn() => RuleSet::create()->password(),
+                'fails' => false,
+            ],
+            'password invalid' => [
+                'data' => 'pass',
+                'rules' => fn() => RuleSet::create()->password(),
+                'fails' => true,
+                'errors' => [
+                    'field' => [
+                        'The field field must be at least 8 characters.',
+                    ],
+                ],
             ],
             'present valid' => [
                 'data' => [
