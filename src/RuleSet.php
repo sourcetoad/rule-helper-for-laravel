@@ -65,8 +65,6 @@ class RuleSet implements Arrayable, IteratorAggregate
 
     /**
      * Append all rules from a defined rule set.
-     *
-     * @param string $name
      */
     public function concatDefined(string $name): self
     {
