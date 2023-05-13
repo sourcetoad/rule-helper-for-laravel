@@ -1245,6 +1245,27 @@ class RuleTest extends TestCase
                 ],
                 'fails' => true,
             ],
+            'missingWithAll valid' => [
+                'data' => [
+                    'field-a' => 'mock',
+                    'field-c' => 'mock',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->missingWithAll('field-b', 'field-c'),
+                ],
+                'fails' => false,
+            ],
+            'missingWithAll invalid' => [
+                'data' => [
+                    'field-a' => 'mock',
+                    'field-b' => 'mock',
+                    'field-c' => 'mock',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->missingWithAll('field-b', 'field-c'),
+                ],
+                'fails' => true,
+            ],
             'multipleOf valid' => [
                 'data' => 9.9,
                 'rules' => fn() => RuleSet::create()->multipleOf(3.3),
