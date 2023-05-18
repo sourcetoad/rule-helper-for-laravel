@@ -14,6 +14,7 @@ use Illuminate\Validation\Rules\ExcludeIf;
 use Illuminate\Validation\Rules\Exists;
 use Illuminate\Validation\Rules\In;
 use Illuminate\Validation\Rules\NotIn;
+use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\Rules\ProhibitedIf;
 use Illuminate\Validation\Rules\RequiredIf;
 use Illuminate\Validation\Rules\Unique;
@@ -776,6 +777,19 @@ class Rule
     public static function numeric(): string
     {
         return 'numeric';
+    }
+
+    /**
+     * The field under validation must be a string with an adequate level of complexity for a password. Defaults to a
+     * minimum of 8 characters if no size is provided and {@see Password::defaults} was not used.
+     *
+     * @link https://laravel.com/docs/10.x/validation#validating-passwords
+     */
+    public static function password(?int $size = null): Password
+    {
+        return $size === null
+            ? Password::default()
+            : Password::min($size);
     }
 
     /**

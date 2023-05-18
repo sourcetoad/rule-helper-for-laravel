@@ -5,14 +5,18 @@ declare(strict_types=1);
 namespace Sourcetoad\RuleHelper\Tests\Unit;
 
 use Carbon\CarbonImmutable;
+use Closure;
 use DateTime;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Hashing\Hasher;
+use Illuminate\Contracts\Translation\Translator;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Dimensions;
+use Illuminate\Validation\Rules\Password;
+use Mockery\MockInterface;
 use Sourcetoad\RuleHelper\Rule;
 use Sourcetoad\RuleHelper\RuleSet;
 use Sourcetoad\RuleHelper\Tests\TestCase;
@@ -22,13 +26,20 @@ use Symfony\Component\Mime\MimeTypes;
 
 class RuleTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        Password::$defaultCallback = null;
+    }
+
     /**
      * @dataProvider ruleDataProvider
      */
-    public function testRuleIntegration($data, \Closure $rules, bool $fails, ?array $errors = null): void
+    public function testRuleIntegration($data, Closure $rules, bool $fails, ?array $errors = null): void
     {
         // Arrange
-        if ($data instanceof \Closure) {
+        if ($data instanceof Closure) {
             $data = $data->call($this);
         }
         if (!is_array($data)) {
@@ -40,11 +51,31 @@ class RuleTest extends TestCase
             $rules = ['field' => $rules];
         }
 
-        $validator = Validator::make($data, $rules, [
-            // TODO Remove these message overrides when we're no longer supporting 9.x
-            'max' => 'The :attribute field must not be greater than 1 characters.',
-            'string' => 'The :attribute field must be a string.',
-        ]);
+        // TODO Remove this translator override when we're no longer supporting 9.x. We replace the translator rather
+        //      than passing in message overrides due to Password pulling its translations from the translator layer
+        //      instead of the validator layer.
+        /**
+         * @var Translator $translator
+         */
+        $translator = $this->app['translator'];
+        /**
+         * @var Translator|MockInterface $mockTranslator
+         */
+        $mockTranslator = $this->mock(Translator::class);
+        $mockTranslator
+            ->shouldReceive('get')
+            ->andReturnUsing(
+                fn($key, array $replace = [], $locale = null) => [
+                    'validation.max.string' => 'The :attribute field must not be greater than :max characters.',
+                    'validation.min.string' => 'The :attribute field must be at least :min characters.',
+                    'validation.password.numbers' => 'The :attribute field must contain at least one number.',
+                    'validation.password.symbols' => 'The :attribute field must contain at least one symbol.',
+                    'validation.string' => 'The :attribute field must be a string.',
+                ][$key] ?? $translator->get($key, $replace, $locale),
+            );
+        $this->app['translator'] = $mockTranslator;
+
+        $validator = Validator::make($data, $rules);
 
         // Act
         $validatorFailed = $validator->fails();
@@ -66,7 +97,7 @@ class RuleTest extends TestCase
     /**
      * @dataProvider excludeProvider
      */
-    public function testExcludeRuleIntegration($data, \Closure $rules, array $expected): void
+    public function testExcludeRuleIntegration($data, Closure $rules, array $expected): void
     {
         // Arrange
         $rules = $rules->call($this);
@@ -83,7 +114,7 @@ class RuleTest extends TestCase
     /**
      * @dataProvider requireIfProvider
      */
-    public function testRequiredIfExtensions(string $data, \Closure $rule, bool $fails): void
+    public function testRequiredIfExtensions(string $data, Closure $rule, bool $fails): void
     {
         // Arrange
         $validator = Validator::make([
@@ -1245,6 +1276,27 @@ class RuleTest extends TestCase
                 ],
                 'fails' => true,
             ],
+            'missingWithAll valid' => [
+                'data' => [
+                    'field-a' => 'mock',
+                    'field-c' => 'mock',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->missingWithAll('field-b', 'field-c'),
+                ],
+                'fails' => false,
+            ],
+            'missingWithAll invalid' => [
+                'data' => [
+                    'field-a' => 'mock',
+                    'field-b' => 'mock',
+                    'field-c' => 'mock',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->missingWithAll('field-b', 'field-c'),
+                ],
+                'fails' => true,
+            ],
             'multipleOf valid' => [
                 'data' => 9.9,
                 'rules' => fn() => RuleSet::create()->multipleOf(3.3),
@@ -1302,6 +1354,74 @@ class RuleTest extends TestCase
                 'data' => 'a',
                 'rules' => fn() => RuleSet::create()->numeric(),
                 'fails' => true,
+            ],
+            'password using default valid' => [
+                'data' => 'pass1!',
+                'rules' => function () {
+                    Password::defaults(Password::min(6)->letters()->numbers()->symbols());
+
+                    return RuleSet::create()->password();
+                },
+                'fails' => false,
+            ],
+            'password using default invalid' => [
+                'data' => 'passwordWithoutNumbersOrSymbols',
+                'rules' => function () {
+                    Password::defaults(Password::min(10)->letters()->numbers()->symbols());
+
+                    return RuleSet::create()->password();
+                },
+                'fails' => true,
+                'errors' => [
+                    'field' => [
+                        'The field field must contain at least one symbol.',
+                        'The field field must contain at least one number.',
+                    ],
+                ],
+            ],
+            'password overriding default valid' => [
+                'data' => 'password',
+                'rules' => function () {
+                    // Set a default password rule set.
+                    Password::defaults(Password::min(10)->letters()->numbers()->symbols());
+
+                    // Make our rule less strict to pass.
+                    return RuleSet::create()->password(8);
+                },
+                'fails' => false,
+            ],
+            'password overriding default invalid' => [
+                'data' => 'password',
+                'rules' => function () {
+                    // Set a default password rule set.
+                    Password::defaults(Password::min(9)->letters()->numbers());
+
+                    // Make our rule more strict to fail and ensure both our error and the default were included.
+                    return RuleSet::create()->password(null, fn(Password $rule) => $rule->symbols());
+                },
+                'fails' => true,
+                'errors' => [
+                    'field' => [
+                        'The field field must be at least 9 characters.',
+                        'The field field must contain at least one symbol.',
+                        'The field field must contain at least one number.',
+                    ],
+                ],
+            ],
+            'password valid' => [
+                'data' => 'password',
+                'rules' => fn() => RuleSet::create()->password(),
+                'fails' => false,
+            ],
+            'password invalid' => [
+                'data' => 'pass',
+                'rules' => fn() => RuleSet::create()->password(),
+                'fails' => true,
+                'errors' => [
+                    'field' => [
+                        'The field field must be at least 8 characters.',
+                    ],
+                ],
             ],
             'present valid' => [
                 'data' => [
