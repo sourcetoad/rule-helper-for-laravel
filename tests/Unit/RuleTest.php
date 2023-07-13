@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Sourcetoad\RuleHelper\Tests\Unit;
 
+use Brick\Math\BigNumber;
 use Carbon\CarbonImmutable;
 use Closure;
 use DateTime;
@@ -416,12 +417,54 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->beforeOrEqual(new DateTime('2021-01-01')),
                 'fails' => true,
             ],
+            'between valid with float' => [
+                'data' => 0.5,
+                'rules' => fn() => RuleSet::create()->numeric()->between(0.1, 0.5),
+                'fails' => false,
+            ],
+            'between invalid with float' => [
+                'data' => 0.6,
+                'rules' => fn() => RuleSet::create()->numeric()->between(0.1, 0.5),
+                'fails' => true,
+            ],
+            'between valid with number' => [
+                'data' => 100,
+                'rules' => fn() => RuleSet::create()->numeric()->between(1, 100),
+                'fails' => false,
+            ],
+            'between invalid with number' => [
+                'data' => 101,
+                'rules' => fn() => RuleSet::create()->numeric()->between(1, 100),
+                'fails' => true,
+            ],
             'between valid with string' => [
+                'data' => 50,
+                'rules' => fn() => RuleSet::create()->numeric()->between('25', '75'),
+                'fails' => false,
+            ],
+            'between invalid with string' => [
+                'data' => 76,
+                'rules' => fn() => RuleSet::create()->numeric()->between('25', '75'),
+                'fails' => true,
+            ],
+            'between valid with BigNumber' => [
+                'data' => '9223372036854775809',
+                'rules' => fn() => RuleSet::create()->numeric()
+                    ->between(BigNumber::of('9223372036854775808'), BigNumber::of('9223372036854775810')),
+                'fails' => false,
+            ],
+            'between invalid with BigNumber' => [
+                'data' => '9223372036854775811',
+                'rules' => fn() => RuleSet::create()->numeric()
+                    ->between(BigNumber::of('9223372036854775808'), BigNumber::of('9223372036854775810')),
+                'fails' => true,
+            ],
+            'between valid with string length' => [
                 'data' => str_repeat('.', 10),
                 'rules' => fn() => RuleSet::create()->between(9, 11),
                 'fails' => false,
             ],
-            'between invalid with string' => [
+            'between invalid with string length' => [
                 'data' => str_repeat('.', 12),
                 'rules' => fn() => RuleSet::create()->between(9, 11),
                 'fails' => true,

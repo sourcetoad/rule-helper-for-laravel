@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Sourcetoad\RuleHelper;
 
+use Brick\Math\BigNumber;
 use DateTimeInterface;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
@@ -162,9 +163,9 @@ class Rule
      *
      * @link https://laravel.com/docs/10.x/validation#rule-between
      */
-    public static function between(int $min, int $max): string
+    public static function between(float|int|string|BigNumber $min, float|int|string|BigNumber $max): string
     {
-        return sprintf('between:%d,%d', $min, $max);
+        return sprintf('between:%s,%s', $min, $max);
     }
 
     /**

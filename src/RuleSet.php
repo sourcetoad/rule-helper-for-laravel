@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Sourcetoad\RuleHelper;
 
 use ArrayIterator;
+use Brick\Math\BigNumber;
 use DateTimeInterface;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Validation\Rules\RequiredIf;
@@ -219,7 +220,7 @@ class RuleSet implements Arrayable, IteratorAggregate
      *
      * @link https://laravel.com/docs/10.x/validation#rule-between
      */
-    public function between(int $min, int $max): self
+    public function between(float|int|string|BigNumber $min, float|int|string|BigNumber $max): self
     {
         return $this->rule(Rule::between($min, $max));
     }
