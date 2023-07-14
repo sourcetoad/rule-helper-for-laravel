@@ -949,7 +949,39 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->filled(),
                 'fails' => true,
             ],
-            'gt valid' => [
+            'gt valid with float' => [
+                'data' => 0.6,
+                'rules' => fn() => RuleSet::create()->numeric()->gt(0.5),
+                'fails' => false,
+            ],
+            'gt invalid with float' => [
+                'data' => 0.5,
+                'rules' => fn() => RuleSet::create()->numeric()->gt(0.5),
+                'fails' => true,
+            ],
+            'gt valid with number' => [
+                'data' => 101,
+                'rules' => fn() => RuleSet::create()->numeric()->gt(100),
+                'fails' => false,
+            ],
+            'gt invalid with number' => [
+                'data' => 100,
+                'rules' => fn() => RuleSet::create()->numeric()->gt(100),
+                'fails' => true,
+            ],
+            'gt valid with BigNumber' => [
+                'data' => '9223372036854775811',
+                'rules' => fn() => RuleSet::create()->numeric()
+                    ->gt(BigNumber::of('9223372036854775810')),
+                'fails' => false,
+            ],
+            'gt invalid with BigNumber' => [
+                'data' => '9223372036854775810',
+                'rules' => fn() => RuleSet::create()->numeric()
+                    ->gt(BigNumber::of('9223372036854775810')),
+                'fails' => true,
+            ],
+            'gt valid with string' => [
                 'data' => [
                     'field-a' => '2',
                     'field-b' => '1',
@@ -959,7 +991,7 @@ class RuleTest extends TestCase
                 ],
                 'fails' => false,
             ],
-            'gt invalid' => [
+            'gt invalid with string' => [
                 'data' => [
                     'field-a' => '1',
                     'field-b' => '2',
@@ -969,7 +1001,39 @@ class RuleTest extends TestCase
                 ],
                 'fails' => true,
             ],
-            'gte valid' => [
+            'gte valid with float' => [
+                'data' => 0.5,
+                'rules' => fn() => RuleSet::create()->numeric()->gte(0.5),
+                'fails' => false,
+            ],
+            'gte invalid with float' => [
+                'data' => 0.4,
+                'rules' => fn() => RuleSet::create()->numeric()->gte(0.5),
+                'fails' => true,
+            ],
+            'gte valid with number' => [
+                'data' => 100,
+                'rules' => fn() => RuleSet::create()->numeric()->gte(100),
+                'fails' => false,
+            ],
+            'gte invalid with number' => [
+                'data' => 99,
+                'rules' => fn() => RuleSet::create()->numeric()->gte(100),
+                'fails' => true,
+            ],
+            'gte valid with BigNumber' => [
+                'data' => '9223372036854775810',
+                'rules' => fn() => RuleSet::create()->numeric()
+                    ->gte(BigNumber::of('9223372036854775810')),
+                'fails' => false,
+            ],
+            'gte invalid with BigNumber' => [
+                'data' => '9223372036854775809',
+                'rules' => fn() => RuleSet::create()->numeric()
+                    ->gte(BigNumber::of('9223372036854775810')),
+                'fails' => true,
+            ],
+            'gte valid with string' => [
                 'data' => [
                     'field-a' => '1',
                     'field-b' => '1',
@@ -979,7 +1043,7 @@ class RuleTest extends TestCase
                 ],
                 'fails' => false,
             ],
-            'gte invalid' => [
+            'gte invalid with string' => [
                 'data' => [
                     'field-a' => '1',
                     'field-b' => '2',
@@ -1103,7 +1167,39 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->lowercase(),
                 'fails' => true,
             ],
-            'lt valid' => [
+            'lt valid with float' => [
+                'data' => 0.4,
+                'rules' => fn() => RuleSet::create()->numeric()->lt(0.5),
+                'fails' => false,
+            ],
+            'lt invalid with float' => [
+                'data' => 0.5,
+                'rules' => fn() => RuleSet::create()->numeric()->lt(0.5),
+                'fails' => true,
+            ],
+            'lt valid with number' => [
+                'data' => 99,
+                'rules' => fn() => RuleSet::create()->numeric()->lt(100),
+                'fails' => false,
+            ],
+            'lt invalid with number' => [
+                'data' => 100,
+                'rules' => fn() => RuleSet::create()->numeric()->lt(100),
+                'fails' => true,
+            ],
+            'lt valid with BigNumber' => [
+                'data' => '9223372036854775809',
+                'rules' => fn() => RuleSet::create()->numeric()
+                    ->lt(BigNumber::of('9223372036854775810')),
+                'fails' => false,
+            ],
+            'lt invalid with BigNumber' => [
+                'data' => '9223372036854775810',
+                'rules' => fn() => RuleSet::create()->numeric()
+                    ->lt(BigNumber::of('9223372036854775810')),
+                'fails' => true,
+            ],
+            'lt valid with string' => [
                 'data' => [
                     'field-a' => '1',
                     'field-b' => '2',
@@ -1113,7 +1209,7 @@ class RuleTest extends TestCase
                 ],
                 'fails' => false,
             ],
-            'lt invalid' => [
+            'lt invalid with string' => [
                 'data' => [
                     'field-a' => '2',
                     'field-b' => '1',
@@ -1123,7 +1219,39 @@ class RuleTest extends TestCase
                 ],
                 'fails' => true,
             ],
-            'lte valid' => [
+            'lte valid with float' => [
+                'data' => 0.5,
+                'rules' => fn() => RuleSet::create()->numeric()->lte(0.5),
+                'fails' => false,
+            ],
+            'lte invalid with float' => [
+                'data' => 0.6,
+                'rules' => fn() => RuleSet::create()->numeric()->lte(0.5),
+                'fails' => true,
+            ],
+            'lte valid with number' => [
+                'data' => 100,
+                'rules' => fn() => RuleSet::create()->numeric()->lte(100),
+                'fails' => false,
+            ],
+            'lte invalid with number' => [
+                'data' => 101,
+                'rules' => fn() => RuleSet::create()->numeric()->lte(100),
+                'fails' => true,
+            ],
+            'lte valid with BigNumber' => [
+                'data' => '9223372036854775810',
+                'rules' => fn() => RuleSet::create()->numeric()
+                    ->lte(BigNumber::of('9223372036854775810')),
+                'fails' => false,
+            ],
+            'lte invalid with BigNumber' => [
+                'data' => '9223372036854775811',
+                'rules' => fn() => RuleSet::create()->numeric()
+                    ->lte(BigNumber::of('9223372036854775810')),
+                'fails' => true,
+            ],
+            'lte valid with string' => [
                 'data' => [
                     'field-a' => '1',
                     'field-b' => '1',
@@ -1133,7 +1261,7 @@ class RuleTest extends TestCase
                 ],
                 'fails' => false,
             ],
-            'lte invalid' => [
+            'lte invalid with string' => [
                 'data' => [
                     'field-a' => '2',
                     'field-b' => '1',

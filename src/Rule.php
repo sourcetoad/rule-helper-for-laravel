@@ -477,9 +477,9 @@ class Rule
      *
      * @link https://laravel.com/docs/10.x/validation#rule-gt
      */
-    public static function gt(string $field): string
+    public static function gt(BigNumber|int|float|string $field): string
     {
-        return 'gt:'.$field;
+        return sprintf('gt:%s', $field);
     }
 
     /**
@@ -487,9 +487,9 @@ class Rule
      *
      * @link https://laravel.com/docs/10.x/validation#rule-gte
      */
-    public static function gte(string $field): string
+    public static function gte(BigNumber|int|float|string $field): string
     {
-        return 'gte:'.$field;
+        return sprintf('gte:%s', $field);
     }
 
     /**
@@ -593,9 +593,9 @@ class Rule
      *
      * @link https://laravel.com/docs/10.x/validation#rule-lt
      */
-    public static function lt(string $field): string
+    public static function lt(BigNumber|int|float|string $field): string
     {
-        return 'lt:'.$field;
+        return sprintf('lt:%s', $field);
     }
 
     /**
@@ -603,9 +603,9 @@ class Rule
      *
      * @link https://laravel.com/docs/10.x/validation#rule-lte
      */
-    public static function lte(string $field): string
+    public static function lte(BigNumber|int|float|string $field): string
     {
-        return 'lte:'.$field;
+        return sprintf('lte:%s', $field);
     }
 
     /**

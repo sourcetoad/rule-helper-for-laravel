@@ -536,7 +536,7 @@ class RuleSet implements Arrayable, IteratorAggregate
      *
      * @link https://laravel.com/docs/10.x/validation#rule-gt
      */
-    public function gt(string $field): self
+    public function gt(BigNumber|int|float|string $field): self
     {
         return $this->rule(Rule::gt($field));
     }
@@ -546,7 +546,7 @@ class RuleSet implements Arrayable, IteratorAggregate
      *
      * @link https://laravel.com/docs/10.x/validation#rule-gte
      */
-    public function gte(string $field): self
+    public function gte(BigNumber|int|float|string $field): self
     {
         return $this->rule(Rule::gte($field));
     }
@@ -652,7 +652,7 @@ class RuleSet implements Arrayable, IteratorAggregate
      *
      * @link https://laravel.com/docs/10.x/validation#rule-lt
      */
-    public function lt(string $field): self
+    public function lt(BigNumber|int|float|string $field): self
     {
         return $this->rule(Rule::lt($field));
     }
@@ -662,7 +662,7 @@ class RuleSet implements Arrayable, IteratorAggregate
      *
      * @link https://laravel.com/docs/10.x/validation#rule-lte
      */
-    public function lte(string $field): self
+    public function lte(BigNumber|int|float|string $field): self
     {
         return $this->rule(Rule::lte($field));
     }
