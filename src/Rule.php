@@ -623,9 +623,9 @@ class Rule
      *
      * @link https://laravel.com/docs/10.x/validation#rule-max
      */
-    public static function max(int $value): string
+    public static function max(BigNumber|int|float|string $value): string
     {
-        return 'max:'.$value;
+        return sprintf('max:%s', $value);
     }
 
     /**
@@ -664,9 +664,9 @@ class Rule
      *
      * @link https://laravel.com/docs/10.x/validation#rule-min
      */
-    public static function min(int $value): string
+    public static function min(BigNumber|int|float|string $value): string
     {
-        return 'min:'.$value;
+        return sprintf('min:%s', $value);
     }
 
     /**
@@ -1007,9 +1007,9 @@ class Rule
      *
      * @link https://laravel.com/docs/10.x/validation#rule-size
      */
-    public static function size(int $value): string
+    public static function size(BigNumber|int|float|string $value): string
     {
-        return 'size:'.$value;
+        return sprintf('size:%s', $value);
     }
 
     /**

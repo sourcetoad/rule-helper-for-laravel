@@ -682,7 +682,7 @@ class RuleSet implements Arrayable, IteratorAggregate
      *
      * @link https://laravel.com/docs/10.x/validation#rule-max
      */
-    public function max(int $value): self
+    public function max(BigNumber|int|float|string $value): self
     {
         return $this->rule(Rule::max($value));
     }
@@ -723,7 +723,7 @@ class RuleSet implements Arrayable, IteratorAggregate
      *
      * @link https://laravel.com/docs/10.x/validation#rule-min
      */
-    public function min(int $value): self
+    public function min(BigNumber|int|float|string $value): self
     {
         return $this->rule(Rule::min($value));
     }
@@ -1069,7 +1069,7 @@ class RuleSet implements Arrayable, IteratorAggregate
      *
      * @link https://laravel.com/docs/10.x/validation#rule-size
      */
-    public function size(int $value): self
+    public function size(BigNumber|int|float|string $value): self
     {
         return $this->rule(Rule::size($value));
     }

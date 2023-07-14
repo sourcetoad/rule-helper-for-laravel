@@ -1153,12 +1153,54 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->macAddress(),
                 'fails' => true,
             ],
+            'max valid with float' => [
+                'data' => 0.5,
+                'rules' => fn() => RuleSet::create()->numeric()->max(0.5),
+                'fails' => false,
+            ],
+            'max invalid with float' => [
+                'data' => 0.6,
+                'rules' => fn() => RuleSet::create()->numeric()->max(0.5),
+                'fails' => true,
+            ],
+            'max valid with number' => [
+                'data' => 100,
+                'rules' => fn() => RuleSet::create()->numeric()->max(100),
+                'fails' => false,
+            ],
+            'max invalid with number' => [
+                'data' => 101,
+                'rules' => fn() => RuleSet::create()->numeric()->max(100),
+                'fails' => true,
+            ],
             'max valid with string' => [
+                'data' => 24,
+                'rules' => fn() => RuleSet::create()->numeric()->max('25'),
+                'fails' => false,
+            ],
+            'max invalid with string' => [
+                'data' => 76,
+                'rules' => fn() => RuleSet::create()->numeric()->max('75'),
+                'fails' => true,
+            ],
+            'max valid with BigNumber' => [
+                'data' => '9223372036854775809',
+                'rules' => fn() => RuleSet::create()->numeric()
+                    ->max(BigNumber::of('9223372036854775810')),
+                'fails' => false,
+            ],
+            'max invalid with BigNumber' => [
+                'data' => '9223372036854775811',
+                'rules' => fn() => RuleSet::create()->numeric()
+                    ->max(BigNumber::of('9223372036854775810')),
+                'fails' => true,
+            ],
+            'max valid with string length' => [
                 'data' => str_repeat('.', 10),
                 'rules' => fn() => RuleSet::create()->max(10),
                 'fails' => false,
             ],
-            'max invalid with string' => [
+            'max invalid with string length' => [
                 'data' => str_repeat('.', 11),
                 'rules' => fn() => RuleSet::create()->max(10),
                 'fails' => true,
@@ -1207,12 +1249,54 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->mimetypes('image/gif', 'application/pdf'),
                 'fails' => true,
             ],
+            'min valid with float' => [
+                'data' => 0.5,
+                'rules' => fn() => RuleSet::create()->numeric()->min(0.5),
+                'fails' => false,
+            ],
+            'min invalid with float' => [
+                'data' => 0.1,
+                'rules' => fn() => RuleSet::create()->numeric()->min(0.5),
+                'fails' => true,
+            ],
+            'min valid with number' => [
+                'data' => 100,
+                'rules' => fn() => RuleSet::create()->numeric()->min(100),
+                'fails' => false,
+            ],
+            'min invalid with number' => [
+                'data' => 99,
+                'rules' => fn() => RuleSet::create()->numeric()->min(100),
+                'fails' => true,
+            ],
             'min valid with string' => [
+                'data' => 76,
+                'rules' => fn() => RuleSet::create()->numeric()->min('75'),
+                'fails' => false,
+            ],
+            'min invalid with string' => [
+                'data' => 24,
+                'rules' => fn() => RuleSet::create()->numeric()->min('25'),
+                'fails' => true,
+            ],
+            'min valid with BigNumber' => [
+                'data' => '9223372036854775811',
+                'rules' => fn() => RuleSet::create()->numeric()
+                    ->min(BigNumber::of('9223372036854775810')),
+                'fails' => false,
+            ],
+            'min invalid with BigNumber' => [
+                'data' => '9223372036854775809',
+                'rules' => fn() => RuleSet::create()->numeric()
+                    ->min(BigNumber::of('9223372036854775810')),
+                'fails' => true,
+            ],
+            'min valid with string length' => [
                 'data' => str_repeat('.', 11),
                 'rules' => fn() => RuleSet::create()->min(10),
                 'fails' => false,
             ],
-            'min invalid with string' => [
+            'min invalid with string length' => [
                 'data' => str_repeat('.', 9),
                 'rules' => fn() => RuleSet::create()->min(10),
                 'fails' => true,
@@ -1887,12 +1971,54 @@ class RuleTest extends TestCase
                 ],
                 'fails' => true,
             ],
-            'size valid' => [
+            'size valid with float' => [
+                'data' => 1.0,
+                'rules' => fn() => RuleSet::create()->numeric()->size(1.0),
+                'fails' => false,
+            ],
+            'size invalid with float' => [
+                'data' => 1.0,
+                'rules' => fn() => RuleSet::create()->numeric()->size(1.1),
+                'fails' => true,
+            ],
+            'size valid with number' => [
+                'data' => 100,
+                'rules' => fn() => RuleSet::create()->numeric()->size(100),
+                'fails' => false,
+            ],
+            'size invalid with number' => [
+                'data' => 101,
+                'rules' => fn() => RuleSet::create()->numeric()->size(100),
+                'fails' => true,
+            ],
+            'size valid with string' => [
+                'data' => 75,
+                'rules' => fn() => RuleSet::create()->numeric()->size('75'),
+                'fails' => false,
+            ],
+            'size invalid with string' => [
+                'data' => 76,
+                'rules' => fn() => RuleSet::create()->numeric()->size('75'),
+                'fails' => true,
+            ],
+            'size valid with BigNumber' => [
+                'data' => '9223372036854775809',
+                'rules' => fn() => RuleSet::create()->numeric()
+                    ->size(BigNumber::of('9223372036854775809')),
+                'fails' => false,
+            ],
+            'size invalid with BigNumber' => [
+                'data' => '9223372036854775809',
+                'rules' => fn() => RuleSet::create()->numeric()
+                    ->size(BigNumber::of('9223372036854775808')),
+                'fails' => true,
+            ],
+            'size valid with string length' => [
                 'data' => 'str',
                 'rules' => fn() => RuleSet::create()->size(3),
                 'fails' => false,
             ],
-            'size invalid' => [
+            'size invalid with string length' => [
                 'data' => 'string',
                 'rules' => fn() => RuleSet::create()->size(3),
                 'fails' => true,
