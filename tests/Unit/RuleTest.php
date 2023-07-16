@@ -52,30 +52,6 @@ class RuleTest extends TestCase
             $rules = ['field' => $rules];
         }
 
-        // TODO Remove this translator override when we're no longer supporting 9.x. We replace the translator rather
-        //      than passing in message overrides due to Password pulling its translations from the translator layer
-        //      instead of the validator layer.
-        /**
-         * @var Translator $translator
-         */
-        $translator = $this->app['translator'];
-        /**
-         * @var Translator|MockInterface $mockTranslator
-         */
-        $mockTranslator = $this->mock(Translator::class);
-        $mockTranslator
-            ->shouldReceive('get')
-            ->andReturnUsing(
-                fn($key, array $replace = [], $locale = null) => [
-                    'validation.max.string' => 'The :attribute field must not be greater than :max characters.',
-                    'validation.min.string' => 'The :attribute field must be at least :min characters.',
-                    'validation.password.numbers' => 'The :attribute field must contain at least one number.',
-                    'validation.password.symbols' => 'The :attribute field must contain at least one symbol.',
-                    'validation.string' => 'The :attribute field must be a string.',
-                ][$key] ?? $translator->get($key, $replace, $locale),
-            );
-        $this->app['translator'] = $mockTranslator;
-
         $validator = Validator::make($data, $rules);
 
         // Act
