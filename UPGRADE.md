@@ -1,5 +1,12 @@
 # Upgrade Guide
 
+## v4
+
+### Upgrading from v3.2 to v4.0
+
+- Minimum Laravel version increased from `9.50.2` to `10.14`.
+- Minimum PHP version increased from `8.0` to `8.1`.
+
 ## v3
 
 ### Upgrading from v3.1 to v3.2
