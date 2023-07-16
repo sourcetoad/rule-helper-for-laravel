@@ -10,7 +10,7 @@
 
 ### Upgrading from v3.0 to v3.1
 
-- Minimum Laravel version increased from `9.45` to `9.50.1`.
+- Minimum Laravel version increased from `9.45` to `9.50.2`.
 
 ### Upgrading from v2.0 to v3.0
 
