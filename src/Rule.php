@@ -382,7 +382,7 @@ class Rule
      */
     public static function enum(string $type): Enum
     {
-        return new Enum($type);
+        return LaravelRule::enum($type);
     }
 
     /**
@@ -1134,7 +1134,7 @@ class Rule
         if ($defaultRules instanceof RuleSet) {
             $defaultRules = $defaultRules->toArray();
         }
-        return new ConditionalRules($condition, $rules, $defaultRules);
+        return LaravelRule::when($condition, $rules, $defaultRules);
     }
 
     protected static function convertDateForRule(
