@@ -30,5 +30,11 @@
                 "Sourcetoad\\RuleHelper\\RuleHelperServiceProvider"
             ]
         }
+    },
+    "scripts": {
+        "check-code": [
+            "@php vendor/bin/phpcs",
+            "@php vendor/bin/phpunit"
+        ]
     }
 }
