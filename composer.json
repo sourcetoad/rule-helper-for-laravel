@@ -12,7 +12,7 @@
         "ext-json": "*",
         "orchestra/testbench": "^8.0",
         "phpunit/phpunit": "^9.6",
-        "squizlabs/php_codesniffer": "^3.6"
+        "squizlabs/php_codesniffer": "^3.7"
     },
     "autoload": {
         "psr-4": {

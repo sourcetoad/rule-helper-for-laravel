@@ -424,6 +424,17 @@ class RuleSet implements Arrayable, IteratorAggregate
     }
 
     /**
+     * The field under validation contains a valid enum value of the specified type.
+     *
+     * @link https://laravel.com/docs/10.x/validation#rule-enum
+     * @param class-string $type
+     */
+    public function enum(string $type): self
+    {
+        return $this->rule(Rule::enum($type));
+    }
+
+    /**
      * The field under validation will be excluded from the request data returned by the *validate* and *validated*
      * methods.
      *

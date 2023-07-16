@@ -11,6 +11,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Validation\ConditionalRules;
 use Illuminate\Validation\Rule as LaravelRule;
 use Illuminate\Validation\Rules\Dimensions;
+use Illuminate\Validation\Rules\Enum;
 use Illuminate\Validation\Rules\ExcludeIf;
 use Illuminate\Validation\Rules\Exists;
 use Illuminate\Validation\Rules\In;
@@ -371,6 +372,17 @@ class Rule
     public static function endsWith(string ...$value): string
     {
         return 'ends_with:'.implode(',', $value);
+    }
+
+    /**
+     * The field under validation contains a valid enum value of the specified type.
+     *
+     * @link https://laravel.com/docs/10.x/validation#rule-enum
+     * @param class-string $type
+     */
+    public static function enum(string $type): Enum
+    {
+        return new Enum($type);
     }
 
     /**

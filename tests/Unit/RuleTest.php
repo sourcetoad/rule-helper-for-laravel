@@ -20,6 +20,8 @@ use Illuminate\Validation\Rules\Password;
 use Mockery\MockInterface;
 use Sourcetoad\RuleHelper\Rule;
 use Sourcetoad\RuleHelper\RuleSet;
+use Sourcetoad\RuleHelper\Tests\Stubs\ExampleIntEnum;
+use Sourcetoad\RuleHelper\Tests\Stubs\ExampleStringEnum;
 use Sourcetoad\RuleHelper\Tests\TestCase;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Mime\MimeTypeGuesserInterface;
@@ -652,82 +654,82 @@ class RuleTest extends TestCase
                 'fails' => true,
             ],
             'dimensions min_width valid' => [
-                'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
+                'data' => new File(dirname(__DIR__).'/Stubs/100x50.png'),
                 'rules' => fn() => RuleSet::create()->dimensions(['min_width' => 100]),
                 'fails' => false,
             ],
             'dimensions min_width invalid' => [
-                'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
+                'data' => new File(dirname(__DIR__).'/Stubs/100x50.png'),
                 'rules' => fn() => RuleSet::create()->dimensions(['min_width' => 101]),
                 'fails' => true,
             ],
             'dimensions min_width via modifier valid' => [
-                'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
+                'data' => new File(dirname(__DIR__).'/Stubs/100x50.png'),
                 'rules' => fn() => RuleSet::create()->dimensions([], fn(Dimensions $rule) => $rule->minWidth(100)),
                 'fails' => false,
             ],
             'dimensions min_width via modifier invalid' => [
-                'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
+                'data' => new File(dirname(__DIR__).'/Stubs/100x50.png'),
                 'rules' => fn() => RuleSet::create()->dimensions([], fn(Dimensions $rule) => $rule->minWidth(101)),
                 'fails' => true,
             ],
             'dimensions max_width valid' => [
-                'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
+                'data' => new File(dirname(__DIR__).'/Stubs/100x50.png'),
                 'rules' => fn() => RuleSet::create()->dimensions(['max_width' => 100]),
                 'fails' => false,
             ],
             'dimensions max_width invalid' => [
-                'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
+                'data' => new File(dirname(__DIR__).'/Stubs/100x50.png'),
                 'rules' => fn() => RuleSet::create()->dimensions(['max_width' => 99]),
                 'fails' => true,
             ],
             'dimensions max_height valid' => [
-                'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
+                'data' => new File(dirname(__DIR__).'/Stubs/100x50.png'),
                 'rules' => fn() => RuleSet::create()->dimensions(['max_height' => 50]),
                 'fails' => false,
             ],
             'dimensions max_height invalid' => [
-                'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
+                'data' => new File(dirname(__DIR__).'/Stubs/100x50.png'),
                 'rules' => fn() => RuleSet::create()->dimensions(['max_height' => 49]),
                 'fails' => true,
             ],
             'dimensions width valid' => [
-                'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
+                'data' => new File(dirname(__DIR__).'/Stubs/100x50.png'),
                 'rules' => fn() => RuleSet::create()->dimensions(['width' => 100]),
                 'fails' => false,
             ],
             'dimensions width invalid' => [
-                'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
+                'data' => new File(dirname(__DIR__).'/Stubs/100x50.png'),
                 'rules' => fn() => RuleSet::create()->dimensions(['width' => 99]),
                 'fails' => true,
             ],
             'dimensions height valid' => [
-                'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
+                'data' => new File(dirname(__DIR__).'/Stubs/100x50.png'),
                 'rules' => fn() => RuleSet::create()->dimensions(['height' => 50]),
                 'fails' => false,
             ],
             'dimensions height invalid' => [
-                'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
+                'data' => new File(dirname(__DIR__).'/Stubs/100x50.png'),
                 'rules' => fn() => RuleSet::create()->dimensions(['height' => 51]),
                 'fails' => true,
             ],
             'dimensions ratio fraction valid' => [
-                'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
+                'data' => new File(dirname(__DIR__).'/Stubs/100x50.png'),
                 'rules' => fn() => RuleSet::create()->dimensions(['ratio' => '2/1']),
                 'fails' => false,
             ],
             'dimensions ratio fraction invalid' => [
-                'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
+                'data' => new File(dirname(__DIR__).'/Stubs/100x50.png'),
                 'rules' => fn() => RuleSet::create()->dimensions(['ratio' => '3/1']),
                 'fails' => true,
             ],
             'dimensions ratio decimal valid' => [
-                'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
+                'data' => new File(dirname(__DIR__).'/Stubs/100x50.png'),
                 'rules' => fn() => RuleSet::create()->dimensions(['ratio' => '2']),
                 'fails' => false,
             ],
             'dimensions ratio decimal invalid' => [
-                'data' => new File(dirname(__DIR__).'/stubs/100x50.png'),
+                'data' => new File(dirname(__DIR__).'/Stubs/100x50.png'),
                 'rules' => fn() => RuleSet::create()->dimensions(['ratio' => '1.5']),
                 'fails' => true,
             ],
@@ -903,6 +905,26 @@ class RuleTest extends TestCase
             'endsWith any invalid' => [
                 'data' => 'string-d',
                 'rules' => fn() => RuleSet::create()->endsWith('a', 'b', 'c'),
+                'fails' => true,
+            ],
+            'enum string valid' => [
+                'data' => 'valid',
+                'rules' => fn() => RuleSet::create()->enum(ExampleStringEnum::class),
+                'fails' => false,
+            ],
+            'enum string invalid' => [
+                'data' => 'invalid',
+                'rules' => fn() => RuleSet::create()->enum(ExampleStringEnum::class),
+                'fails' => true,
+            ],
+            'enum int valid' => [
+                'data' => '50',
+                'rules' => fn() => RuleSet::create()->enum(ExampleIntEnum::class),
+                'fails' => false,
+            ],
+            'enum int invalid' => [
+                'data' => '1',
+                'rules' => fn() => RuleSet::create()->enum(ExampleIntEnum::class),
                 'fails' => true,
             ],
             'file valid' => [
