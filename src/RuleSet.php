@@ -8,6 +8,7 @@ use ArrayIterator;
 use Brick\Math\BigNumber;
 use DateTimeInterface;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Validation\Rules\Can;
 use Illuminate\Validation\Rules\RequiredIf;
 use Illuminate\Validation\Rules\Password;
 use IteratorAggregate;
@@ -233,6 +234,16 @@ class RuleSet implements Arrayable, IteratorAggregate
     public function boolean(): self
     {
         return $this->rule(Rule::boolean());
+    }
+
+    /**
+     * The field under validation must pass a Gate check for the specified ability.
+     *
+     * @link https://laravel.com/docs/10.x/authorization#gates
+     */
+    public function can(string $ability, ...$arguments): self
+    {
+        return $this->rule(Rule::can($ability, ...$arguments));
     }
 
     /**

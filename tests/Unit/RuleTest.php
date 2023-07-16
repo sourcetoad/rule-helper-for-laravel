@@ -9,9 +9,11 @@ use Carbon\CarbonImmutable;
 use Closure;
 use DateTime;
 use Illuminate\Auth\AuthManager;
+use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Contracts\Translation\Translator;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -455,6 +457,31 @@ class RuleTest extends TestCase
             'boolean invalid' => [
                 'data' => 'please',
                 'rules' => fn() => RuleSet::create()->boolean(),
+                'fails' => true,
+            ],
+            'can valid' => [
+                'data' => 'value-a',
+                'rules' => function () {
+                    $mockUser = new User;
+                    $this->mockGateAllows(true, 'modify', [User::class, $mockUser, 'value-a']);
+
+                    return RuleSet::create()->can('modify', User::class, $mockUser);
+                },
+                'fails' => false,
+            ],
+            'can invalid' => [
+                'data' => 'value-b',
+                'rules' => function () {
+                    $mockUser = new User;
+                    $this->mockGateAllows(false, 'modify', [User::class, $mockUser, 'value-b']);
+
+                    return RuleSet::create()->can('modify', User::class, $mockUser);
+                },
+                'fails' => true,
+            ],
+            'can invalid no gate' => [
+                'data' => 'value',
+                'rules' => fn() => RuleSet::create()->can('modify', User::class, new User),
                 'fails' => true,
             ],
             'confirmed valid' => [
@@ -2685,5 +2712,19 @@ class RuleTest extends TestCase
                 return $this->extension;
             }
         };
+    }
+
+    private function mockGateAllows(bool $return, ...$arguments): void
+    {
+        $gate = $this->mock(Gate::class);
+
+        $gate
+            ->expects('allows')
+            ->once()
+            ->with(...$arguments)
+            ->andReturn($return)
+            ->getMock();
+
+        $this->app->instance(Gate::class, $gate);
     }
 }

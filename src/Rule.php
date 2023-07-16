@@ -10,6 +10,7 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\ConditionalRules;
 use Illuminate\Validation\Rule as LaravelRule;
+use Illuminate\Validation\Rules\Can;
 use Illuminate\Validation\Rules\Dimensions;
 use Illuminate\Validation\Rules\Enum;
 use Illuminate\Validation\Rules\ExcludeIf;
@@ -177,6 +178,16 @@ class Rule
     public static function boolean(): string
     {
         return 'boolean';
+    }
+
+    /**
+     * The field under validation must pass a Gate check for the specified ability.
+     *
+     * @link https://laravel.com/docs/10.x/authorization#gates
+     */
+    public static function can(string $ability, ...$arguments): Can
+    {
+        return LaravelRule::can($ability, ...$arguments);
     }
 
     /**
