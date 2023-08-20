@@ -33,8 +33,10 @@
     },
     "scripts": {
         "check-code": [
-            "@php vendor/bin/phpcs",
-            "@php vendor/bin/phpunit"
-        ]
+            "@lint",
+            "@test"
+        ],
+        "lint": "@php vendor/bin/phpcs",
+        "test": "@php vendor/bin/phpunit"
     }
 }
