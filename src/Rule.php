@@ -10,7 +10,9 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\ConditionalRules;
 use Illuminate\Validation\Rule as LaravelRule;
+use Illuminate\Validation\Rules\Can;
 use Illuminate\Validation\Rules\Dimensions;
+use Illuminate\Validation\Rules\Enum;
 use Illuminate\Validation\Rules\ExcludeIf;
 use Illuminate\Validation\Rules\Exists;
 use Illuminate\Validation\Rules\In;
@@ -176,6 +178,16 @@ class Rule
     public static function boolean(): string
     {
         return 'boolean';
+    }
+
+    /**
+     * The field under validation must pass a Gate check for the specified ability.
+     *
+     * @link https://laravel.com/docs/10.x/authorization#gates
+     */
+    public static function can(string $ability, ...$arguments): Can
+    {
+        return LaravelRule::can($ability, ...$arguments);
     }
 
     /**
@@ -371,6 +383,17 @@ class Rule
     public static function endsWith(string ...$value): string
     {
         return 'ends_with:'.implode(',', $value);
+    }
+
+    /**
+     * The field under validation contains a valid enum value of the specified type.
+     *
+     * @link https://laravel.com/docs/10.x/validation#rule-enum
+     * @param class-string $type
+     */
+    public static function enum(string $type): Enum
+    {
+        return LaravelRule::enum($type);
     }
 
     /**
@@ -1122,7 +1145,7 @@ class Rule
         if ($defaultRules instanceof RuleSet) {
             $defaultRules = $defaultRules->toArray();
         }
-        return new ConditionalRules($condition, $rules, $defaultRules);
+        return LaravelRule::when($condition, $rules, $defaultRules);
     }
 
     protected static function convertDateForRule(

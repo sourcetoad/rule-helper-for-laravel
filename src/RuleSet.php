@@ -8,6 +8,7 @@ use ArrayIterator;
 use Brick\Math\BigNumber;
 use DateTimeInterface;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Validation\Rules\Can;
 use Illuminate\Validation\Rules\RequiredIf;
 use Illuminate\Validation\Rules\Password;
 use IteratorAggregate;
@@ -236,6 +237,16 @@ class RuleSet implements Arrayable, IteratorAggregate
     }
 
     /**
+     * The field under validation must pass a Gate check for the specified ability.
+     *
+     * @link https://laravel.com/docs/10.x/authorization#gates
+     */
+    public function can(string $ability, ...$arguments): self
+    {
+        return $this->rule(Rule::can($ability, ...$arguments));
+    }
+
+    /**
      * The field under validation must have a matching field of *{field}_confirmation*.
      *
      * @link https://laravel.com/docs/10.x/validation#rule-confirmed
@@ -421,6 +432,17 @@ class RuleSet implements Arrayable, IteratorAggregate
     public function endsWith(string ...$value): self
     {
         return $this->rule(Rule::endsWith(...$value));
+    }
+
+    /**
+     * The field under validation contains a valid enum value of the specified type.
+     *
+     * @link https://laravel.com/docs/10.x/validation#rule-enum
+     * @param class-string $type
+     */
+    public function enum(string $type): self
+    {
+        return $this->rule(Rule::enum($type));
     }
 
     /**

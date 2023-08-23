@@ -31,9 +31,6 @@ class DefinedRuleSetsTest extends TestCase
             'field-a' => $this->faker->name(),
         ], [
             'field-a' => RuleSet::useDefined('user.email'),
-        ], [
-            // TODO Remove these message overrides when we're no longer supporting 9.x
-            'email' => 'The :attribute field must be a valid email address.',
         ]);
 
         // Act
