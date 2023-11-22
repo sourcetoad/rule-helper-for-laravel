@@ -8,7 +8,6 @@ use ArrayIterator;
 use Brick\Math\BigNumber;
 use DateTimeInterface;
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Validation\Rules\Can;
 use Illuminate\Validation\Rules\RequiredIf;
 use Illuminate\Validation\Rules\Password;
 use IteratorAggregate;
