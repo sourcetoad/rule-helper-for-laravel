@@ -1722,6 +1722,119 @@ class RuleTest extends TestCase
                 ],
                 'fails' => true,
             ],
+            'presentIf valid' => [
+                'data' => [
+                    'field-b' => '',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->presentIf('field-b', 'a'),
+                ],
+                'fails' => false,
+            ],
+            'presentIf valid with value' => [
+                'data' => [
+                    'field-a' => '',
+                    'field-b' => 'a',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->presentIf('field-b', 'a'),
+                ],
+                'fails' => false,
+            ],
+            'presentIf invalid' => [
+                'data' => [
+                    'field-b' => 'a',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->presentIf('field-b', 'a'),
+                ],
+                'fails' => true,
+            ],
+            'presentUnless valid' => [
+                'data' => [
+                    'field-a' => '',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->presentUnless('field-b', 'a'),
+                ],
+                'fails' => false,
+            ],
+            'presentUnless valid with value' => [
+                'data' => [
+                    'field-b' => 'a',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->presentUnless('field-b', 'a'),
+                ],
+                'fails' => false,
+            ],
+            'presentUnless invalid' => [
+                'data' => [
+                    'field-b' => 'b',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->presentUnless('field-b', 'a'),
+                ],
+                'fails' => true,
+            ],
+            'presentWith valid' => [
+                'data' => [
+                    'field-a' => '',
+                    'field-b' => 'b',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->presentWith('field-b'),
+                ],
+                'fails' => false,
+            ],
+            'presentWith valid without' => [
+                'data' => [
+                    'field-c' => 'c',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->presentWith('field-b'),
+                ],
+                'fails' => false,
+            ],
+            'presentWith invalid' => [
+                'data' => [
+                    'field-b' => 'b',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->presentWith('field-b'),
+                ],
+                'fails' => true,
+            ],
+            'presentWithAll valid' => [
+                'data' => [
+                    'field-a' => '',
+                    'field-b' => 'b',
+                    'field-c' => 'c',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->presentWithAll('field-b', 'field-c'),
+                ],
+                'fails' => false,
+            ],
+            'presentWithAll valid without' => [
+                'data' => [
+                    'field-c' => 'c',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->presentWithAll('field-b', 'field-c'),
+                ],
+                'fails' => false,
+            ],
+            'presentWithAll invalid' => [
+                'data' => [
+                    'field-b' => 'b',
+                    'field-c' => 'c',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->presentWithAll('field-b', 'field-c'),
+                ],
+                'fails' => true,
+            ],
             'prohibited valid' => [
                 'data' => [
                     'field-a' => '',

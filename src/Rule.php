@@ -827,6 +827,42 @@ class Rule
     }
 
     /**
+     * The field under validation must be present but can be empty if *anotherField* under validation is equal to a
+     * specified value.
+     */
+    public static function presentIf(string $anotherField, string ...$value): string
+    {
+        return sprintf('present_if:%s,%s', $anotherField, implode(',', $value));
+    }
+
+    /**
+     * The field under validation must be present but can be empty unless the *anotherField* field is equal to any
+     * *value*.
+     */
+    public static function presentUnless(string $anotherField, string ...$value): string
+    {
+        return sprintf('present_unless:%s,%s', $anotherField, implode(',', $value));
+    }
+
+    /**
+     * The field under validation must be present but can be empty *only if* any of the other specified fields are
+     * present and not empty.
+     */
+    public static function presentWith(string ...$field): string
+    {
+        return 'present_with:'.implode(',', $field);
+    }
+
+    /**
+     * The field under validation must be present but can be empty *only if* all the other specified fields are present
+     * and not empty.
+     */
+    public static function presentWithAll(string ...$field): string
+    {
+        return 'present_with_all:'.implode(',', $field);
+    }
+
+    /**
      * The field under validation must be empty or not present.
      *
      * @link https://laravel.com/docs/10.x/validation#rule-prohibited

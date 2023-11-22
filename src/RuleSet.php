@@ -892,6 +892,42 @@ class RuleSet implements Arrayable, IteratorAggregate
     }
 
     /**
+     * The field under validation must be present but can be empty if *anotherField* under validation is equal to a
+     * specified value.
+     */
+    public function presentIf(string $anotherField, string ...$value): self
+    {
+        return $this->rule(Rule::presentIf($anotherField, ...$value));
+    }
+
+    /**
+     * The field under validation must be present but can be empty unless the *anotherField* field is equal to any
+     * *value*.
+     */
+    public function presentUnless(string $anotherField, string ...$value): self
+    {
+        return $this->rule(Rule::presentUnless($anotherField, ...$value));
+    }
+
+    /**
+     * The field under validation must be present but can be empty *only if* any of the other specified fields are
+     * present and not empty.
+     */
+    public function presentWith(string ...$field): self
+    {
+        return $this->rule(Rule::presentWith(...$field));
+    }
+
+    /**
+     * The field under validation must be present but can be empty *only if* all the other specified fields are present
+     * and not empty.
+     */
+    public function presentWithAll(string ...$field): self
+    {
+        return $this->rule(Rule::presentWithAll(...$field));
+    }
+
+    /**
      * The field under validation must be empty or not present.
      *
      * @link https://laravel.com/docs/10.x/validation#rule-prohibited
