@@ -516,6 +516,17 @@ class Rule
     }
 
     /**
+     * The field under validation must contain a valid color value in hexadecimal format.
+     *
+     * @link https://laravel.com/docs/10.x/validation#rule-hex-color
+     * @link https://developer.mozilla.org/en-US/docs/Web/CSS/hex-color
+     */
+    public static function hexColor(): string
+    {
+        return 'hex_color';
+    }
+
+    /**
      * The file under validation must be an image (jpg, jpeg, png, bmp, gif, svg, or webp).
      *
      * @link https://laravel.com/docs/10.x/validation#rule-image

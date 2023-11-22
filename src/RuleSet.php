@@ -573,6 +573,17 @@ class RuleSet implements Arrayable, IteratorAggregate
     }
 
     /**
+     * The field under validation must contain a valid color value in hexadecimal format.
+     *
+     * @link https://laravel.com/docs/10.x/validation#rule-hex-color
+     * @link https://developer.mozilla.org/en-US/docs/Web/CSS/hex-color
+     */
+    public function hexColor(): self
+    {
+        return $this->rule(Rule::hexColor());
+    }
+
+    /**
      * The file under validation must be an image (jpg, jpeg, png, bmp, gif, svg, or webp).
      *
      * @link https://laravel.com/docs/10.x/validation#rule-image

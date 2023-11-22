@@ -1078,6 +1078,31 @@ class RuleTest extends TestCase
                 ],
                 'fails' => true,
             ],
+            'hex color valid short' => [
+                'data' => fn() => '#fff',
+                'rules' => fn() => RuleSet::create()->hexColor(),
+                'fails' => false,
+            ],
+            'hex color valid short with alpha' => [
+                'data' => fn() => '#FFFA',
+                'rules' => fn() => RuleSet::create()->hexColor(),
+                'fails' => false,
+            ],
+            'hex color valid' => [
+                'data' => fn() => '#ffeedd',
+                'rules' => fn() => RuleSet::create()->hexColor(),
+                'fails' => false,
+            ],
+            'hex color valid with alpha' => [
+                'data' => fn() => '#FFEEDDAA',
+                'rules' => fn() => RuleSet::create()->hexColor(),
+                'fails' => false,
+            ],
+            'hex color invalid' => [
+                'data' => fn() => 'what',
+                'rules' => fn() => RuleSet::create()->hexColor(),
+                'fails' => true,
+            ],
             'image valid' => [
                 'data' => fn() => $this->mockFile('/code/image.jpg'),
                 'rules' => fn() => RuleSet::create()->image(),
