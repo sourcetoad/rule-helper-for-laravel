@@ -2,6 +2,10 @@
 
 ## v4
 
+### Upgrading from v4.0 to v4.1
+
+- Minimum Laravel version increased from `10.14` to `10.33`.
+
 ### Upgrading from v3.2 to v4.0
 
 - Minimum Laravel version increased from `9.50.2` to `10.14`.
