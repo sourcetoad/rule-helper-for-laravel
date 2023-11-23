@@ -8,7 +8,6 @@ use ArrayIterator;
 use Brick\Math\BigNumber;
 use DateTimeInterface;
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Validation\Rules\Can;
 use Illuminate\Validation\Rules\RequiredIf;
 use Illuminate\Validation\Rules\Password;
 use IteratorAggregate;
@@ -574,6 +573,17 @@ class RuleSet implements Arrayable, IteratorAggregate
     }
 
     /**
+     * The field under validation must contain a valid color value in hexadecimal format.
+     *
+     * @link https://laravel.com/docs/10.x/validation#rule-hex-color
+     * @link https://developer.mozilla.org/en-US/docs/Web/CSS/hex-color
+     */
+    public function hexColor(): self
+    {
+        return $this->rule(Rule::hexColor());
+    }
+
+    /**
      * The file under validation must be an image (jpg, jpeg, png, bmp, gif, svg, or webp).
      *
      * @link https://laravel.com/docs/10.x/validation#rule-image
@@ -889,6 +899,42 @@ class RuleSet implements Arrayable, IteratorAggregate
     public function present(): self
     {
         return $this->rule(Rule::present());
+    }
+
+    /**
+     * The field under validation must be present but can be empty if *anotherField* under validation is equal to a
+     * specified value.
+     */
+    public function presentIf(string $anotherField, string ...$value): self
+    {
+        return $this->rule(Rule::presentIf($anotherField, ...$value));
+    }
+
+    /**
+     * The field under validation must be present but can be empty unless the *anotherField* field is equal to any
+     * *value*.
+     */
+    public function presentUnless(string $anotherField, string ...$value): self
+    {
+        return $this->rule(Rule::presentUnless($anotherField, ...$value));
+    }
+
+    /**
+     * The field under validation must be present but can be empty *only if* any of the other specified fields are
+     * present and not empty.
+     */
+    public function presentWith(string ...$field): self
+    {
+        return $this->rule(Rule::presentWith(...$field));
+    }
+
+    /**
+     * The field under validation must be present but can be empty *only if* all the other specified fields are present
+     * and not empty.
+     */
+    public function presentWithAll(string ...$field): self
+    {
+        return $this->rule(Rule::presentWithAll(...$field));
     }
 
     /**

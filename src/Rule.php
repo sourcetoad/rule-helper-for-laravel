@@ -516,6 +516,17 @@ class Rule
     }
 
     /**
+     * The field under validation must contain a valid color value in hexadecimal format.
+     *
+     * @link https://laravel.com/docs/10.x/validation#rule-hex-color
+     * @link https://developer.mozilla.org/en-US/docs/Web/CSS/hex-color
+     */
+    public static function hexColor(): string
+    {
+        return 'hex_color';
+    }
+
+    /**
      * The file under validation must be an image (jpg, jpeg, png, bmp, gif, svg, or webp).
      *
      * @link https://laravel.com/docs/10.x/validation#rule-image
@@ -824,6 +835,42 @@ class Rule
     public static function present(): string
     {
         return 'present';
+    }
+
+    /**
+     * The field under validation must be present but can be empty if *anotherField* under validation is equal to a
+     * specified value.
+     */
+    public static function presentIf(string $anotherField, string ...$value): string
+    {
+        return sprintf('present_if:%s,%s', $anotherField, implode(',', $value));
+    }
+
+    /**
+     * The field under validation must be present but can be empty unless the *anotherField* field is equal to any
+     * *value*.
+     */
+    public static function presentUnless(string $anotherField, string ...$value): string
+    {
+        return sprintf('present_unless:%s,%s', $anotherField, implode(',', $value));
+    }
+
+    /**
+     * The field under validation must be present but can be empty *only if* any of the other specified fields are
+     * present and not empty.
+     */
+    public static function presentWith(string ...$field): string
+    {
+        return 'present_with:'.implode(',', $field);
+    }
+
+    /**
+     * The field under validation must be present but can be empty *only if* all the other specified fields are present
+     * and not empty.
+     */
+    public static function presentWithAll(string ...$field): string
+    {
+        return 'present_with_all:'.implode(',', $field);
     }
 
     /**
