@@ -533,6 +533,20 @@ class RuleSet implements Arrayable, IteratorAggregate
     }
 
     /**
+     * The file under validation must have a user-assigned extension corresponding to one of the listed extensions.
+     *
+     * Warning: You should never rely on validating a file by its user-assigned extension alone. This rule should
+     *          typically always be used in combination with the {@see RuleSet::mimes} or {@see RuleSet::mimetypes}
+     *          rules.
+     *
+     * @link https://laravel.com/docs/10.x/validation#rule-extensions
+     */
+    public function extensions(string ...$extension): self
+    {
+        return $this->rule(Rule::extensions(...$extension));
+    }
+
+    /**
      * The field under validation must be a successfully uploaded file.
      *
      * @link https://laravel.com/docs/10.x/validation#rule-file

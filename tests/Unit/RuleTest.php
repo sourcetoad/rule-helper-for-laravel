@@ -954,6 +954,16 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->enum(ExampleIntEnum::class),
                 'fails' => true,
             ],
+            'extensions valid' => [
+                'data' => fn() => $this->mockFile('/code/image.jpg'),
+                'rules' => fn() => RuleSet::create()->extensions('jpg', 'png'),
+                'fails' => false,
+            ],
+            'extensions invalid' => [
+                'data' => fn() => $this->mockFile('/code/not-image.csv'),
+                'rules' => fn() => RuleSet::create()->extensions('jpg', 'png'),
+                'fails' => true,
+            ],
             'file valid' => [
                 'data' => new File(__FILE__),
                 'rules' => fn() => RuleSet::create()->file(),
@@ -2846,6 +2856,11 @@ class RuleTest extends TestCase
             }
 
             public function guessExtension(): string
+            {
+                return $this->extension;
+            }
+
+            public function getClientOriginalExtension(): string
             {
                 return $this->extension;
             }

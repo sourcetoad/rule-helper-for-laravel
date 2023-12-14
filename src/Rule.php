@@ -476,6 +476,19 @@ class Rule
     }
 
     /**
+     * The file under validation must have a user-assigned extension corresponding to one of the listed extensions.
+     *
+     * Warning: You should never rely on validating a file by its user-assigned extension alone. This rule should
+     *          typically always be used in combination with the {@see Rule::mimes} or {@see Rule::mimetypes} rules.
+     *
+     * @link https://laravel.com/docs/10.x/validation#rule-extensions
+     */
+    public static function extensions(string ...$extension): string
+    {
+        return 'extensions:'.implode(',', $extension);
+    }
+
+    /**
      * The field under validation must be a successfully uploaded file.
      *
      * @link https://laravel.com/docs/10.x/validation#rule-file
