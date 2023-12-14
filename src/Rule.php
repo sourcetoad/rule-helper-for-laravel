@@ -476,6 +476,19 @@ class Rule
     }
 
     /**
+     * The file under validation must have a user-assigned extension corresponding to one of the listed extensions.
+     *
+     * Warning: You should never rely on validating a file by its user-assigned extension alone. This rule should
+     *          typically always be used in combination with the {@see Rule::mimes} or {@see Rule::mimetypes} rules.
+     *
+     * @link https://laravel.com/docs/10.x/validation#rule-extensions
+     */
+    public static function extensions(string ...$extension): string
+    {
+        return 'extensions:'.implode(',', $extension);
+    }
+
+    /**
      * The field under validation must be a successfully uploaded file.
      *
      * @link https://laravel.com/docs/10.x/validation#rule-file
@@ -968,9 +981,10 @@ class Rule
     }
 
     /**
-     * The field must be present if the other specified field is accepted.
+     * The field under validation must be present and not empty if the `anotherfield` field is equal to yes, on, 1, "1",
+     * true, or "true".
      *
-     * @see Rule::accepted() for accepted criteria
+     * @link https://laravel.com/docs/10.x/validation#rule-required-if-accepted
      */
     public static function requiredIfAccepted(string $field): string
     {
@@ -1192,6 +1206,7 @@ class Rule
         if ($defaultRules instanceof RuleSet) {
             $defaultRules = $defaultRules->toArray();
         }
+
         return LaravelRule::when($condition, $rules, $defaultRules);
     }
 

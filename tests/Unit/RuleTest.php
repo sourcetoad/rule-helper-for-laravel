@@ -12,14 +12,11 @@ use Illuminate\Auth\AuthManager;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Hashing\Hasher;
-use Illuminate\Contracts\Translation\Translator;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Dimensions;
 use Illuminate\Validation\Rules\Password;
-use Mockery\MockInterface;
 use Sourcetoad\RuleHelper\Rule;
 use Sourcetoad\RuleHelper\RuleSet;
 use Sourcetoad\RuleHelper\Tests\Stubs\ExampleIntEnum;
@@ -191,7 +188,7 @@ class RuleTest extends TestCase
                 'fails' => false,
             ],
             'activeUrl invalid' => [
-                'data' => 'https://'.str_repeat((string)Str::uuid(), 3).'/',
+                'data' => 'https://'.str_repeat((string) Str::uuid(), 3).'/',
                 'rules' => fn() => RuleSet::create()->activeUrl(),
                 'fails' => true,
             ],
@@ -910,7 +907,7 @@ class RuleTest extends TestCase
                 'fails' => false,
             ],
             'email filter invalid' => [
-                'data' => "someone@com",
+                'data' => 'someone@com',
                 'rules' => fn() => RuleSet::create()->email('filter'),
                 'fails' => true,
             ],
@@ -952,6 +949,16 @@ class RuleTest extends TestCase
             'enum int invalid' => [
                 'data' => '1',
                 'rules' => fn() => RuleSet::create()->enum(ExampleIntEnum::class),
+                'fails' => true,
+            ],
+            'extensions valid' => [
+                'data' => fn() => $this->mockFile('/code/image.jpg'),
+                'rules' => fn() => RuleSet::create()->extensions('jpg', 'png'),
+                'fails' => false,
+            ],
+            'extensions invalid' => [
+                'data' => fn() => $this->mockFile('/code/not-image.csv'),
+                'rules' => fn() => RuleSet::create()->extensions('jpg', 'png'),
                 'fails' => true,
             ],
             'file valid' => [
@@ -2813,7 +2820,8 @@ class RuleTest extends TestCase
             // We need to start a new instance in case a guesser was already created for a previous test.
             $finder = new MimeTypes();
 
-            $finder->registerGuesser(new class($mimeType) implements MimeTypeGuesserInterface {
+            $finder->registerGuesser(new class($mimeType) implements MimeTypeGuesserInterface
+            {
                 private string $mimeType;
 
                 public function __construct(string $mimeType)
@@ -2835,7 +2843,8 @@ class RuleTest extends TestCase
             MimeTypes::setDefault($finder);
         }
 
-        return new class($path, $extension) extends File {
+        return new class($path, $extension) extends File
+        {
             private string $extension;
 
             public function __construct(string $path, string $extension)
@@ -2846,6 +2855,11 @@ class RuleTest extends TestCase
             }
 
             public function guessExtension(): string
+            {
+                return $this->extension;
+            }
+
+            public function getClientOriginalExtension(): string
             {
                 return $this->extension;
             }

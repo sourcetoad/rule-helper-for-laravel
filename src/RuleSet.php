@@ -8,8 +8,8 @@ use ArrayIterator;
 use Brick\Math\BigNumber;
 use DateTimeInterface;
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Validation\Rules\RequiredIf;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Validation\Rules\RequiredIf;
 use IteratorAggregate;
 
 class RuleSet implements Arrayable, IteratorAggregate
@@ -533,6 +533,20 @@ class RuleSet implements Arrayable, IteratorAggregate
     }
 
     /**
+     * The file under validation must have a user-assigned extension corresponding to one of the listed extensions.
+     *
+     * Warning: You should never rely on validating a file by its user-assigned extension alone. This rule should
+     *          typically always be used in combination with the {@see RuleSet::mimes} or {@see RuleSet::mimetypes}
+     *          rules.
+     *
+     * @link https://laravel.com/docs/10.x/validation#rule-extensions
+     */
+    public function extensions(string ...$extension): self
+    {
+        return $this->rule(Rule::extensions(...$extension));
+    }
+
+    /**
      * The field under validation must be a successfully uploaded file.
      *
      * @link https://laravel.com/docs/10.x/validation#rule-file
@@ -1032,9 +1046,10 @@ class RuleSet implements Arrayable, IteratorAggregate
     }
 
     /**
-     * The field must be present if the other specified field is accepted.
+     * The field under validation must be present and not empty if the `anotherfield` field is equal to yes, on, 1, "1",
+     * true, or "true".
      *
-     * @see RuleSet::accepted() for accepted criteria
+     * @link https://laravel.com/docs/10.x/validation#rule-required-if-accepted
      */
     public function requiredIfAccepted(string $field): self
     {

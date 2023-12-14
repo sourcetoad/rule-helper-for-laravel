@@ -6,13 +6,13 @@
     "minimum-stability": "stable",
     "require": {
         "php": "^8.1",
-        "laravel/framework": "^10.33"
+        "laravel/framework": "^10.34"
     },
     "require-dev": {
         "ext-json": "*",
         "orchestra/testbench": "^8.0",
         "phpunit/phpunit": "^9.6",
-        "squizlabs/php_codesniffer": "^3.7"
+        "laravel/pint": "1.13.7"
     },
     "autoload": {
         "psr-4": {
@@ -36,8 +36,8 @@
             "@lint",
             "@test"
         ],
-        "lint": "@php vendor/bin/phpcs",
-        "lint:fix": "@php vendor/bin/phpcbf",
+        "lint": "@php vendor/bin/pint --test",
+        "lint:fix": "@php vendor/bin/pint",
         "test": "@php vendor/bin/phpunit"
     }
 }
