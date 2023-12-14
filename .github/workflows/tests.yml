@@ -36,8 +36,5 @@ jobs:
       - name: Install Composer dependencies
         run: composer update --no-interaction --no-progress --optimize-autoloader --prefer-dist ${{ matrix.stability }}
 
-      - name: Check code style
-        run: vendor/bin/phpcs
-
-      - name: Run tests
-        run: vendor/bin/phpunit
+      - name: Check code
+        run: composer check-code
