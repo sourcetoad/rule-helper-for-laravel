@@ -68,6 +68,7 @@ class DatabaseRuleTest extends TestCase
                         'email' => $email,
                         'password' => $this->faker->password,
                     ]);
+
                     return ['email' => $email];
                 },
                 'rule' => fn() => [
@@ -90,6 +91,7 @@ class DatabaseRuleTest extends TestCase
                         'email' => $email,
                         'password' => $this->faker->password,
                     ]);
+
                     return ['value' => $email];
                 },
                 'rule' => fn() => [
@@ -105,6 +107,7 @@ class DatabaseRuleTest extends TestCase
                         'email' => $email,
                         'password' => $this->faker->password,
                     ]);
+
                     return ['value' => $email];
                 },
                 'rule' => fn() => [
@@ -124,6 +127,7 @@ class DatabaseRuleTest extends TestCase
                         'email' => $email,
                         'password' => $this->faker->password,
                     ]);
+
                     return ['value' => $email];
                 },
                 'rule' => fn() => [
@@ -143,6 +147,7 @@ class DatabaseRuleTest extends TestCase
                         'email' => $email,
                         'password' => $this->faker->password,
                     ]);
+
                     return ['email' => $email];
                 },
                 'rule' => fn() => [
@@ -165,6 +170,7 @@ class DatabaseRuleTest extends TestCase
                         'email' => $email,
                         'password' => $this->faker->password,
                     ]);
+
                     return ['value' => $email];
                 },
                 'rule' => fn() => [
@@ -187,6 +193,7 @@ class DatabaseRuleTest extends TestCase
                         'email' => $email,
                         'password' => $this->faker->password,
                     ]);
+
                     return ['value' => $email];
                 },
                 'rule' => fn() => [
@@ -206,6 +213,7 @@ class DatabaseRuleTest extends TestCase
                         'email' => $email,
                         'password' => $this->faker->password,
                     ]);
+
                     return ['value' => $email];
                 },
                 'rule' => fn() => [

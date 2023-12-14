@@ -1206,6 +1206,7 @@ class Rule
         if ($defaultRules instanceof RuleSet) {
             $defaultRules = $defaultRules->toArray();
         }
+
         return LaravelRule::when($condition, $rules, $defaultRules);
     }
 

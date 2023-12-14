@@ -8,8 +8,8 @@ use ArrayIterator;
 use Brick\Math\BigNumber;
 use DateTimeInterface;
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Validation\Rules\RequiredIf;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Validation\Rules\RequiredIf;
 use IteratorAggregate;
 
 class RuleSet implements Arrayable, IteratorAggregate
