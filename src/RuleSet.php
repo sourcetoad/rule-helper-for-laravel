@@ -1032,9 +1032,10 @@ class RuleSet implements Arrayable, IteratorAggregate
     }
 
     /**
-     * The field must be present if the other specified field is accepted.
+     * The field under validation must be present and not empty if the `anotherfield` field is equal to yes, on, 1, "1",
+     * true, or "true".
      *
-     * @see RuleSet::accepted() for accepted criteria
+     * @link https://laravel.com/docs/10.x/validation#rule-required-if-accepted
      */
     public function requiredIfAccepted(string $field): self
     {
