@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Exists;
 use Illuminate\Validation\Rules\Unique;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Sourcetoad\RuleHelper\RuleSet;
 use Sourcetoad\RuleHelper\Tests\TestCase;
 
@@ -26,9 +27,7 @@ class DatabaseRuleTest extends TestCase
         $this->loadLaravelMigrations();
     }
 
-    /**
-     * @dataProvider databaseSetupProvider
-     */
+    #[DataProvider('databaseSetupProvider')]
     public function testDatabaseRules(Closure $createData, Closure $createRules, bool $fails): void
     {
         // Arrange
@@ -50,7 +49,7 @@ class DatabaseRuleTest extends TestCase
         );
     }
 
-    public function databaseSetupProvider(): array
+    public static function databaseSetupProvider(): array
     {
         return [
             'does not exist without column' => [
