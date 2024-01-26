@@ -11,14 +11,17 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Validation\InvokableRule;
 use Illuminate\Contracts\Validation\Rule as RuleContract;
 use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Validation\ConditionalRules;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\Rules\RequiredIf;
 use IteratorAggregate;
+use Stringable;
 
 class RuleSet implements Arrayable, IteratorAggregate
 {
     public function __construct(protected array $rules = [])
     {
+        //
     }
 
     public function getIterator(): ArrayIterator
@@ -61,7 +64,7 @@ class RuleSet implements Arrayable, IteratorAggregate
     /**
      * Append one or more rules to the end of the rule set.
      *
-     * @param RuleContract|InvokableRule|ValidationRule|string $rule
+     * @param RuleContract|InvokableRule|ValidationRule|ConditionalRules|Stringable|string $rule
      */
     public function concat(...$rule): self
     {
@@ -79,7 +82,7 @@ class RuleSet implements Arrayable, IteratorAggregate
     /**
      * Append a rule to the end of the rule set.
      *
-     * @param RuleContract|InvokableRule|ValidationRule|string $rule
+     * @param RuleContract|InvokableRule|ValidationRule|ConditionalRules|Stringable|string $rule
      */
     public function rule(mixed $rule): self
     {
