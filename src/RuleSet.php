@@ -12,18 +12,29 @@ use Illuminate\Contracts\Validation\InvokableRule;
 use Illuminate\Contracts\Validation\Rule as RuleContract;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Validation\ConditionalRules;
+use Illuminate\Validation\Rules\Dimensions;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\Rules\RequiredIf;
 use IteratorAggregate;
 use Stringable;
 
+/**
+ * @implements Arrayable<array-key, RuleContract|InvokableRule|ValidationRule|ConditionalRules|Stringable|string>
+ * @implements IteratorAggregate<array-key, RuleContract|InvokableRule|ValidationRule|ConditionalRules|Stringable|string>
+ */
 class RuleSet implements Arrayable, IteratorAggregate
 {
-    public function __construct(protected array $rules = [])
+    /**
+     * @param array<array-key, RuleContract|InvokableRule|ValidationRule|ConditionalRules|Stringable|string> $rules
+     */
+    final public function __construct(protected array $rules = [])
     {
         //
     }
 
+    /**
+     * @return ArrayIterator<array-key, RuleContract|InvokableRule|ValidationRule|ConditionalRules|Stringable|string>
+     */
     public function getIterator(): ArrayIterator
     {
         return new ArrayIterator($this->rules);
@@ -31,6 +42,8 @@ class RuleSet implements Arrayable, IteratorAggregate
 
     /**
      * Get the rule set as an array.
+     *
+     * @return array<array-key, RuleContract|InvokableRule|ValidationRule|ConditionalRules|Stringable|string>
      */
     public function toArray(): array
     {
@@ -39,6 +52,8 @@ class RuleSet implements Arrayable, IteratorAggregate
 
     /**
      * Create a new rule set.
+     *
+     * @param array<array-key, RuleContract|InvokableRule|ValidationRule|ConditionalRules|Stringable|string> $rules
      */
     public static function create(array $rules = []): self
     {
@@ -246,7 +261,7 @@ class RuleSet implements Arrayable, IteratorAggregate
      *
      * @link https://laravel.com/docs/10.x/authorization#gates
      */
-    public function can(string $ability, ...$arguments): self
+    public function can(string $ability, mixed ...$arguments): self
     {
         return $this->rule(Rule::can($ability, ...$arguments));
     }
@@ -380,7 +395,7 @@ class RuleSet implements Arrayable, IteratorAggregate
      * @param array<string, int|float> $constraints
      * @param ?callable(\Illuminate\Validation\Rules\Dimensions): void $modifier
      */
-    public function dimensions(array $constraints, ?callable $modifier = null): self
+    public function dimensions(array $constraints = [], ?callable $modifier = null): self
     {
         $rule = Rule::dimensions($constraints);
 
@@ -630,6 +645,7 @@ class RuleSet implements Arrayable, IteratorAggregate
      * list of values provided to the *in* rule.
      *
      * @link https://laravel.com/docs/10.x/validation#rule-in
+     * @param Arrayable<array-key, RuleContract|InvokableRule|ValidationRule|ConditionalRules|Stringable|string>|array<array-key, RuleContract|InvokableRule|ValidationRule|ConditionalRules|Stringable|string>|string $values
      */
     public function in(Arrayable|array|string $values): self
     {
@@ -864,6 +880,7 @@ class RuleSet implements Arrayable, IteratorAggregate
      * The field under validation must not be included in the given list of values.
      *
      * @link https://laravel.com/docs/10.x/validation#rule-not-in
+     * @param Arrayable<array-key, RuleContract|InvokableRule|ValidationRule|ConditionalRules|Stringable|string>|array<array-key, RuleContract|InvokableRule|ValidationRule|ConditionalRules|Stringable|string>|string $values
      */
     public function notIn(Arrayable|array|string $values): self
     {
@@ -1282,6 +1299,10 @@ class RuleSet implements Arrayable, IteratorAggregate
 
     /**
      * Create a new conditional rule set.
+     *
+     * @param bool|callable(\Illuminate\Support\Fluent<array-key, mixed>): bool $condition
+     * @param array<array-key, RuleContract|InvokableRule|ValidationRule|ConditionalRules|Stringable|string>|string|RuleSet $rules
+     * @param array<array-key, RuleContract|InvokableRule|ValidationRule|ConditionalRules|Stringable|string>|string|RuleSet $defaultRules
      */
     public function when(mixed $condition, array|string|RuleSet $rules, array|string|RuleSet $defaultRules = []): self
     {

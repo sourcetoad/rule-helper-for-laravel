@@ -7,6 +7,9 @@ namespace Sourcetoad\RuleHelper;
 use Brick\Math\BigNumber;
 use DateTimeInterface;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Contracts\Validation\InvokableRule;
+use Illuminate\Contracts\Validation\Rule as RuleContract;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\ConditionalRules;
 use Illuminate\Validation\Rule as LaravelRule;
@@ -21,6 +24,7 @@ use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\Rules\ProhibitedIf;
 use Illuminate\Validation\Rules\RequiredIf;
 use Illuminate\Validation\Rules\Unique;
+use Stringable;
 
 class Rule
 {
@@ -185,7 +189,7 @@ class Rule
      *
      * @link https://laravel.com/docs/10.x/authorization#gates
      */
-    public static function can(string $ability, ...$arguments): Can
+    public static function can(string $ability, mixed ...$arguments): Can
     {
         return LaravelRule::can($ability, ...$arguments);
     }
@@ -317,6 +321,7 @@ class Rule
      * like *3/2* or a float like *1.5*.
      *
      * @link https://laravel.com/docs/10.x/validation#rule-dimensions
+     * @param array<string, int|float> $constraints
      */
     public static function dimensions(array $constraints = []): Dimensions
     {
@@ -412,7 +417,7 @@ class Rule
      * methods if a true boolean is passed in or the passed in closure returns true.
      *
      * @link https://laravel.com/docs/10.x/validation#rule-exclude-if
-     * @param callable|bool $callback
+     * @param bool|callable(): bool $callback
      */
     public static function excludeIf(mixed $callback): ExcludeIf
     {
@@ -556,6 +561,7 @@ class Rule
      * list of values provided to the *in* rule.
      *
      * @link https://laravel.com/docs/10.x/validation#rule-in
+     * @param Arrayable<array-key, mixed>|array<array-key, mixed>|string $values
      */
     public static function in(Arrayable|array|string $values): In
     {
@@ -790,6 +796,7 @@ class Rule
      * The field under validation must not be included in the given list of values.
      *
      * @link https://laravel.com/docs/10.x/validation#rule-not-in
+     * @param Arrayable<array-key, mixed>|array<array-key, mixed>|string $values
      */
     public static function notIn(Arrayable|array|string $values): NotIn
     {
@@ -901,7 +908,7 @@ class Rule
      * passed in closure returns true.
      *
      * @link https://laravel.com/docs/10.x/validation#rule-prohibited-if
-     * @param callable|bool $callback
+     * @param bool|callable(): bool $callback
      */
     public static function prohibitedIf(mixed $callback): ProhibitedIf
     {
@@ -973,7 +980,7 @@ class Rule
      * closure returns true.
      *
      * @link https://laravel.com/docs/10.x/validation#rule-required-if
-     * @param callable|bool $callback
+     * @param bool|callable(): bool $callback
      */
     public static function requiredIf(mixed $callback): RequiredIf
     {
@@ -1198,6 +1205,10 @@ class Rule
 
     /**
      * Create a new conditional rule set.
+     *
+     * @param bool|callable(\Illuminate\Support\Fluent<array-key, mixed>): bool $condition
+     * @param array<array-key, RuleContract|InvokableRule|ValidationRule|ConditionalRules|Stringable|string>|string|RuleSet $rules
+     * @param array<array-key, RuleContract|InvokableRule|ValidationRule|ConditionalRules|Stringable|string>|string|RuleSet $defaultRules
      */
     public static function when(
         mixed $condition,
@@ -1225,6 +1236,10 @@ class Rule
         }
     }
 
+    /**
+     * @param array<array-key, RequiredIf> $rules
+     * @return Collection<array-key, bool>
+     */
     protected static function getRuleResults(array $rules): Collection
     {
         return collect($rules)

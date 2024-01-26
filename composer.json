@@ -12,7 +12,8 @@
         "ext-json": "*",
         "orchestra/testbench": "^8.0",
         "phpunit/phpunit": "^10.5",
-        "laravel/pint": "1.13.9"
+        "laravel/pint": "1.13.9",
+        "larastan/larastan": "^2.0"
     },
     "autoload": {
         "psr-4": {
@@ -34,10 +35,12 @@
     "scripts": {
         "check-code": [
             "@lint",
+            "@phpstan",
             "@test"
         ],
         "lint": "@php vendor/bin/pint --test",
         "lint:fix": "@php vendor/bin/pint",
+        "phpstan": "@php vendor/bin/phpstan analyse",
         "test": "@php vendor/bin/phpunit"
     }
 }
