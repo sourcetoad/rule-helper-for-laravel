@@ -12,6 +12,8 @@ use Illuminate\Auth\AuthManager;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Hashing\Hasher;
+use Illuminate\Contracts\Validation\InvokableRule;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -2247,6 +2249,82 @@ class RuleTest extends TestCase
                 'rules' => fn() => [
                     'field-a' => RuleSet::create()->requiredWithoutAll('field-b', 'field-c'),
                 ],
+                'fails' => true,
+            ],
+            'rule InvokableRule valid' => [
+                'data' => '50',
+                'rules' => fn() => new class implements InvokableRule
+                {
+                    public function __invoke(string $attribute, mixed $value, Closure $fail)
+                    {
+                        //
+                    }
+                },
+                'fails' => false,
+            ],
+            'rule Rule invalid' => [
+                'data' => '1',
+                'rules' => fn() => new class implements \Illuminate\Contracts\Validation\Rule
+                {
+                    public function passes($attribute, $value): bool
+                    {
+                        return false;
+                    }
+
+                    public function message(): string
+                    {
+                        return 'Invalid';
+                    }
+                },
+                'fails' => true,
+            ],
+            'rule Rule valid' => [
+                'data' => '50',
+                'rules' => fn() => new class implements \Illuminate\Contracts\Validation\Rule
+                {
+                    public function passes($attribute, $value): bool
+                    {
+                        return true;
+                    }
+
+                    public function message(): string
+                    {
+                        return 'Invalid';
+                    }
+                },
+                'fails' => false,
+            ],
+            'rule InvokableRule invalid' => [
+                'data' => '1',
+                'rules' => fn() => new class implements InvokableRule
+                {
+                    public function __invoke(string $attribute, mixed $value, Closure $fail): void
+                    {
+                        $fail('Invalid');
+                    }
+                },
+                'fails' => true,
+            ],
+            'rule ValidationRule valid' => [
+                'data' => '50',
+                'rules' => fn() => new class implements ValidationRule
+                {
+                    public function validate(string $attribute, mixed $value, Closure $fail): void
+                    {
+                        //
+                    }
+                },
+                'fails' => false,
+            ],
+            'rule ValidationRule invalid' => [
+                'data' => '1',
+                'rules' => fn() => new class implements ValidationRule
+                {
+                    public function validate(string $attribute, mixed $value, Closure $fail): void
+                    {
+                        $fail('Invalid');
+                    }
+                },
                 'fails' => true,
             ],
             'same valid' => [
