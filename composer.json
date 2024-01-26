@@ -12,7 +12,7 @@
         "ext-json": "*",
         "orchestra/testbench": "^8.0",
         "phpunit/phpunit": "^9.6",
-        "laravel/pint": "1.13.7"
+        "laravel/pint": "1.13.9"
     },
     "autoload": {
         "psr-4": {
