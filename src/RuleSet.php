@@ -8,6 +8,8 @@ use ArrayIterator;
 use Brick\Math\BigNumber;
 use DateTimeInterface;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Contracts\Validation\Rule as RuleContract;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\Rules\RequiredIf;
 use IteratorAggregate;
@@ -58,7 +60,7 @@ class RuleSet implements Arrayable, IteratorAggregate
     /**
      * Append one or more rules to the end of the rule set.
      *
-     * @param \Illuminate\Contracts\Validation\Rule|string $rule
+     * @param RuleContract|ValidationRule|string $rule
      */
     public function concat(...$rule): self
     {
@@ -76,7 +78,7 @@ class RuleSet implements Arrayable, IteratorAggregate
     /**
      * Append a rule to the end of the rule set.
      *
-     * @param \Illuminate\Contracts\Validation\Rule|string $rule
+     * @param RuleContract|ValidationRule|string $rule
      */
     public function rule(mixed $rule): self
     {
