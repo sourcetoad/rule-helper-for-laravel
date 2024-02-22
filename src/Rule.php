@@ -1173,12 +1173,16 @@ class Rule
     }
 
     /**
-     * The field under validation must be a valid URL.
+     * The field under validation must be a valid URL. If no protocol is specified, all protocols are considered valid.
      *
      * @link https://laravel.com/docs/10.x/validation#rule-url
      */
-    public static function url(): string
+    public static function url(string ...$protocol): string
     {
+        if (count($protocol)) {
+            return 'url:'.implode(',', $protocol);
+        }
+
         return 'url';
     }
 

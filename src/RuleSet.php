@@ -1249,13 +1249,13 @@ class RuleSet implements Arrayable, IteratorAggregate
     }
 
     /**
-     * The field under validation must be a valid URL.
+     * The field under validation must be a valid URL. If no protocol is specified, all protocols are considered valid.
      *
      * @link https://laravel.com/docs/10.x/validation#rule-url
      */
-    public function url(): self
+    public function url(string ...$protocol): self
     {
-        return $this->rule(Rule::url());
+        return $this->rule(Rule::url(...$protocol));
     }
 
     /**

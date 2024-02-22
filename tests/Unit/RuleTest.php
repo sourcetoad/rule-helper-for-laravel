@@ -2478,14 +2478,24 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->uppercase(),
                 'fails' => true,
             ],
-            'url valid' => [
-                'data' => 'https://example.com',
+            'url no protocol constraints valid' => [
+                'data' => 'ssh://example.com',
                 'rules' => fn() => RuleSet::create()->url(),
                 'fails' => false,
             ],
-            'url invalid' => [
+            'url no protocol constraints invalid' => [
                 'data' => 'not a url',
                 'rules' => fn() => RuleSet::create()->url(),
+                'fails' => true,
+            ],
+            'url with protocol constraints valid' => [
+                'data' => 'http://example.com',
+                'rules' => fn() => RuleSet::create()->url('sftp', 'http'),
+                'fails' => false,
+            ],
+            'url with protocol constraints invalid' => [
+                'data' => 'http://example.com',
+                'rules' => fn() => RuleSet::create()->url('sftp', 'ssh'),
                 'fails' => true,
             ],
             'uuid valid' => [
