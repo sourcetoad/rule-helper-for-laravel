@@ -377,6 +377,8 @@ class RuleSet implements Arrayable, IteratorAggregate
      * pass a callback which accepts a {@see \Illuminate\Validation\Rules\Dimensions} instance.
      *
      * @link https://laravel.com/docs/10.x/validation#rule-dimensions
+     * @param array<string, int|float> $constraints
+     * @param ?callable(\Illuminate\Validation\Rules\Dimensions): void $modifier
      */
     public function dimensions(array $constraints, ?callable $modifier = null): self
     {
@@ -526,6 +528,7 @@ class RuleSet implements Arrayable, IteratorAggregate
      * {@see RuleSet::rule} or pass a callback which accepts an {@see \Illuminate\Validation\Rules\Exists} instance.
      *
      * @link https://laravel.com/docs/10.x/validation#rule-exists
+     * @param ?callable(\Illuminate\Validation\Rules\Exists): void $modifier
      */
     public function exists(string $table, string $column = 'NULL', ?callable $modifier = null): self
     {
@@ -899,6 +902,7 @@ class RuleSet implements Arrayable, IteratorAggregate
      * use {@see Rule::password} with {@see RuleSet::rule}, or pass a callback which accepts a {@see Password} instance.
      *
      * @link https://laravel.com/docs/10.x/validation#validating-passwords
+     * @param ?callable(\Illuminate\Validation\Rules\Password): void $modifier
      */
     public function password(?int $size = null, ?callable $modifier = null): self
     {
@@ -972,7 +976,7 @@ class RuleSet implements Arrayable, IteratorAggregate
      * passed in closure returns true.
      *
      * @link https://laravel.com/docs/10.x/validation#rule-prohibited-if
-     * @param callable|bool $callback
+     * @param bool|callable(): bool $callback
      */
     public function prohibitedIf(mixed $callback): self
     {
@@ -1044,7 +1048,7 @@ class RuleSet implements Arrayable, IteratorAggregate
      * closure returns true.
      *
      * @link https://laravel.com/docs/10.x/validation#rule-required-if
-     * @param callable|bool $callback
+     * @param bool|callable(): bool $callback
      */
     public function requiredIf(mixed $callback): self
     {
@@ -1226,6 +1230,7 @@ class RuleSet implements Arrayable, IteratorAggregate
      * {@see RuleSet::rule} or pass a callback which accepts a {@see \Illuminate\Validation\Rules\Unique} instance.
      *
      * @link https://laravel.com/docs/10.x/validation#rule-unique
+     * @param ?callable(\Illuminate\Validation\Rules\Unique): void $modifier
      */
     public function unique(string $table, string $column = 'NULL', ?callable $modifier = null): self
     {
