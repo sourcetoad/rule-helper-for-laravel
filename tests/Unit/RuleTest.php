@@ -18,6 +18,7 @@ use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Dimensions;
+use Illuminate\Validation\Rules\Enum;
 use Illuminate\Validation\Rules\Password;
 use Sourcetoad\RuleHelper\Rule;
 use Sourcetoad\RuleHelper\RuleSet;
@@ -951,6 +952,22 @@ class RuleTest extends TestCase
             'enum int invalid' => [
                 'data' => '1',
                 'rules' => fn() => RuleSet::create()->enum(ExampleIntEnum::class),
+                'fails' => true,
+            ],
+            'enum string constrained valid' => [
+                'data' => 'another',
+                'rules' => fn() => RuleSet::create()->enum(
+                    ExampleStringEnum::class,
+                    fn(Enum $rule) => $rule->only(ExampleStringEnum::Another),
+                ),
+                'fails' => false,
+            ],
+            'enum string constrained invalid' => [
+                'data' => 'another',
+                'rules' => fn() => RuleSet::create()->enum(
+                    ExampleStringEnum::class,
+                    fn(Enum $rule) => $rule->except(ExampleStringEnum::Another),
+                ),
                 'fails' => true,
             ],
             'extensions valid' => [
