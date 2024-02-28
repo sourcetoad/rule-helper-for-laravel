@@ -446,10 +446,17 @@ class RuleSet implements Arrayable, IteratorAggregate
      *
      * @link https://laravel.com/docs/10.x/validation#rule-enum
      * @param class-string $type
+     * @param ?callable(\Illuminate\Validation\Rules\Enum): void $modifier
      */
-    public function enum(string $type): self
+    public function enum(string $type, ?callable $modifier = null): self
     {
-        return $this->rule(Rule::enum($type));
+        $rule = Rule::enum($type);
+
+        if ($modifier) {
+            $modifier($rule);
+        }
+
+        return $this->rule($rule);
     }
 
     /**
