@@ -716,6 +716,14 @@ class RuleSet implements Arrayable, IteratorAggregate
     }
 
     /**
+     * The field under validation must be a list style array.
+     */
+    public function list(): self
+    {
+        return $this->rule(Rule::list());
+    }
+
+    /**
      * The field under validation must be lowercase.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-lowercase

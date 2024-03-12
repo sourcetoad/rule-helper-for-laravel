@@ -632,6 +632,14 @@ class Rule
     }
 
     /**
+     * The field under validation must be a list style array.
+     */
+    public static function list(): string
+    {
+        return 'list';
+    }
+
+    /**
      * The field under validation must be lowercase.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-lowercase

@@ -1226,6 +1226,21 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->json(),
                 'fails' => true,
             ],
+            'list valid' => [
+                'data' => ['a', 'b', 'c'],
+                'rules' => fn() => RuleSet::create()->list(),
+                'fails' => false,
+            ],
+            'list invalid array' => [
+                'data' => ['field' => ['a' => 'A', 'b' => 'B', 'c' => 'C']],
+                'rules' => fn() => ['field' => RuleSet::create()->list()],
+                'fails' => true,
+            ],
+            'list invalid string' => [
+                'data' => 'a,b,c',
+                'rules' => fn() => RuleSet::create()->list(),
+                'fails' => true,
+            ],
             'lowercase valid' => [
                 'data' => 'lowercase',
                 'rules' => fn() => RuleSet::create()->lowercase(),
