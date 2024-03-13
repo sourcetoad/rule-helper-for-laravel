@@ -20,6 +20,7 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Dimensions;
 use Illuminate\Validation\Rules\Enum;
 use Illuminate\Validation\Rules\Password;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Sourcetoad\RuleHelper\Rule;
 use Sourcetoad\RuleHelper\RuleSet;
 use Sourcetoad\RuleHelper\Tests\Stubs\ExampleIntEnum;
@@ -38,9 +39,7 @@ class RuleTest extends TestCase
         Password::$defaultCallback = null;
     }
 
-    /**
-     * @dataProvider ruleDataProvider
-     */
+    #[DataProvider('ruleDataProvider')]
     public function testRuleIntegration($data, Closure $rules, bool $fails, ?array $errors = null): void
     {
         // Arrange
@@ -75,9 +74,7 @@ class RuleTest extends TestCase
         }
     }
 
-    /**
-     * @dataProvider excludeProvider
-     */
+    #[DataProvider('excludeProvider')]
     public function testExcludeRuleIntegration($data, Closure $rules, array $expected): void
     {
         // Arrange
@@ -92,9 +89,7 @@ class RuleTest extends TestCase
         $this->assertEqualsCanonicalizing($expected, $valid);
     }
 
-    /**
-     * @dataProvider requireIfProvider
-     */
+    #[DataProvider('requireIfProvider')]
     public function testRequiredIfExtensions(string $data, Closure $rule, bool $fails): void
     {
         // Arrange
@@ -117,9 +112,7 @@ class RuleTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider dateProvider
-     */
+    #[DataProvider('dateProvider')]
     public function testDateRules(string $data, string $rule, bool $fails): void
     {
         // Arrange
@@ -142,7 +135,7 @@ class RuleTest extends TestCase
         );
     }
 
-    public function ruleDataProvider(): array
+    public static function ruleDataProvider(): array
     {
         return [
             'accepted valid' => [
@@ -1231,6 +1224,21 @@ class RuleTest extends TestCase
             'json invalid' => [
                 'data' => '{"a":',
                 'rules' => fn() => RuleSet::create()->json(),
+                'fails' => true,
+            ],
+            'list valid' => [
+                'data' => ['a', 'b', 'c'],
+                'rules' => fn() => RuleSet::create()->list(),
+                'fails' => false,
+            ],
+            'list invalid array' => [
+                'data' => ['field' => ['a' => 'A', 'b' => 'B', 'c' => 'C']],
+                'rules' => fn() => ['field' => RuleSet::create()->list()],
+                'fails' => true,
+            ],
+            'list invalid string' => [
+                'data' => 'a,b,c',
+                'rules' => fn() => RuleSet::create()->list(),
                 'fails' => true,
             ],
             'lowercase valid' => [
@@ -2547,7 +2555,7 @@ class RuleTest extends TestCase
         ];
     }
 
-    public function excludeProvider(): array
+    public static function excludeProvider(): array
     {
         return [
             'exclude' => [
@@ -2709,7 +2717,7 @@ class RuleTest extends TestCase
         ];
     }
 
-    public function requireIfProvider(): array
+    public static function requireIfProvider(): array
     {
         return [
             'requiredIfAny required with no data' => [
@@ -2787,7 +2795,7 @@ class RuleTest extends TestCase
         ];
     }
 
-    public function dateProvider(): array
+    public static function dateProvider(): array
     {
         return [
             'before success 01/01 is before 01/02 (string)' => [

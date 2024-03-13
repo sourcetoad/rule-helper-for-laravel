@@ -1,5 +1,12 @@
 # Upgrade Guide
 
+## v5
+
+### Upgrading from v4.3 to v5.0
+
+- Minimum Laravel version increased from `10.46` to `11.0.3`.
+- Minimum PHP version increased from `8.1` to `8.2`.
+
 ## v4
 
 ### Upgrading from v4.2 to v4.3
