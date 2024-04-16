@@ -645,7 +645,7 @@ class RuleSet implements Arrayable, IteratorAggregate
      * list of values provided to the *in* rule.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-in
-     * @param Arrayable<array-key, RuleContract|InvokableRule|ValidationRule|ConditionalRules|Stringable|string>|array<array-key, RuleContract|InvokableRule|ValidationRule|ConditionalRules|Stringable|string>|string $values
+     * @param Arrayable<array-key, mixed>|array<array-key, mixed>|string $values
      */
     public function in(Arrayable|array|string $values): self
     {
