@@ -1088,8 +1088,8 @@ class RuleSet implements Arrayable, IteratorAggregate
     }
 
     /**
-     * The field under validation must be present and not empty if the `anotherfield` field is equal to yes, on, 1, "1",
-     * true, or "true".
+     * The field under validation must be present and not empty if the `field` field is equal to yes, on, 1, "1", true,
+     * or "true".
      *
      * @link https://laravel.com/docs/11.x/validation#rule-required-if-accepted
      */
@@ -1112,6 +1112,17 @@ class RuleSet implements Arrayable, IteratorAggregate
     public function requiredIfAny(RequiredIf ...$rules): self
     {
         return $this->rule(Rule::requiredIfAny(...$rules));
+    }
+
+    /**
+     * The field under validation must be present and not empty if the `field` field is equal to "no", "off", 0, "0",
+     * false, or "false".
+     *
+     * @link https://laravel.com/docs/11.x/validation#rule-required-if-declined
+     */
+    public function requiredIfDeclined(string $field): self
+    {
+        return $this->rule(Rule::requiredIfDeclined($field));
     }
 
     /**
