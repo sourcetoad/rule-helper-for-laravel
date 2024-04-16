@@ -888,7 +888,7 @@ class RuleSet implements Arrayable, IteratorAggregate
      * The field under validation must not be included in the given list of values.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-not-in
-     * @param Arrayable<array-key, RuleContract|InvokableRule|ValidationRule|ConditionalRules|Stringable|string>|array<array-key, RuleContract|InvokableRule|ValidationRule|ConditionalRules|Stringable|string>|string $values
+     * @param Arrayable<array-key, mixed>|array<array-key, mixed>|string $values
      */
     public function notIn(Arrayable|array|string $values): self
     {
