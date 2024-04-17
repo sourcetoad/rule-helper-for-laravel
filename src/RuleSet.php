@@ -645,7 +645,7 @@ class RuleSet implements Arrayable, IteratorAggregate
      * list of values provided to the *in* rule.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-in
-     * @param Arrayable<array-key, RuleContract|InvokableRule|ValidationRule|ConditionalRules|Stringable|string>|array<array-key, RuleContract|InvokableRule|ValidationRule|ConditionalRules|Stringable|string>|string $values
+     * @param Arrayable<array-key, mixed>|array<array-key, mixed>|string $values
      */
     public function in(Arrayable|array|string $values): self
     {
@@ -888,7 +888,7 @@ class RuleSet implements Arrayable, IteratorAggregate
      * The field under validation must not be included in the given list of values.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-not-in
-     * @param Arrayable<array-key, RuleContract|InvokableRule|ValidationRule|ConditionalRules|Stringable|string>|array<array-key, RuleContract|InvokableRule|ValidationRule|ConditionalRules|Stringable|string>|string $values
+     * @param Arrayable<array-key, mixed>|array<array-key, mixed>|string $values
      */
     public function notIn(Arrayable|array|string $values): self
     {
@@ -1088,8 +1088,8 @@ class RuleSet implements Arrayable, IteratorAggregate
     }
 
     /**
-     * The field under validation must be present and not empty if the `anotherfield` field is equal to yes, on, 1, "1",
-     * true, or "true".
+     * The field under validation must be present and not empty if the `field` field is equal to yes, on, 1, "1", true,
+     * or "true".
      *
      * @link https://laravel.com/docs/11.x/validation#rule-required-if-accepted
      */
@@ -1112,6 +1112,17 @@ class RuleSet implements Arrayable, IteratorAggregate
     public function requiredIfAny(RequiredIf ...$rules): self
     {
         return $this->rule(Rule::requiredIfAny(...$rules));
+    }
+
+    /**
+     * The field under validation must be present and not empty if the `field` field is equal to "no", "off", 0, "0",
+     * false, or "false".
+     *
+     * @link https://laravel.com/docs/11.x/validation#rule-required-if-declined
+     */
+    public function requiredIfDeclined(string $field): self
+    {
+        return $this->rule(Rule::requiredIfDeclined($field));
     }
 
     /**

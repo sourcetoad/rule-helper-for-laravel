@@ -2110,6 +2110,26 @@ class RuleTest extends TestCase
                 ],
                 'fails' => true,
             ],
+            'requiredIfDeclined valid' => [
+                'data' => [
+                    'field-a' => 'a',
+                    'field-b' => '1',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->requiredIfDeclined('field-b'),
+                ],
+                'fails' => false,
+            ],
+            'requiredIfDeclined invalid' => [
+                'data' => [
+                    'field-a' => '',
+                    'field-b' => '0',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->requiredIfDeclined('field-b'),
+                ],
+                'fails' => true,
+            ],
             'requiredIfValue valid' => [
                 'data' => [
                     'field-a' => 'a',

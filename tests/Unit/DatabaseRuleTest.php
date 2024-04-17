@@ -54,7 +54,7 @@ class DatabaseRuleTest extends TestCase
         return [
             'does not exist without column' => [
                 'createData' => fn() => ['email' => $this->faker->email],
-                'rule' => fn() => [
+                'createRules' => fn() => [
                     'email' => RuleSet::create()->exists('users'),
                 ],
                 'fails' => true,
@@ -70,14 +70,14 @@ class DatabaseRuleTest extends TestCase
 
                     return ['email' => $email];
                 },
-                'rule' => fn() => [
+                'createRules' => fn() => [
                     'email' => RuleSet::create()->exists('users'),
                 ],
                 'fails' => false,
             ],
             'does not exist with column' => [
                 'createData' => fn() => ['value' => $this->faker->email],
-                'rule' => fn() => [
+                'createRules' => fn() => [
                     'value' => RuleSet::create()->exists('users', 'email'),
                 ],
                 'fails' => true,
@@ -93,7 +93,7 @@ class DatabaseRuleTest extends TestCase
 
                     return ['value' => $email];
                 },
-                'rule' => fn() => [
+                'createRules' => fn() => [
                     'value' => RuleSet::create()->exists('users', 'email'),
                 ],
                 'fails' => false,
@@ -109,7 +109,7 @@ class DatabaseRuleTest extends TestCase
 
                     return ['value' => $email];
                 },
-                'rule' => fn() => [
+                'createRules' => fn() => [
                     'value' => RuleSet::create()->exists(
                         'users',
                         'email',
@@ -129,7 +129,7 @@ class DatabaseRuleTest extends TestCase
 
                     return ['value' => $email];
                 },
-                'rule' => fn() => [
+                'createRules' => fn() => [
                     'value' => RuleSet::create()->exists(
                         'users',
                         'email',
@@ -149,14 +149,14 @@ class DatabaseRuleTest extends TestCase
 
                     return ['email' => $email];
                 },
-                'rule' => fn() => [
+                'createRules' => fn() => [
                     'email' => RuleSet::create()->unique('users'),
                 ],
                 'fails' => true,
             ],
             'unique without column' => [
                 'createData' => fn() => ['email' => $this->faker->email],
-                'rule' => fn() => [
+                'createRules' => fn() => [
                     'email' => RuleSet::create()->unique('users'),
                 ],
                 'fails' => false,
@@ -172,14 +172,14 @@ class DatabaseRuleTest extends TestCase
 
                     return ['value' => $email];
                 },
-                'rule' => fn() => [
+                'createRules' => fn() => [
                     'value' => RuleSet::create()->unique('users', 'email'),
                 ],
                 'fails' => true,
             ],
             'unique with column' => [
                 'createData' => fn() => ['value' => $this->faker->email],
-                'rule' => fn() => [
+                'createRules' => fn() => [
                     'value' => RuleSet::create()->unique('users', 'email'),
                 ],
                 'fails' => false,
@@ -195,7 +195,7 @@ class DatabaseRuleTest extends TestCase
 
                     return ['value' => $email];
                 },
-                'rule' => fn() => [
+                'createRules' => fn() => [
                     'value' => RuleSet::create()->unique(
                         'users',
                         'email',
@@ -215,7 +215,7 @@ class DatabaseRuleTest extends TestCase
 
                     return ['value' => $email];
                 },
-                'rule' => fn() => [
+                'createRules' => fn() => [
                     'value' => RuleSet::create()->unique(
                         'users',
                         'email',

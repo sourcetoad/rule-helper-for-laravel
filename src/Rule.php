@@ -996,8 +996,8 @@ class Rule
     }
 
     /**
-     * The field under validation must be present and not empty if the `anotherfield` field is equal to yes, on, 1, "1",
-     * true, or "true".
+     * The field under validation must be present and not empty if the `field` field is equal to yes, on, 1, "1", true,
+     * or "true".
      *
      * @link https://laravel.com/docs/11.x/validation#rule-required-if-accepted
      */
@@ -1024,6 +1024,17 @@ class Rule
         return self::requiredIf(function () use ($rules) {
             return self::getRuleResults($rules)->containsStrict(true);
         });
+    }
+
+    /**
+     * The field under validation must be present and not empty if the `field` field is equal to "no", "off", 0, "0",
+     * false, or "false".
+     *
+     * @link https://laravel.com/docs/11.x/validation#rule-required-if-declined
+     */
+    public static function requiredIfDeclined(string $field): string
+    {
+        return 'required_if_declined:'.$field;
     }
 
     /**
