@@ -1150,6 +1150,24 @@ class RuleTest extends TestCase
                 ],
                 'fails' => true,
             ],
+            'in enum valid' => [
+                'data' => [
+                    'field-a' => ExampleStringEnum::Valid->value,
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->in(ExampleStringEnum::Valid),
+                ],
+                'fails' => false,
+            ],
+            'in enum invalid' => [
+                'data' => [
+                    'field-a' => ExampleStringEnum::Another->value,
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->in(ExampleStringEnum::Valid),
+                ],
+                'fails' => true,
+            ],
             'inArray valid' => [
                 'data' => [
                     'field-a' => 'a',
@@ -1661,6 +1679,24 @@ class RuleTest extends TestCase
                 ],
                 'rules' => fn() => [
                     'field-a' => RuleSet::create()->notIn(['a', 'b', 'c']),
+                ],
+                'fails' => true,
+            ],
+            'notIn enum valid' => [
+                'data' => [
+                    'field-a' => ExampleStringEnum::Another->value,
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->notIn(ExampleStringEnum::Valid),
+                ],
+                'fails' => false,
+            ],
+            'notIn enum invalid' => [
+                'data' => [
+                    'field-a' => ExampleStringEnum::Valid->value,
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->notIn(ExampleStringEnum::Valid),
                 ],
                 'fails' => true,
             ],

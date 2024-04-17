@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Sourcetoad\RuleHelper;
 
 use ArrayIterator;
+use BackedEnum;
 use Brick\Math\BigNumber;
 use DateTimeInterface;
 use Illuminate\Contracts\Support\Arrayable;
@@ -16,6 +17,7 @@ use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\Rules\RequiredIf;
 use IteratorAggregate;
 use Stringable;
+use UnitEnum;
 
 /**
  * @implements Arrayable<array-key, RuleContract|InvokableRule|ValidationRule|ConditionalRules|Stringable|string>
@@ -644,9 +646,9 @@ class RuleSet implements Arrayable, IteratorAggregate
      * list of values provided to the *in* rule.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-in
-     * @param Arrayable<array-key, mixed>|array<array-key, mixed>|string $values
+     * @param Arrayable<array-key, BackedEnum|UnitEnum|string>|array<BackedEnum|UnitEnum|string>|BackedEnum|UnitEnum|string $values
      */
-    public function in(Arrayable|array|string $values): self
+    public function in(Arrayable|BackedEnum|UnitEnum|array|string $values): self
     {
         return $this->rule(Rule::in($values));
     }
@@ -890,9 +892,9 @@ class RuleSet implements Arrayable, IteratorAggregate
      * The field under validation must not be included in the given list of values.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-not-in
-     * @param Arrayable<array-key, mixed>|array<array-key, mixed>|string $values
+     * @param Arrayable<array-key, BackedEnum|UnitEnum|string>|array<BackedEnum|UnitEnum|string>|BackedEnum|UnitEnum|string $values
      */
-    public function notIn(Arrayable|array|string $values): self
+    public function notIn(Arrayable|BackedEnum|UnitEnum|array|string $values): self
     {
         return $this->rule(Rule::notIn($values));
     }

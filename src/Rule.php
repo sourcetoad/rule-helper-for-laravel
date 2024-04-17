@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Sourcetoad\RuleHelper;
 
+use BackedEnum;
 use Brick\Math\BigNumber;
 use DateTimeInterface;
 use Illuminate\Contracts\Support\Arrayable;
@@ -25,6 +26,7 @@ use Illuminate\Validation\Rules\ProhibitedIf;
 use Illuminate\Validation\Rules\RequiredIf;
 use Illuminate\Validation\Rules\Unique;
 use Stringable;
+use UnitEnum;
 
 class Rule
 {
@@ -561,9 +563,9 @@ class Rule
      * list of values provided to the *in* rule.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-in
-     * @param Arrayable<array-key, mixed>|array<array-key, mixed>|string $values
+     * @param Arrayable<array-key, BackedEnum|UnitEnum|string>|array<BackedEnum|UnitEnum|string>|BackedEnum|UnitEnum|string $values
      */
-    public static function in(Arrayable|array|string $values): In
+    public static function in(Arrayable|BackedEnum|UnitEnum|array|string $values): In
     {
         return LaravelRule::in($values);
     }
@@ -807,9 +809,9 @@ class Rule
      * The field under validation must not be included in the given list of values.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-not-in
-     * @param Arrayable<array-key, mixed>|array<array-key, mixed>|string $values
+     * @param Arrayable<array-key, BackedEnum|UnitEnum|string>|array<BackedEnum|UnitEnum|string>|BackedEnum|UnitEnum|string $values
      */
-    public static function notIn(Arrayable|array|string $values): NotIn
+    public static function notIn(Arrayable|BackedEnum|UnitEnum|array|string $values): NotIn
     {
         return LaravelRule::notIn($values);
     }
