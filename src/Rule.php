@@ -632,7 +632,10 @@ class Rule
     }
 
     /**
-     * The field under validation must be a list style array.
+     * The field under validation must be an array that is a list. An array is considered a list if its keys consist of
+     * consecutive numbers from 0 to count($array) - 1.
+     *
+     * @link https://laravel.com/docs/11.x/validation#rule-list
      */
     public static function list(): string
     {
@@ -866,8 +869,9 @@ class Rule
     }
 
     /**
-     * The field under validation must be present but can be empty if *anotherField* under validation is equal to a
-     * specified value.
+     * The field under validation must be present if the *anotherField* field is equal to any *value*.
+     *
+     * @link https://laravel.com/docs/11.x/validation#rule-present-if
      */
     public static function presentIf(string $anotherField, string ...$value): string
     {
@@ -875,8 +879,9 @@ class Rule
     }
 
     /**
-     * The field under validation must be present but can be empty unless the *anotherField* field is equal to any
-     * *value*.
+     * The field under validation must be present unless the *anotherField* field is equal to any *value*.
+     *
+     * @link https://laravel.com/docs/11.x/validation#rule-present-unless
      */
     public static function presentUnless(string $anotherField, string ...$value): string
     {
@@ -884,8 +889,9 @@ class Rule
     }
 
     /**
-     * The field under validation must be present but can be empty *only if* any of the other specified fields are
-     * present and not empty.
+     * The field under validation must be present *only if* any of the other specified fields are present.
+     *
+     * @link https://laravel.com/docs/11.x/validation#rule-present-with
      */
     public static function presentWith(string ...$field): string
     {
@@ -893,8 +899,9 @@ class Rule
     }
 
     /**
-     * The field under validation must be present but can be empty *only if* all the other specified fields are present
-     * and not empty.
+     * The field under validation must be present *only if* all the other specified fields are present.
+     *
+     * @link https://laravel.com/docs/11.x/validation#rule-present-with-all
      */
     public static function presentWithAll(string ...$field): string
     {
@@ -996,7 +1003,7 @@ class Rule
     }
 
     /**
-     * The field under validation must be present and not empty if the `field` field is equal to yes, on, 1, "1", true,
+     * The field under validation must be present and not empty if the *field* field is equal to yes, on, 1, "1", true,
      * or "true".
      *
      * @link https://laravel.com/docs/11.x/validation#rule-required-if-accepted
@@ -1027,7 +1034,7 @@ class Rule
     }
 
     /**
-     * The field under validation must be present and not empty if the `field` field is equal to "no", "off", 0, "0",
+     * The field under validation must be present and not empty if the *field* field is equal to "no", "off", 0, "0",
      * false, or "false".
      *
      * @link https://laravel.com/docs/11.x/validation#rule-required-if-declined
