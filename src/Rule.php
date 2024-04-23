@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Sourcetoad\RuleHelper;
 
+use BackedEnum;
 use Brick\Math\BigNumber;
 use DateTimeInterface;
 use Illuminate\Contracts\Support\Arrayable;
@@ -25,6 +26,7 @@ use Illuminate\Validation\Rules\ProhibitedIf;
 use Illuminate\Validation\Rules\RequiredIf;
 use Illuminate\Validation\Rules\Unique;
 use Stringable;
+use UnitEnum;
 
 class Rule
 {
@@ -561,9 +563,9 @@ class Rule
      * list of values provided to the *in* rule.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-in
-     * @param Arrayable<array-key, mixed>|array<array-key, mixed>|string $values
+     * @param Arrayable<array-key, BackedEnum|UnitEnum|string>|array<BackedEnum|UnitEnum|string>|BackedEnum|UnitEnum|string $values
      */
-    public static function in(Arrayable|array|string $values): In
+    public static function in(Arrayable|BackedEnum|UnitEnum|array|string $values): In
     {
         return LaravelRule::in($values);
     }
@@ -632,7 +634,10 @@ class Rule
     }
 
     /**
-     * The field under validation must be a list style array.
+     * The field under validation must be an array that is a list. An array is considered a list if its keys consist of
+     * consecutive numbers from 0 to count($array) - 1.
+     *
+     * @link https://laravel.com/docs/11.x/validation#rule-list
      */
     public static function list(): string
     {
@@ -804,9 +809,9 @@ class Rule
      * The field under validation must not be included in the given list of values.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-not-in
-     * @param Arrayable<array-key, mixed>|array<array-key, mixed>|string $values
+     * @param Arrayable<array-key, BackedEnum|UnitEnum|string>|array<BackedEnum|UnitEnum|string>|BackedEnum|UnitEnum|string $values
      */
-    public static function notIn(Arrayable|array|string $values): NotIn
+    public static function notIn(Arrayable|BackedEnum|UnitEnum|array|string $values): NotIn
     {
         return LaravelRule::notIn($values);
     }
@@ -866,8 +871,9 @@ class Rule
     }
 
     /**
-     * The field under validation must be present but can be empty if *anotherField* under validation is equal to a
-     * specified value.
+     * The field under validation must be present if the *anotherField* field is equal to any *value*.
+     *
+     * @link https://laravel.com/docs/11.x/validation#rule-present-if
      */
     public static function presentIf(string $anotherField, string ...$value): string
     {
@@ -875,8 +881,9 @@ class Rule
     }
 
     /**
-     * The field under validation must be present but can be empty unless the *anotherField* field is equal to any
-     * *value*.
+     * The field under validation must be present unless the *anotherField* field is equal to any *value*.
+     *
+     * @link https://laravel.com/docs/11.x/validation#rule-present-unless
      */
     public static function presentUnless(string $anotherField, string ...$value): string
     {
@@ -884,8 +891,9 @@ class Rule
     }
 
     /**
-     * The field under validation must be present but can be empty *only if* any of the other specified fields are
-     * present and not empty.
+     * The field under validation must be present *only if* any of the other specified fields are present.
+     *
+     * @link https://laravel.com/docs/11.x/validation#rule-present-with
      */
     public static function presentWith(string ...$field): string
     {
@@ -893,8 +901,9 @@ class Rule
     }
 
     /**
-     * The field under validation must be present but can be empty *only if* all the other specified fields are present
-     * and not empty.
+     * The field under validation must be present *only if* all the other specified fields are present.
+     *
+     * @link https://laravel.com/docs/11.x/validation#rule-present-with-all
      */
     public static function presentWithAll(string ...$field): string
     {
@@ -996,7 +1005,7 @@ class Rule
     }
 
     /**
-     * The field under validation must be present and not empty if the `field` field is equal to yes, on, 1, "1", true,
+     * The field under validation must be present and not empty if the *field* field is equal to yes, on, 1, "1", true,
      * or "true".
      *
      * @link https://laravel.com/docs/11.x/validation#rule-required-if-accepted
@@ -1027,7 +1036,7 @@ class Rule
     }
 
     /**
-     * The field under validation must be present and not empty if the `field` field is equal to "no", "off", 0, "0",
+     * The field under validation must be present and not empty if the *field* field is equal to "no", "off", 0, "0",
      * false, or "false".
      *
      * @link https://laravel.com/docs/11.x/validation#rule-required-if-declined

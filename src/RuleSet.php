@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Sourcetoad\RuleHelper;
 
 use ArrayIterator;
+use BackedEnum;
 use Brick\Math\BigNumber;
 use DateTimeInterface;
 use Illuminate\Contracts\Support\Arrayable;
@@ -12,11 +13,11 @@ use Illuminate\Contracts\Validation\InvokableRule;
 use Illuminate\Contracts\Validation\Rule as RuleContract;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Validation\ConditionalRules;
-use Illuminate\Validation\Rules\Dimensions;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\Rules\RequiredIf;
 use IteratorAggregate;
 use Stringable;
+use UnitEnum;
 
 /**
  * @implements Arrayable<array-key, RuleContract|InvokableRule|ValidationRule|ConditionalRules|Stringable|string>
@@ -645,9 +646,9 @@ class RuleSet implements Arrayable, IteratorAggregate
      * list of values provided to the *in* rule.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-in
-     * @param Arrayable<array-key, mixed>|array<array-key, mixed>|string $values
+     * @param Arrayable<array-key, BackedEnum|UnitEnum|string>|array<BackedEnum|UnitEnum|string>|BackedEnum|UnitEnum|string $values
      */
-    public function in(Arrayable|array|string $values): self
+    public function in(Arrayable|BackedEnum|UnitEnum|array|string $values): self
     {
         return $this->rule(Rule::in($values));
     }
@@ -716,7 +717,10 @@ class RuleSet implements Arrayable, IteratorAggregate
     }
 
     /**
-     * The field under validation must be a list style array.
+     * The field under validation must be an array that is a list. An array is considered a list if its keys consist of
+     * consecutive numbers from 0 to count($array) - 1.
+     *
+     * @link https://laravel.com/docs/11.x/validation#rule-list
      */
     public function list(): self
     {
@@ -888,9 +892,9 @@ class RuleSet implements Arrayable, IteratorAggregate
      * The field under validation must not be included in the given list of values.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-not-in
-     * @param Arrayable<array-key, mixed>|array<array-key, mixed>|string $values
+     * @param Arrayable<array-key, BackedEnum|UnitEnum|string>|array<BackedEnum|UnitEnum|string>|BackedEnum|UnitEnum|string $values
      */
-    public function notIn(Arrayable|array|string $values): self
+    public function notIn(Arrayable|BackedEnum|UnitEnum|array|string $values): self
     {
         return $this->rule(Rule::notIn($values));
     }
@@ -958,8 +962,9 @@ class RuleSet implements Arrayable, IteratorAggregate
     }
 
     /**
-     * The field under validation must be present but can be empty if *anotherField* under validation is equal to a
-     * specified value.
+     * The field under validation must be present if the *anotherField* field is equal to any *value*.
+     *
+     * @link https://laravel.com/docs/11.x/validation#rule-present-if
      */
     public function presentIf(string $anotherField, string ...$value): self
     {
@@ -967,8 +972,9 @@ class RuleSet implements Arrayable, IteratorAggregate
     }
 
     /**
-     * The field under validation must be present but can be empty unless the *anotherField* field is equal to any
-     * *value*.
+     * The field under validation must be present unless the *anotherField* field is equal to any *value*.
+     *
+     * @link https://laravel.com/docs/11.x/validation#rule-present-unless
      */
     public function presentUnless(string $anotherField, string ...$value): self
     {
@@ -976,8 +982,9 @@ class RuleSet implements Arrayable, IteratorAggregate
     }
 
     /**
-     * The field under validation must be present but can be empty *only if* any of the other specified fields are
-     * present and not empty.
+     * The field under validation must be present *only if* any of the other specified fields are present.
+     *
+     * @link https://laravel.com/docs/11.x/validation#rule-present-with
      */
     public function presentWith(string ...$field): self
     {
@@ -985,8 +992,9 @@ class RuleSet implements Arrayable, IteratorAggregate
     }
 
     /**
-     * The field under validation must be present but can be empty *only if* all the other specified fields are present
-     * and not empty.
+     * The field under validation must be present *only if* all the other specified fields are present.
+     *
+     * @link https://laravel.com/docs/11.x/validation#rule-present-with-all
      */
     public function presentWithAll(string ...$field): self
     {
@@ -1088,7 +1096,7 @@ class RuleSet implements Arrayable, IteratorAggregate
     }
 
     /**
-     * The field under validation must be present and not empty if the `field` field is equal to yes, on, 1, "1", true,
+     * The field under validation must be present and not empty if the *field* field is equal to yes, on, 1, "1", true,
      * or "true".
      *
      * @link https://laravel.com/docs/11.x/validation#rule-required-if-accepted
@@ -1115,7 +1123,7 @@ class RuleSet implements Arrayable, IteratorAggregate
     }
 
     /**
-     * The field under validation must be present and not empty if the `field` field is equal to "no", "off", 0, "0",
+     * The field under validation must be present and not empty if the *field* field is equal to "no", "off", 0, "0",
      * false, or "false".
      *
      * @link https://laravel.com/docs/11.x/validation#rule-required-if-declined
