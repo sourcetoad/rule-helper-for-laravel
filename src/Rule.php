@@ -685,7 +685,8 @@ class Rule
     }
 
     /**
-     * The field under validation must be less than or equal to a maximum *value*.
+     * The field under validation must be less than or equal to a maximum *value*. Strings, numerics, arrays, and files
+     * are evaluated in the same fashion as the *size* rule.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-max
      */
@@ -726,7 +727,8 @@ class Rule
     }
 
     /**
-     * The field under validation must have a minimum *value*.
+     * The field under validation must have a minimum *value*. Strings, numerics, arrays, and files are evaluated in the
+     * same fashion as the *size* rule.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-min
      */
