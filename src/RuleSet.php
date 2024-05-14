@@ -192,7 +192,7 @@ class RuleSet implements Arrayable, IteratorAggregate
      *
      * @link https://laravel.com/docs/11.x/validation#rule-array
      */
-    public function array(string ...$requiredKey): self
+    public function array(BackedEnum|UnitEnum|string ...$requiredKey): self
     {
         return $this->rule(Rule::array(...$requiredKey));
     }

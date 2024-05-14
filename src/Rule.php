@@ -14,6 +14,7 @@ use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\ConditionalRules;
 use Illuminate\Validation\Rule as LaravelRule;
+use Illuminate\Validation\Rules\ArrayRule;
 use Illuminate\Validation\Rules\Can;
 use Illuminate\Validation\Rules\Dimensions;
 use Illuminate\Validation\Rules\Enum;
@@ -117,13 +118,13 @@ class Rule
      *
      * @link https://laravel.com/docs/11.x/validation#rule-array
      */
-    public static function array(string ...$requiredKey): string
+    public static function array(BackedEnum|UnitEnum|string ...$requiredKey): ArrayRule
     {
         if (count($requiredKey)) {
-            return 'array:'.implode(',', $requiredKey);
+            return LaravelRule::array($requiredKey);
         }
 
-        return 'array';
+        return LaravelRule::array();
     }
 
     /**

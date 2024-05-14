@@ -304,6 +304,28 @@ class RuleTest extends TestCase
                 ],
                 'fails' => true,
             ],
+            'array with enum keys valid' => [
+                'data' => [
+                    'field' => [
+                        ExampleStringEnum::Valid->value => 'value',
+                    ],
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->array('what', ExampleStringEnum::Valid),
+                ],
+                'fails' => false,
+            ],
+            'array with enum keys invalid' => [
+                'data' => [
+                    'field' => [
+                        ExampleStringEnum::Valid->value => 'value',
+                    ],
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->array(ExampleStringEnum::Another),
+                ],
+                'fails' => true,
+            ],
             'ascii valid' => [
                 'data' => 'Ascii',
                 'rules' => fn() => RuleSet::create()->ascii(),
