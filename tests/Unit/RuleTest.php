@@ -519,6 +519,42 @@ class RuleTest extends TestCase
                 ],
                 'fails' => true,
             ],
+            'contains valid' => [
+                'data' => [
+                    'field' => ['a', 'b', 'c'],
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->contains('b', 'c'),
+                ],
+                'fails' => false,
+            ],
+            'contains invalid' => [
+                'data' => [
+                    'field' => ['a', 'b', 'c'],
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->contains('b', 'c', 'd'),
+                ],
+                'fails' => true,
+            ],
+            'contains valid not strict' => [
+                'data' => [
+                    'field' => ['1', '2'],
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->contains(1),
+                ],
+                'fails' => false,
+            ],
+            'contains invalid not array' => [
+                'data' => [
+                    'field' => 'what',
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->contains('w'),
+                ],
+                'fails' => true,
+            ],
             'currentPassword valid' => [
                 'data' => 'password-one',
                 'rules' => function () {

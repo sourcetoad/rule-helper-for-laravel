@@ -209,6 +209,16 @@ class Rule
     }
 
     /**
+     * The field under validation must be an array that contains all of the given parameter values.
+     *
+     * @link https://laravel.com/docs/11.x/validation#rule-contains
+     */
+    public static function contains(mixed ...$value): string
+    {
+        return 'contains:'.implode(',', $value);
+    }
+
+    /**
      * The field under validation must match the authenticated user's password.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-current-password
