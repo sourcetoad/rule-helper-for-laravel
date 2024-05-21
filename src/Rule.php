@@ -14,6 +14,7 @@ use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\ConditionalRules;
 use Illuminate\Validation\Rule as LaravelRule;
+use Illuminate\Validation\Rules\ArrayRule;
 use Illuminate\Validation\Rules\Can;
 use Illuminate\Validation\Rules\Dimensions;
 use Illuminate\Validation\Rules\Enum;
@@ -117,13 +118,13 @@ class Rule
      *
      * @link https://laravel.com/docs/11.x/validation#rule-array
      */
-    public static function array(string ...$requiredKey): string
+    public static function array(BackedEnum|UnitEnum|string ...$requiredKey): ArrayRule
     {
         if (count($requiredKey)) {
-            return 'array:'.implode(',', $requiredKey);
+            return LaravelRule::array($requiredKey);
         }
 
-        return 'array';
+        return LaravelRule::array();
     }
 
     /**
@@ -177,7 +178,8 @@ class Rule
     }
 
     /**
-     * The field under validation must be able to be cast as boolean.
+     * The field under validation must be able to be cast as a boolean. Accepted input are true, false, 1, 0, "1", and
+     * "0".
      *
      * @link https://laravel.com/docs/11.x/validation#rule-boolean
      */
@@ -204,6 +206,16 @@ class Rule
     public static function confirmed(): string
     {
         return 'confirmed';
+    }
+
+    /**
+     * The field under validation must be an array that contains all of the given parameter values.
+     *
+     * @link https://laravel.com/docs/11.x/validation#rule-contains
+     */
+    public static function contains(mixed ...$value): string
+    {
+        return 'contains:'.implode(',', $value);
     }
 
     /**
@@ -685,7 +697,8 @@ class Rule
     }
 
     /**
-     * The field under validation must be less than or equal to a maximum *value*.
+     * The field under validation must be less than or equal to a maximum *value*. Strings, numerics, arrays, and files
+     * are evaluated in the same fashion as the *size* rule.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-max
      */
@@ -726,7 +739,8 @@ class Rule
     }
 
     /**
-     * The field under validation must have a minimum *value*.
+     * The field under validation must have a minimum *value*. Strings, numerics, arrays, and files are evaluated in the
+     * same fashion as the *size* rule.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-min
      */

@@ -192,7 +192,7 @@ class RuleSet implements Arrayable, IteratorAggregate
      *
      * @link https://laravel.com/docs/11.x/validation#rule-array
      */
-    public function array(string ...$requiredKey): self
+    public function array(BackedEnum|UnitEnum|string ...$requiredKey): self
     {
         return $this->rule(Rule::array(...$requiredKey));
     }
@@ -248,7 +248,8 @@ class RuleSet implements Arrayable, IteratorAggregate
     }
 
     /**
-     * The field under validation must be able to be cast as boolean.
+     * The field under validation must be able to be cast as a boolean. Accepted input are true, false, 1, 0, "1", and
+     * "0".
      *
      * @link https://laravel.com/docs/11.x/validation#rule-boolean
      */
@@ -275,6 +276,16 @@ class RuleSet implements Arrayable, IteratorAggregate
     public function confirmed(): self
     {
         return $this->rule(Rule::confirmed());
+    }
+
+    /**
+     * The field under validation must be an array that contains all of the given parameter values.
+     *
+     * @link https://laravel.com/docs/11.x/validation#rule-contains
+     */
+    public function contains(mixed ...$value): self
+    {
+        return $this->rule(Rule::contains(...$value));
     }
 
     /**
@@ -768,7 +779,8 @@ class RuleSet implements Arrayable, IteratorAggregate
     }
 
     /**
-     * The field under validation must be less than or equal to a maximum *value*.
+     * The field under validation must be less than or equal to a maximum *value*. Strings, numerics, arrays, and files
+     * are evaluated in the same fashion as the *size* rule.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-max
      */
@@ -809,7 +821,8 @@ class RuleSet implements Arrayable, IteratorAggregate
     }
 
     /**
-     * The field under validation must have a minimum *value*.
+     * The field under validation must have a minimum *value*. Strings, numerics, arrays, and files are evaluated in the
+     * same fashion as the *size* rule.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-min
      */

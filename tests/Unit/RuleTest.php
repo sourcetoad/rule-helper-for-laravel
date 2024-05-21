@@ -304,6 +304,28 @@ class RuleTest extends TestCase
                 ],
                 'fails' => true,
             ],
+            'array with enum keys valid' => [
+                'data' => [
+                    'field' => [
+                        ExampleStringEnum::Valid->value => 'value',
+                    ],
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->array('what', ExampleStringEnum::Valid),
+                ],
+                'fails' => false,
+            ],
+            'array with enum keys invalid' => [
+                'data' => [
+                    'field' => [
+                        ExampleStringEnum::Valid->value => 'value',
+                    ],
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->array(ExampleStringEnum::Another),
+                ],
+                'fails' => true,
+            ],
             'ascii valid' => [
                 'data' => 'Ascii',
                 'rules' => fn() => RuleSet::create()->ascii(),
@@ -494,6 +516,42 @@ class RuleTest extends TestCase
                 ],
                 'rules' => fn() => [
                     'field' => RuleSet::create()->confirmed(),
+                ],
+                'fails' => true,
+            ],
+            'contains valid' => [
+                'data' => [
+                    'field' => ['a', 'b', 'c'],
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->contains('b', 'c'),
+                ],
+                'fails' => false,
+            ],
+            'contains invalid' => [
+                'data' => [
+                    'field' => ['a', 'b', 'c'],
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->contains('b', 'c', 'd'),
+                ],
+                'fails' => true,
+            ],
+            'contains valid not strict' => [
+                'data' => [
+                    'field' => ['1', '2'],
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->contains(1),
+                ],
+                'fails' => false,
+            ],
+            'contains invalid not array' => [
+                'data' => [
+                    'field' => 'what',
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->contains('w'),
                 ],
                 'fails' => true,
             ],
