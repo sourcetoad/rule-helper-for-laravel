@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Validator;
 use Sourcetoad\RuleHelper\Contracts\DefinedRuleSets;
 use Sourcetoad\RuleHelper\RuleHelperServiceProvider;
 use Sourcetoad\RuleHelper\RuleSet;
+use Sourcetoad\RuleHelper\Tests\Stubs\ExampleNonBackedEnum;
+use Sourcetoad\RuleHelper\Tests\Stubs\ExampleStringDuplicateEnum;
+use Sourcetoad\RuleHelper\Tests\Stubs\ExampleStringEnum;
 use Sourcetoad\RuleHelper\Tests\TestCase;
 
 class DefinedRuleSetsTest extends TestCase
@@ -87,5 +90,32 @@ class DefinedRuleSetsTest extends TestCase
 
         // Assert
         $this->assertSame(['required', 'email'], $ruleSet->toArray());
+    }
+
+    public function testWorksWithNonBackedEnums(): void
+    {
+        // Arrange
+        RuleSet::define(ExampleNonBackedEnum::Value, RuleSet::create()->email());
+
+        // Act
+        $ruleSet = RuleSet::useDefined(ExampleNonBackedEnum::Value);
+
+        // Assert
+        $this->assertSame(['email'], $ruleSet->toArray());
+    }
+
+    public function testDefinedEnumsWithDuplicateValuesAreTreatedAsDifferent(): void
+    {
+        // Arrange
+        RuleSet::define(ExampleStringEnum::Another, RuleSet::create()->email());
+        RuleSet::define(ExampleStringDuplicateEnum::Another, RuleSet::create()->required());
+
+        // Act
+        $ruleSetOne = RuleSet::useDefined(ExampleStringEnum::Another);
+        $ruleSetTwo = RuleSet::useDefined(ExampleStringDuplicateEnum::Another);
+
+        // Assert
+        $this->assertSame(['email'], $ruleSetOne->toArray());
+        $this->assertSame(['required'], $ruleSetTwo->toArray());
     }
 }
