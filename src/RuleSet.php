@@ -64,7 +64,7 @@ class RuleSet implements Arrayable, IteratorAggregate
     /**
      * Defines a rule set to be re-used later.
      */
-    public static function define(string $name, RuleSet $ruleSet): void
+    public static function define(string|BackedEnum|UnitEnum $name, RuleSet $ruleSet): void
     {
         static::getDefinedRuleSets()->define($name, $ruleSet);
     }
@@ -72,7 +72,7 @@ class RuleSet implements Arrayable, IteratorAggregate
     /**
      * Uses a previously defined rule set.
      */
-    public static function useDefined(string $name): RuleSet
+    public static function useDefined(string|BackedEnum|UnitEnum $name): RuleSet
     {
         return static::getDefinedRuleSets()->useDefined($name);
     }
