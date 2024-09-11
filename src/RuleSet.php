@@ -273,9 +273,9 @@ class RuleSet implements Arrayable, IteratorAggregate
      *
      * @link https://laravel.com/docs/11.x/validation#rule-confirmed
      */
-    public function confirmed(): self
+    public function confirmed(?string $confirmationFieldName = null): self
     {
-        return $this->rule(Rule::confirmed());
+        return $this->rule(Rule::confirmed($confirmationFieldName));
     }
 
     /**

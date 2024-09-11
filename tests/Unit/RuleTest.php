@@ -519,6 +519,28 @@ class RuleTest extends TestCase
                 ],
                 'fails' => true,
             ],
+            'confirmed with override valid' => [
+                'data' => [
+                    'field' => 'value',
+                    'fieldConfirmation' => 'value',
+                    'field_confirmation' => 'other-value',
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->confirmed('fieldConfirmation'),
+                ],
+                'fails' => false,
+            ],
+            'confirmed with override invalid' => [
+                'data' => [
+                    'field' => 'value',
+                    'fieldConfirmation' => 'other-value',
+                    'field_confirmation' => 'value',
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->confirmed('fieldConfirmation'),
+                ],
+                'fails' => true,
+            ],
             'contains valid' => [
                 'data' => [
                     'field' => ['a', 'b', 'c'],

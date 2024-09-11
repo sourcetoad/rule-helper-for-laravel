@@ -203,8 +203,12 @@ class Rule
      *
      * @link https://laravel.com/docs/11.x/validation#rule-confirmed
      */
-    public static function confirmed(): string
+    public static function confirmed(?string $confirmationFieldName = null): string
     {
+        if ($confirmationFieldName !== null) {
+            return 'confirmed:'.$confirmationFieldName;
+        }
+
         return 'confirmed';
     }
 
