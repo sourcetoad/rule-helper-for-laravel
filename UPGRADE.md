@@ -2,6 +2,10 @@
 
 ## v5
 
+### Upgrading from v5.2 to v5.3
+
+- Minimum Laravel version increased from `11.8` to `11.23.2`.
+
 ### Upgrading from v5.1 to v5.2
 
 - Minimum Laravel version increased from `11.5` to `11.8`.
