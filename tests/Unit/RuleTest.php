@@ -9,12 +9,12 @@ use Carbon\CarbonImmutable;
 use Closure;
 use DateTime;
 use Illuminate\Auth\AuthManager;
-use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Contracts\Validation\InvokableRule;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Auth\User;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Dimensions;
@@ -478,7 +478,11 @@ class RuleTest extends TestCase
                 'data' => 'value-a',
                 'rules' => function () {
                     $mockUser = new User;
-                    $this->mockGateAllows(true, 'modify', [User::class, $mockUser, 'value-a']);
+
+                    Gate::expects('allows')
+                        ->once()
+                        ->with('modify', [User::class, $mockUser, 'value-a'])
+                        ->andReturn(true);
 
                     return RuleSet::create()->can('modify', User::class, $mockUser);
                 },
@@ -488,7 +492,11 @@ class RuleTest extends TestCase
                 'data' => 'value-b',
                 'rules' => function () {
                     $mockUser = new User;
-                    $this->mockGateAllows(false, 'modify', [User::class, $mockUser, 'value-b']);
+
+                    Gate::expects('allows')
+                        ->once()
+                        ->with('modify', [User::class, $mockUser, 'value-b'])
+                        ->andReturn(false);
 
                     return RuleSet::create()->can('modify', User::class, $mockUser);
                 },
@@ -3113,19 +3121,5 @@ class RuleTest extends TestCase
                 return $this->extension;
             }
         };
-    }
-
-    private function mockGateAllows(bool $return, ...$arguments): void
-    {
-        $gate = $this->mock(Gate::class);
-
-        $gate
-            ->expects('allows')
-            ->once()
-            ->with(...$arguments)
-            ->andReturn($return)
-            ->getMock();
-
-        $this->app->instance(Gate::class, $gate);
     }
 }
