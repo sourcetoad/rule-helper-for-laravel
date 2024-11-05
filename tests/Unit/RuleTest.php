@@ -40,7 +40,7 @@ class RuleTest extends TestCase
     }
 
     #[DataProvider('ruleDataProvider')]
-    public function testRuleIntegration($data, Closure $rules, bool $fails, ?array $errors = null): void
+    public function testRuleIntegration(mixed $data, Closure $rules, bool $fails, ?array $errors = null): void
     {
         // Arrange
         if ($data instanceof Closure) {
