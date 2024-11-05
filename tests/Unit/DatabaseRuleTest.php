@@ -9,6 +9,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule as LaravelRule;
 use Illuminate\Validation\Rules\Exists;
 use Illuminate\Validation\Rules\Unique;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -200,6 +201,51 @@ class DatabaseRuleTest extends TestCase
                         'users',
                         'email',
                         fn(Unique $rule) => $rule->where('name', 'test')
+                    ),
+                ],
+                'fails' => true,
+            ],
+            'not unique with modifier that does not return' => [
+                'createData' => function () {
+                    $email = $this->faker->email;
+                    DB::table('users')->insert([
+                        'name' => 'modified',
+                        'email' => $email,
+                        'password' => $this->faker->password,
+                    ]);
+
+                    return ['value' => $email];
+                },
+                'createRules' => fn() => [
+                    'value' => RuleSet::create()->unique(
+                        'users',
+                        'email',
+                        function (Unique $rule) {
+                            $rule->where('name', 'modified');
+                        }
+                    ),
+                ],
+                'fails' => true,
+            ],
+            'not unique with modifier that overwrites' => [
+                'createData' => function () {
+                    $email = $this->faker->email;
+                    DB::table('users')->insert([
+                        'name' => 'overwritten',
+                        'email' => $email,
+                        'password' => $this->faker->password,
+                    ]);
+
+                    return ['value' => $email];
+                },
+                'createRules' => fn() => [
+                    'value' => RuleSet::create()->unique(
+                        'invalid_users',
+                        'email',
+                        function () {
+                            return LaravelRule::unique('users', 'email')
+                                ->where('name', 'overwritten');
+                        }
                     ),
                 ],
                 'fails' => true,
