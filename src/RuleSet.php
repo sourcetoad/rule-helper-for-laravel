@@ -502,7 +502,7 @@ class RuleSet implements Arrayable, IteratorAggregate
      * methods if a true boolean is passed in or the passed in closure returns true.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-exclude-if
-     * @param callable|bool $callback
+     * @param bool|callable(): bool $callback
      */
     public function excludeIf(mixed $callback): self
     {
