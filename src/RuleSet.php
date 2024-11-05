@@ -405,14 +405,14 @@ class RuleSet implements Arrayable, IteratorAggregate
      *
      * @link https://laravel.com/docs/11.x/validation#rule-dimensions
      * @param array<string, int|float> $constraints
-     * @param ?callable(\Illuminate\Validation\Rules\Dimensions): void $modifier
+     * @param ?callable(\Illuminate\Validation\Rules\Dimensions): (\Illuminate\Validation\Rules\Dimensions|void) $modifier
      */
     public function dimensions(array $constraints = [], ?callable $modifier = null): self
     {
         $rule = Rule::dimensions($constraints);
 
         if ($modifier) {
-            $modifier($rule);
+            $rule = $this->modify($rule, $modifier);
         }
 
         return $this->rule($rule);
@@ -473,14 +473,14 @@ class RuleSet implements Arrayable, IteratorAggregate
      *
      * @link https://laravel.com/docs/11.x/validation#rule-enum
      * @param class-string $type
-     * @param ?callable(\Illuminate\Validation\Rules\Enum): void $modifier
+     * @param ?callable(\Illuminate\Validation\Rules\Enum): (\Illuminate\Validation\Rules\Enum|void) $modifier
      */
     public function enum(string $type, ?callable $modifier = null): self
     {
         $rule = Rule::enum($type);
 
         if ($modifier) {
-            $modifier($rule);
+            $rule = $this->modify($rule, $modifier);
         }
 
         return $this->rule($rule);
@@ -562,14 +562,14 @@ class RuleSet implements Arrayable, IteratorAggregate
      * {@see RuleSet::rule} or pass a callback which accepts an {@see \Illuminate\Validation\Rules\Exists} instance.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-exists
-     * @param ?callable(\Illuminate\Validation\Rules\Exists): void $modifier
+     * @param ?callable(\Illuminate\Validation\Rules\Exists): (\Illuminate\Validation\Rules\Exists|void) $modifier
      */
     public function exists(string $table, string $column = 'NULL', ?callable $modifier = null): self
     {
         $rule = Rule::exists($table, $column);
 
         if ($modifier) {
-            $modifier($rule);
+            $rule = $this->modify($rule, $modifier);
         }
 
         return $this->rule($rule);
@@ -951,14 +951,14 @@ class RuleSet implements Arrayable, IteratorAggregate
      * use {@see Rule::password} with {@see RuleSet::rule}, or pass a callback which accepts a {@see Password} instance.
      *
      * @link https://laravel.com/docs/11.x/validation#validating-passwords
-     * @param ?callable(\Illuminate\Validation\Rules\Password): void $modifier
+     * @param ?callable(\Illuminate\Validation\Rules\Password): (\Illuminate\Validation\Rules\Password|void) $modifier
      */
     public function password(?int $size = null, ?callable $modifier = null): self
     {
         $rule = Rule::password($size);
 
         if ($modifier) {
-            $modifier($rule);
+            $rule = $this->modify($rule, $modifier);
         }
 
         return $this->rule($rule);
@@ -1294,14 +1294,14 @@ class RuleSet implements Arrayable, IteratorAggregate
      * {@see RuleSet::rule} or pass a callback which accepts a {@see \Illuminate\Validation\Rules\Unique} instance.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-unique
-     * @param ?callable(\Illuminate\Validation\Rules\Unique): void $modifier
+     * @param ?callable(\Illuminate\Validation\Rules\Unique): (\Illuminate\Validation\Rules\Unique|void) $modifier
      */
     public function unique(string $table, string $column = 'NULL', ?callable $modifier = null): self
     {
         $rule = Rule::unique($table, $column);
 
         if ($modifier) {
-            $modifier($rule);
+            $rule = $this->modify($rule, $modifier);
         }
 
         return $this->rule($rule);
@@ -1352,5 +1352,17 @@ class RuleSet implements Arrayable, IteratorAggregate
     protected static function getDefinedRuleSets(): Contracts\DefinedRuleSets
     {
         return resolve(Contracts\DefinedRuleSets::class);
+    }
+
+    /**
+     * @param T $rule
+     * @param callable(T): (T|void) $modifier
+     * @return T
+     * @template T
+     */
+    protected function modify($rule, callable $modifier)
+    {
+        /** @var T */
+        return $modifier($rule) ?: $rule;
     }
 }
