@@ -404,7 +404,7 @@ class RuleSet implements Arrayable, IteratorAggregate
      * pass a callback which accepts a {@see \Illuminate\Validation\Rules\Dimensions} instance.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-dimensions
-     * @param array<string, int|float> $constraints
+     * @param array<string, int|float|string> $constraints
      * @param ?callable(\Illuminate\Validation\Rules\Dimensions): (\Illuminate\Validation\Rules\Dimensions|void) $modifier
      */
     public function dimensions(array $constraints = [], ?callable $modifier = null): self

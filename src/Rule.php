@@ -339,7 +339,7 @@ class Rule
      * like *3/2* or a float like *1.5*.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-dimensions
-     * @param array<string, int|float> $constraints
+     * @param array<string, int|float|string> $constraints
      */
     public static function dimensions(array $constraints = []): Dimensions
     {
