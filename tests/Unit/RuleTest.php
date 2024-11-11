@@ -761,6 +761,16 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->dateFormat('d-M-Y'),
                 'fails' => true,
             ],
+            'dateFormat of many valid' => [
+                'data' => '2021-Jan-01',
+                'rules' => fn() => RuleSet::create()->dateFormat('d-M-Y', 'Y-M-d'),
+                'fails' => false,
+            ],
+            'dateFormat of many invalid' => [
+                'data' => '2021-01-01',
+                'rules' => fn() => RuleSet::create()->dateFormat('d-M-Y', 'Y-M-d'),
+                'fails' => true,
+            ],
             'decimal valid' => [
                 'data' => '1.1',
                 'rules' => fn() => RuleSet::create()->decimal(1),

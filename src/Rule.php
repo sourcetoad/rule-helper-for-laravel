@@ -289,15 +289,15 @@ class Rule
     }
 
     /**
-     * The field under validation must match the given *format*.
+     * The field under validation must match one of the given formats. You should use **either** *date* or *dateFormat*
+     * when validating a field, not both. This validation rule supports all formats supported by PHP's *DateTime* class.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-date-format
      * @link https://www.php.net/manual/en/datetime.format.php
-     * @param string $dateFormat A format supported by the *DateTime* class
      */
-    public static function dateFormat(string $dateFormat): string
+    public static function dateFormat(string ...$dateFormat): string
     {
-        return 'date_format:'.$dateFormat;
+        return 'date_format:'.implode(',', $dateFormat);
     }
 
     /**
