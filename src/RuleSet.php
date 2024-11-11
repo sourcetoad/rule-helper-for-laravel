@@ -1286,14 +1286,17 @@ class RuleSet implements Arrayable, IteratorAggregate
     }
 
     /**
-     * The field under validation must be a valid timezone identifier according to the *timezone_identifiers_list* PHP
-     * function.
+     * The field under validation must be a valid timezone identifier according to the
+     * {@see DateTimeZone::listIdentifiers} method.
      *
+     * @param ?string $timezoneGroup One of the {@see DateTimeZone} class constant names.
+     * @param ?string $countryCode A two-letter (uppercase) ISO 3166-1 compatible country code. Note: This option is only used when timezoneGroup is set to "per_country".
      * @link https://laravel.com/docs/11.x/validation#rule-timezone
+     * @link https://www.php.net/manual/en/datetimezone.listidentifiers.php
      */
-    public function timezone(): self
+    public function timezone(?string $timezoneGroup = null, ?string $countryCode = null): self
     {
-        return $this->rule(Rule::timezone());
+        return $this->rule(Rule::timezone($timezoneGroup, $countryCode));
     }
 
     /**

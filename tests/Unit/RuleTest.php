@@ -2771,9 +2771,34 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->timezone(),
                 'fails' => false,
             ],
+            'timezone valid europe' => [
+                'data' => 'Europe/London',
+                'rules' => fn() => RuleSet::create()->timezone(),
+                'fails' => false,
+            ],
             'timezone invalid' => [
                 'data' => 'not a timezone',
                 'rules' => fn() => RuleSet::create()->timezone(),
+                'fails' => true,
+            ],
+            'timezone constrained to country valid' => [
+                'data' => 'America/New_York',
+                'rules' => fn() => RuleSet::create()->timezone('america'),
+                'fails' => false,
+            ],
+            'timezone constrained to country invalid' => [
+                'data' => 'Europe/London',
+                'rules' => fn() => RuleSet::create()->timezone('america'),
+                'fails' => true,
+            ],
+            'timezone constrained to country code valid' => [
+                'data' => 'America/New_York',
+                'rules' => fn() => RuleSet::create()->timezone('per_country', 'us'),
+                'fails' => false,
+            ],
+            'timezone constrained to country code invalid' => [
+                'data' => 'Europe/London',
+                'rules' => fn() => RuleSet::create()->timezone('per_country', 'us'),
                 'fails' => true,
             ],
             'ulid valid' => [
