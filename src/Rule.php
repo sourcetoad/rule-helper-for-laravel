@@ -64,23 +64,28 @@ class Rule
     }
 
     /**
-     * The field under validation must be a value after a given date.
+     * The field under validation must be a value after a given date. If a string is used, the dates will be passed into
+     * the *strtotime* PHP function in order to be converted to a valid *DateTime* instance.
+     *
+     * Instead of passing a date string to be evaluated by *strtotime*, you may specify another field to compare against
+     * the date.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-after
      */
-    public static function after(string|DateTimeInterface $date): string
+    public static function after(string|DateTimeInterface $dateOrField): string
     {
-        return 'after:'.static::convertDateForRule($date);
+        return 'after:'.static::convertDateForRule($dateOrField);
     }
 
     /**
-     * The field under validation must be a value after or equal to the given date.
+     * The field under validation must be a value after or equal to the given date. For more information, see the
+     * {@see Rule::after} rule.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-after-or-equal
      */
-    public static function afterOrEqual(string|DateTimeInterface $date): string
+    public static function afterOrEqual(string|DateTimeInterface $dateOrField): string
     {
-        return 'after_or_equal:'.static::convertDateForRule($date);
+        return 'after_or_equal:'.static::convertDateForRule($dateOrField);
     }
 
     /**
@@ -148,23 +153,27 @@ class Rule
     }
 
     /**
-     * The field under validation must be a value preceding the given date.
+     * The field under validation must be a value preceding the given date. The dates will be passed into the PHP
+     * *strtotime* function in order to be converted into a valid *DateTime* instance. In addition, like the
+     * {@see Rule::after} rule, the name of another field under validation may be supplied as the value of date.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-before
      */
-    public static function before(string|DateTimeInterface $date): string
+    public static function before(string|DateTimeInterface $dateOrField): string
     {
-        return 'before:'.static::convertDateForRule($date);
+        return 'before:'.static::convertDateForRule($dateOrField);
     }
 
     /**
-     * The field under validation must be a value preceding or equal to the given date.
+     * The field under validation must be a value preceding or equal to the given date. The dates will be passed into
+     * the PHP *strtotime* function in order to be converted into a valid *DateTime* instance. In addition, like the
+     * {@see Rule::after} rule, the name of another field under validation may be supplied as the value of date.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-before-or-equal
      */
-    public static function beforeOrEqual(string|DateTimeInterface $date): string
+    public static function beforeOrEqual(string|DateTimeInterface $dateOrField): string
     {
-        return 'before_or_equal:'.static::convertDateForRule($date);
+        return 'before_or_equal:'.static::convertDateForRule($dateOrField);
     }
 
     /**

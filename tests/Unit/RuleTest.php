@@ -218,6 +218,26 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->after(CarbonImmutable::parse('2021-01-01')),
                 'fails' => true,
             ],
+            'after valid based on field' => [
+                'data' => [
+                    'field-a' => '2021-01-02',
+                    'field-b' => '2021-01-01',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->after('field-b'),
+                ],
+                'fails' => false,
+            ],
+            'after invalid based on field' => [
+                'data' => [
+                    'field-a' => '2021-01-01',
+                    'field-b' => '2021-01-02',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->after('field-b'),
+                ],
+                'fails' => true,
+            ],
             'afterOrEqual valid' => [
                 'data' => '2021-01-02',
                 'rules' => fn() => RuleSet::create()->afterOrEqual('2021-01-02'),
@@ -236,6 +256,26 @@ class RuleTest extends TestCase
             'afterOrEqual invalid with DateTime' => [
                 'data' => '2021-01-01',
                 'rules' => fn() => RuleSet::create()->afterOrEqual(new DateTime('2021-01-02')),
+                'fails' => true,
+            ],
+            'afterOrEqual valid based on field' => [
+                'data' => [
+                    'field-a' => '2021-01-02',
+                    'field-b' => '2021-01-02',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->afterOrEqual('field-b'),
+                ],
+                'fails' => false,
+            ],
+            'afterOrEqual invalid based on field' => [
+                'data' => [
+                    'field-a' => '2021-01-02',
+                    'field-b' => '2021-01-03',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->afterOrEqual('field-b'),
+                ],
                 'fails' => true,
             ],
             'alpha valid' => [
@@ -392,6 +432,26 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->before(CarbonImmutable::parse('2021-01-02')),
                 'fails' => true,
             ],
+            'before valid based on field' => [
+                'data' => [
+                    'field-a' => '2021-01-01',
+                    'field-b' => '2021-01-02',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->before('field-b'),
+                ],
+                'fails' => false,
+            ],
+            'before invalid based on field' => [
+                'data' => [
+                    'field-a' => '2021-01-02',
+                    'field-b' => '2021-01-01',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->before('field-b'),
+                ],
+                'fails' => true,
+            ],
             'beforeOrEqual valid' => [
                 'data' => '2021-01-01',
                 'rules' => fn() => RuleSet::create()->beforeOrEqual('2021-01-01'),
@@ -410,6 +470,26 @@ class RuleTest extends TestCase
             'beforeOrEqual invalid with DateTime' => [
                 'data' => '2021-01-02',
                 'rules' => fn() => RuleSet::create()->beforeOrEqual(new DateTime('2021-01-01')),
+                'fails' => true,
+            ],
+            'beforeOrEqual valid based on field' => [
+                'data' => [
+                    'field-a' => '2021-01-02',
+                    'field-b' => '2021-01-02',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->beforeOrEqual('field-b'),
+                ],
+                'fails' => false,
+            ],
+            'beforeOrEqual invalid based on field' => [
+                'data' => [
+                    'field-a' => '2021-01-03',
+                    'field-b' => '2021-01-02',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->beforeOrEqual('field-b'),
+                ],
                 'fails' => true,
             ],
             'between valid with float' => [
