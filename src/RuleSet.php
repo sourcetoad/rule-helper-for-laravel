@@ -163,33 +163,44 @@ class RuleSet implements Arrayable, IteratorAggregate
     }
 
     /**
-     * The field under validation must be entirely alphabetic characters.
+     * The field under validation must be entirely Unicode alphabetic characters contained in *\p{L}* and *\p{M}*.
+     *
+     * To restrict this validation rule to characters in the ASCII range (*a-z* and *A-Z*), use the *limitToAscii*
+     * argument.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-alpha
      */
-    public function alpha(): self
+    public function alpha(?bool $limitToAscii = null): self
     {
-        return $this->rule(Rule::alpha());
+        return $this->rule(Rule::alpha($limitToAscii));
     }
 
     /**
-     * The field under validation may have alpha-numeric characters, as well as dashes and underscores.
+     * The field under validation must be entirely Unicode alpha-numeric characters contained in *\p{L}*, *\p{M}*,
+     * *\p{N}*, as well as ASCII dashes (*-*) and ASCII underscores (*_*).
+     *
+     * To restrict this validation rule to characters in the ASCII range (*a-z* and *A-Z*), use the *limitToAscii*
+     * argument.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-alpha-dash
      */
-    public function alphaDash(): self
+    public function alphaDash(?bool $limitToAscii = null): self
     {
-        return $this->rule(Rule::alphaDash());
+        return $this->rule(Rule::alphaDash($limitToAscii));
     }
 
     /**
-     * The field under validation must be entirely alpha-numeric characters.
+     * The field under validation must be entirely Unicode alpha-numeric characters contained in *\p{L}*, *\p{M}*, and
+     * *\p{N}*.
+     *
+     * To restrict this validation rule to characters in the ASCII range (*a-z* and *A-Z*), use the *limitToAscii*
+     * argument.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-alpha-num
      */
-    public function alphaNum(): self
+    public function alphaNum(?bool $limitToAscii = null): self
     {
-        return $this->rule(Rule::alphaNum());
+        return $this->rule(Rule::alphaNum($limitToAscii));
     }
 
     /**

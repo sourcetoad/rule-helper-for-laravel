@@ -279,33 +279,63 @@ class RuleTest extends TestCase
                 'fails' => true,
             ],
             'alpha valid' => [
-                'data' => 'alpha',
+                'data' => 'álpha',
                 'rules' => fn() => RuleSet::create()->alpha(),
                 'fails' => false,
             ],
             'alpha invalid' => [
-                'data' => 'not-alpha',
+                'data' => 'not-álpha',
                 'rules' => fn() => RuleSet::create()->alpha(),
                 'fails' => true,
             ],
+            'alpha limited to ascii valid' => [
+                'data' => 'alpha',
+                'rules' => fn() => RuleSet::create()->alpha(limitToAscii: true),
+                'fails' => false,
+            ],
+            'alpha limited to ascii invalid' => [
+                'data' => 'álpha',
+                'rules' => fn() => RuleSet::create()->alpha(limitToAscii: true),
+                'fails' => true,
+            ],
             'alphaDash valid' => [
-                'data' => 'still-alpha',
+                'data' => 'still-álpha',
                 'rules' => fn() => RuleSet::create()->alphaDash(),
                 'fails' => false,
             ],
             'alphaDash invalid' => [
-                'data' => 'not/alpha',
+                'data' => 'not/álpha',
                 'rules' => fn() => RuleSet::create()->alphaDash(),
                 'fails' => true,
             ],
+            'alphaDash limited to ascii valid' => [
+                'data' => 'still-alpha',
+                'rules' => fn() => RuleSet::create()->alphaDash(limitToAscii: true),
+                'fails' => false,
+            ],
+            'alphaDash limited to ascii invalid' => [
+                'data' => 'not-álpha',
+                'rules' => fn() => RuleSet::create()->alphaDash(limitToAscii: true),
+                'fails' => true,
+            ],
             'alphaNum valid' => [
-                'data' => 'alpha1',
+                'data' => 'álpha1',
                 'rules' => fn() => RuleSet::create()->alphaNum(),
                 'fails' => false,
             ],
             'alphaNum invalid' => [
-                'data' => 'not-alpha1',
+                'data' => 'not-álpha1',
                 'rules' => fn() => RuleSet::create()->alphaNum(),
+                'fails' => true,
+            ],
+            'alphaNum limited to ascii valid' => [
+                'data' => 'alpha1',
+                'rules' => fn() => RuleSet::create()->alphaNum(limitToAscii: true),
+                'fails' => false,
+            ],
+            'alphaNum limited to ascii invalid' => [
+                'data' => 'álpha1',
+                'rules' => fn() => RuleSet::create()->alphaNum(limitToAscii: true),
                 'fails' => true,
             ],
             'array valid' => [
