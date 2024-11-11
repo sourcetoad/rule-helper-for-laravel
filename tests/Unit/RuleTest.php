@@ -2414,6 +2414,35 @@ class RuleTest extends TestCase
                 ],
                 'fails' => true,
             ],
+            'requiredUnless null valid missing' => [
+                'data' => [
+                    'field-a' => '',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->requiredUnless('field-b', null),
+                ],
+                'fails' => false,
+            ],
+            'requiredUnless null valid' => [
+                'data' => [
+                    'field-a' => '',
+                    'field-b' => null,
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->requiredUnless('field-b', null),
+                ],
+                'fails' => false,
+            ],
+            'requiredUnless null invalid' => [
+                'data' => [
+                    'field-a' => '',
+                    'field-b' => 'd',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->requiredUnless('field-b', null),
+                ],
+                'fails' => true,
+            ],
             'requiredWith valid - required' => [
                 'data' => [
                     'field-a' => 'a',

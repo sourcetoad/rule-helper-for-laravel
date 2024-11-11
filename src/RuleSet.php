@@ -1178,11 +1178,13 @@ class RuleSet implements Arrayable, IteratorAggregate
 
     /**
      * The field under validation must be present and not empty unless the *anotherField* field is equal to any
-     * *value*.
+     * *value*. This also means *anotherField* must be present in the request data unless value is *null*. If value is
+     * *null*, the field under validation will be required unless the comparison field is null or the comparison field
+     * is missing from the request data.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-required-unless
      */
-    public function requiredUnless(string $anotherField, string ...$value): self
+    public function requiredUnless(string $anotherField, ?string ...$value): self
     {
         return $this->rule(Rule::requiredUnless($anotherField, ...$value));
     }

@@ -1108,12 +1108,16 @@ class Rule
 
     /**
      * The field under validation must be present and not empty unless the *anotherField* field is equal to any
-     * *value*.
+     * *value*. This also means *anotherField* must be present in the request data unless value is *null*. If value is
+     * *null*, the field under validation will be required unless the comparison field is null or the comparison field
+     * is missing from the request data.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-required-unless
      */
-    public static function requiredUnless(string $anotherField, string ...$value): string
+    public static function requiredUnless(string $anotherField, ?string ...$value): string
     {
+        $value = array_map(fn(?string $value) => $value ?? 'null', $value);
+
         return sprintf('required_unless:%s,%s', $anotherField, implode(',', $value));
     }
 
