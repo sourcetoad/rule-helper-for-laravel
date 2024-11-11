@@ -218,6 +218,26 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->after(CarbonImmutable::parse('2021-01-01')),
                 'fails' => true,
             ],
+            'after valid based on field' => [
+                'data' => [
+                    'field-a' => '2021-01-02',
+                    'field-b' => '2021-01-01',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->after('field-b'),
+                ],
+                'fails' => false,
+            ],
+            'after invalid based on field' => [
+                'data' => [
+                    'field-a' => '2021-01-01',
+                    'field-b' => '2021-01-02',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->after('field-b'),
+                ],
+                'fails' => true,
+            ],
             'afterOrEqual valid' => [
                 'data' => '2021-01-02',
                 'rules' => fn() => RuleSet::create()->afterOrEqual('2021-01-02'),
@@ -238,34 +258,84 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->afterOrEqual(new DateTime('2021-01-02')),
                 'fails' => true,
             ],
+            'afterOrEqual valid based on field' => [
+                'data' => [
+                    'field-a' => '2021-01-02',
+                    'field-b' => '2021-01-02',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->afterOrEqual('field-b'),
+                ],
+                'fails' => false,
+            ],
+            'afterOrEqual invalid based on field' => [
+                'data' => [
+                    'field-a' => '2021-01-02',
+                    'field-b' => '2021-01-03',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->afterOrEqual('field-b'),
+                ],
+                'fails' => true,
+            ],
             'alpha valid' => [
-                'data' => 'alpha',
+                'data' => 'álpha',
                 'rules' => fn() => RuleSet::create()->alpha(),
                 'fails' => false,
             ],
             'alpha invalid' => [
-                'data' => 'not-alpha',
+                'data' => 'not-álpha',
                 'rules' => fn() => RuleSet::create()->alpha(),
                 'fails' => true,
             ],
+            'alpha limited to ascii valid' => [
+                'data' => 'alpha',
+                'rules' => fn() => RuleSet::create()->alpha(limitToAscii: true),
+                'fails' => false,
+            ],
+            'alpha limited to ascii invalid' => [
+                'data' => 'álpha',
+                'rules' => fn() => RuleSet::create()->alpha(limitToAscii: true),
+                'fails' => true,
+            ],
             'alphaDash valid' => [
-                'data' => 'still-alpha',
+                'data' => 'still-álpha',
                 'rules' => fn() => RuleSet::create()->alphaDash(),
                 'fails' => false,
             ],
             'alphaDash invalid' => [
-                'data' => 'not/alpha',
+                'data' => 'not/álpha',
                 'rules' => fn() => RuleSet::create()->alphaDash(),
                 'fails' => true,
             ],
+            'alphaDash limited to ascii valid' => [
+                'data' => 'still-alpha',
+                'rules' => fn() => RuleSet::create()->alphaDash(limitToAscii: true),
+                'fails' => false,
+            ],
+            'alphaDash limited to ascii invalid' => [
+                'data' => 'not-álpha',
+                'rules' => fn() => RuleSet::create()->alphaDash(limitToAscii: true),
+                'fails' => true,
+            ],
             'alphaNum valid' => [
-                'data' => 'alpha1',
+                'data' => 'álpha1',
                 'rules' => fn() => RuleSet::create()->alphaNum(),
                 'fails' => false,
             ],
             'alphaNum invalid' => [
-                'data' => 'not-alpha1',
+                'data' => 'not-álpha1',
                 'rules' => fn() => RuleSet::create()->alphaNum(),
+                'fails' => true,
+            ],
+            'alphaNum limited to ascii valid' => [
+                'data' => 'alpha1',
+                'rules' => fn() => RuleSet::create()->alphaNum(limitToAscii: true),
+                'fails' => false,
+            ],
+            'alphaNum limited to ascii invalid' => [
+                'data' => 'álpha1',
+                'rules' => fn() => RuleSet::create()->alphaNum(limitToAscii: true),
                 'fails' => true,
             ],
             'array valid' => [
@@ -392,6 +462,26 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->before(CarbonImmutable::parse('2021-01-02')),
                 'fails' => true,
             ],
+            'before valid based on field' => [
+                'data' => [
+                    'field-a' => '2021-01-01',
+                    'field-b' => '2021-01-02',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->before('field-b'),
+                ],
+                'fails' => false,
+            ],
+            'before invalid based on field' => [
+                'data' => [
+                    'field-a' => '2021-01-02',
+                    'field-b' => '2021-01-01',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->before('field-b'),
+                ],
+                'fails' => true,
+            ],
             'beforeOrEqual valid' => [
                 'data' => '2021-01-01',
                 'rules' => fn() => RuleSet::create()->beforeOrEqual('2021-01-01'),
@@ -410,6 +500,26 @@ class RuleTest extends TestCase
             'beforeOrEqual invalid with DateTime' => [
                 'data' => '2021-01-02',
                 'rules' => fn() => RuleSet::create()->beforeOrEqual(new DateTime('2021-01-01')),
+                'fails' => true,
+            ],
+            'beforeOrEqual valid based on field' => [
+                'data' => [
+                    'field-a' => '2021-01-02',
+                    'field-b' => '2021-01-02',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->beforeOrEqual('field-b'),
+                ],
+                'fails' => false,
+            ],
+            'beforeOrEqual invalid based on field' => [
+                'data' => [
+                    'field-a' => '2021-01-03',
+                    'field-b' => '2021-01-02',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->beforeOrEqual('field-b'),
+                ],
                 'fails' => true,
             ],
             'between valid with float' => [
@@ -649,6 +759,16 @@ class RuleTest extends TestCase
             'dateFormat invalid' => [
                 'data' => '2021-01-01',
                 'rules' => fn() => RuleSet::create()->dateFormat('d-M-Y'),
+                'fails' => true,
+            ],
+            'dateFormat of many valid' => [
+                'data' => '2021-Jan-01',
+                'rules' => fn() => RuleSet::create()->dateFormat('d-M-Y', 'Y-M-d'),
+                'fails' => false,
+            ],
+            'dateFormat of many invalid' => [
+                'data' => '2021-01-01',
+                'rules' => fn() => RuleSet::create()->dateFormat('d-M-Y', 'Y-M-d'),
                 'fails' => true,
             ],
             'decimal valid' => [
@@ -2294,6 +2414,35 @@ class RuleTest extends TestCase
                 ],
                 'fails' => true,
             ],
+            'requiredUnless null valid missing' => [
+                'data' => [
+                    'field-a' => '',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->requiredUnless('field-b', null),
+                ],
+                'fails' => false,
+            ],
+            'requiredUnless null valid' => [
+                'data' => [
+                    'field-a' => '',
+                    'field-b' => null,
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->requiredUnless('field-b', null),
+                ],
+                'fails' => false,
+            ],
+            'requiredUnless null invalid' => [
+                'data' => [
+                    'field-a' => '',
+                    'field-b' => 'd',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->requiredUnless('field-b', null),
+                ],
+                'fails' => true,
+            ],
             'requiredWith valid - required' => [
                 'data' => [
                     'field-a' => 'a',
@@ -2622,9 +2771,34 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->timezone(),
                 'fails' => false,
             ],
+            'timezone valid europe' => [
+                'data' => 'Europe/London',
+                'rules' => fn() => RuleSet::create()->timezone(),
+                'fails' => false,
+            ],
             'timezone invalid' => [
                 'data' => 'not a timezone',
                 'rules' => fn() => RuleSet::create()->timezone(),
+                'fails' => true,
+            ],
+            'timezone constrained to country valid' => [
+                'data' => 'America/New_York',
+                'rules' => fn() => RuleSet::create()->timezone('america'),
+                'fails' => false,
+            ],
+            'timezone constrained to country invalid' => [
+                'data' => 'Europe/London',
+                'rules' => fn() => RuleSet::create()->timezone('america'),
+                'fails' => true,
+            ],
+            'timezone constrained to country code valid' => [
+                'data' => 'America/New_York',
+                'rules' => fn() => RuleSet::create()->timezone('per_country', 'us'),
+                'fails' => false,
+            ],
+            'timezone constrained to country code invalid' => [
+                'data' => 'Europe/London',
+                'rules' => fn() => RuleSet::create()->timezone('per_country', 'us'),
                 'fails' => true,
             ],
             'ulid valid' => [

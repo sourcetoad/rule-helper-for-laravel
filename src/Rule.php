@@ -32,8 +32,8 @@ use UnitEnum;
 class Rule
 {
     /**
-     * The field under validation must be "yes", "on", 1, or true. This is useful for validating "Terms of Service"
-     * acceptance or similar fields.
+     * The field under validation must be "yes", "on", 1, "1", true, or "true". This is useful for validating "Terms of
+     * Service" acceptance or similar fields.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-accepted
      */
@@ -43,8 +43,8 @@ class Rule
     }
 
     /**
-     * The field under validation must be "yes", "on", 1, or true if *anotherField* under validation is equal to a
-     * specified *value*. This is useful for validating "Terms of Service" acceptance or similar fields.
+     * The field under validation must be "yes", "on", 1, "1", true, or "true" if another field under validation is
+     * equal to a specified value. This is useful for validating "Terms of Service" acceptance or similar fields.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-accepted-if
      */
@@ -54,7 +54,9 @@ class Rule
     }
 
     /**
-     * The field under validation must have a valid A or AAAA record according to the *dns_get_record* PHP function.
+     * The field under validation must have a valid A or AAAA record according to the *dns_get_record* PHP function. The
+     * hostname of the provided URL is extracted using the *parse_url* PHP function before being passed to
+     * *dns_get_record*.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-active-url
      */
@@ -64,57 +66,90 @@ class Rule
     }
 
     /**
-     * The field under validation must be a value after a given date.
+     * The field under validation must be a value after a given date. If a string is used, the dates will be passed into
+     * the *strtotime* PHP function in order to be converted to a valid *DateTime* instance.
+     *
+     * Instead of passing a date string to be evaluated by *strtotime*, you may specify another field to compare against
+     * the date.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-after
      */
-    public static function after(string|DateTimeInterface $date): string
+    public static function after(string|DateTimeInterface $dateOrField): string
     {
-        return 'after:'.static::convertDateForRule($date);
+        return 'after:'.static::convertDateForRule($dateOrField);
     }
 
     /**
-     * The field under validation must be a value after or equal to the given date.
+     * The field under validation must be a value after or equal to the given date. For more information, see the
+     * {@see Rule::after} rule.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-after-or-equal
      */
-    public static function afterOrEqual(string|DateTimeInterface $date): string
+    public static function afterOrEqual(string|DateTimeInterface $dateOrField): string
     {
-        return 'after_or_equal:'.static::convertDateForRule($date);
+        return 'after_or_equal:'.static::convertDateForRule($dateOrField);
     }
 
     /**
-     * The field under validation must be entirely alphabetic characters.
+     * The field under validation must be entirely Unicode alphabetic characters contained in *\p{L}* and *\p{M}*.
+     *
+     * To restrict this validation rule to characters in the ASCII range (*a-z* and *A-Z*), use the *limitToAscii*
+     * argument.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-alpha
      */
-    public static function alpha(): string
+    public static function alpha(?bool $limitToAscii = null): string
     {
+        if ($limitToAscii) {
+            return 'alpha:ascii';
+        }
+
         return 'alpha';
     }
 
     /**
-     * The field under validation may have alpha-numeric characters, as well as dashes and underscores.
+     * The field under validation must be entirely Unicode alpha-numeric characters contained in *\p{L}*, *\p{M}*,
+     * *\p{N}*, as well as ASCII dashes (*-*) and ASCII underscores (*_*).
+     *
+     * To restrict this validation rule to characters in the ASCII range (*a-z* and *A-Z*), use the *limitToAscii*
+     * argument.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-alpha-dash
      */
-    public static function alphaDash(): string
+    public static function alphaDash(?bool $limitToAscii = null): string
     {
+        if ($limitToAscii) {
+            return 'alpha_dash:ascii';
+        }
+
         return 'alpha_dash';
     }
 
     /**
-     * The field under validation must be entirely alpha-numeric characters.
+     * The field under validation must be entirely Unicode alpha-numeric characters contained in *\p{L}*, *\p{M}*, and
+     * *\p{N}*.
+     *
+     * To restrict this validation rule to characters in the ASCII range (*a-z* and *A-Z*), use the *limitToAscii*
+     * argument.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-alpha-num
      */
-    public static function alphaNum(): string
+    public static function alphaNum(?bool $limitToAscii = null): string
     {
+        if ($limitToAscii) {
+            return 'alpha_num:ascii';
+        }
+
         return 'alpha_num';
     }
 
     /**
      * The field under validation must be a PHP *array*.
+     *
+     * When additional values are provided to the *array* rule, each key in the input array must be present within the
+     * list of values provided to the rule.
+     *
+     * In general, you should always specify the array keys that are allowed to be present within your array.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-array
      */
@@ -140,6 +175,10 @@ class Rule
     /**
      * Stop running validation rules for the field after the first validation failure.
      *
+     * While the bail rule will only stop validating a specific field when it encounters a validation failure, the
+     * *stopOnFirstFailure method will inform the validator that it should stop validating all attributes once a single
+     * validation failure has occurred.
+     *
      * @link https://laravel.com/docs/11.x/validation#rule-bail
      */
     public static function bail(): string
@@ -148,27 +187,32 @@ class Rule
     }
 
     /**
-     * The field under validation must be a value preceding the given date.
+     * The field under validation must be a value preceding the given date. The dates will be passed into the PHP
+     * *strtotime* function in order to be converted into a valid *DateTime* instance. In addition, like the
+     * {@see Rule::after} rule, the name of another field under validation may be supplied as the value of date.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-before
      */
-    public static function before(string|DateTimeInterface $date): string
+    public static function before(string|DateTimeInterface $dateOrField): string
     {
-        return 'before:'.static::convertDateForRule($date);
+        return 'before:'.static::convertDateForRule($dateOrField);
     }
 
     /**
-     * The field under validation must be a value preceding or equal to the given date.
+     * The field under validation must be a value preceding or equal to the given date. The dates will be passed into
+     * the PHP *strtotime* function in order to be converted into a valid *DateTime* instance. In addition, like the
+     * {@see Rule::after} rule, the name of another field under validation may be supplied as the value of date.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-before-or-equal
      */
-    public static function beforeOrEqual(string|DateTimeInterface $date): string
+    public static function beforeOrEqual(string|DateTimeInterface $dateOrField): string
     {
-        return 'before_or_equal:'.static::convertDateForRule($date);
+        return 'before_or_equal:'.static::convertDateForRule($dateOrField);
     }
 
     /**
-     * The field under validation must have a size between the given *min* and *max*.
+     * The field under validation must have a size between the given *min* and *max* (inclusive). Strings, numerics,
+     * arrays, and files are evaluated in the same fashion as the {@see Rule::size} rule.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-between
      */
@@ -199,7 +243,11 @@ class Rule
     }
 
     /**
-     * The field under validation must have a matching field of *{field}_confirmation*.
+     * The field under validation must have a matching field of *{field}_confirmation*. For example, if the field under
+     * validation is *password*, a matching *password_confirmation* field must be present in the input.
+     *
+     * You may also pass a custom confirmation field name. For example, passing *repeat_username* will expect the field
+     * *repeat_username* to match the field under validation.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-confirmed
      */
@@ -237,7 +285,7 @@ class Rule
     }
 
     /**
-     * The field under validation must be a valid, non-relative date according to the 'strtotime' PHP function.
+     * The field under validation must be a valid, non-relative date according to the *strtotime* PHP function.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-date
      */
@@ -247,7 +295,8 @@ class Rule
     }
 
     /**
-     * The field under validation must be equal to the given date.
+     * The field under validation must be equal to the given date. The dates will be passed into the PHP *strtotime*
+     * function in order to be converted into a valid *DateTime* instance.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-date-equals
      */
@@ -257,15 +306,15 @@ class Rule
     }
 
     /**
-     * The field under validation must match the given *format*.
+     * The field under validation must match one of the given formats. You should use **either** *date* or *dateFormat*
+     * when validating a field, not both. This validation rule supports all formats supported by PHP's *DateTime* class.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-date-format
      * @link https://www.php.net/manual/en/datetime.format.php
-     * @param string $dateFormat A format supported by the *DateTime* class
      */
-    public static function dateFormat(string $dateFormat): string
+    public static function dateFormat(string ...$dateFormat): string
     {
-        return 'date_format:'.$dateFormat;
+        return 'date_format:'.implode(',', $dateFormat);
     }
 
     /**
@@ -279,7 +328,7 @@ class Rule
     }
 
     /**
-     * The field under validation must be *"no"*, *"off"*, *0*, or *false*.
+     * The field under validation must be "no", "off", 0, or false.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-declined
      */
@@ -289,8 +338,8 @@ class Rule
     }
 
     /**
-     * The field under validation must be *"no"*, *"off"*, *0*, or *false* if *anotherField* under validation is equal
-     * to a specified value.
+     * The field under validation must be "no", "off", 0, "0", false, or "false" if another field under validation is
+     * equal to a specified value.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-declined-if
      */
@@ -310,7 +359,7 @@ class Rule
     }
 
     /**
-     * The field under validation must be numeric and must have an exact length of *value*.
+     * The integer under validation must have the exact length of the given value.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-digits
      */
@@ -320,7 +369,7 @@ class Rule
     }
 
     /**
-     * The field under validation must be numeric and must have a length between the given *min* and *max*.
+     * The integer validation must have a length between the given *min* and *max*.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-digits-between
      */
@@ -348,6 +397,9 @@ class Rule
 
     /**
      * When validating arrays, the field under validation must not have any duplicate values.
+     *
+     * Distinct uses loose variable and case-sensitive comparisons by default. To use strict comparisons, or to ignore
+     * the case of the values, use the *strict* or *ignoreCase* parameters.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-distinct
      */
@@ -387,6 +439,15 @@ class Rule
     /**
      * The field under validation must be formatted as an email address.
      *
+     * By default, the *RFCValidation* validator is applied, but you can apply other validation styles as well:
+     *
+     * - *rfc*: {@see \Egulias\EmailValidator\Validation\RFCValidation}
+     * - *strict*: {@see \Egulias\EmailValidator\Validation\NoRFCWarningsValidation}
+     * - *dns*: {@see \Egulias\EmailValidator\Validation\DNSCheckValidation}
+     * - *spoof*: {@see \Egulias\EmailValidator\Validation\Extra\SpoofCheckValidation}
+     * - *filter*: {@see \Illuminate\Validation\Concerns\FilterEmailValidation}
+     * - *filter_unicode*: {@see \Illuminate\Validation\Concerns\FilterEmailValidation::unicode}
+     *
      * @link https://laravel.com/docs/11.x/validation#rule-email
      */
     public static function email(string ...$validator): string
@@ -409,7 +470,10 @@ class Rule
     }
 
     /**
-     * The field under validation contains a valid enum value of the specified type.
+     * The field under validation contains a valid enum value of the specified type. When validating primitive values,
+     * a backed Enum should be provided to the Enum rule.
+     *
+     * The Enum rule's *only* and *except* methods may be used to limit which enum cases should be considered valid.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-enum
      * @param class-string $type
@@ -455,7 +519,8 @@ class Rule
 
     /**
      * The field under validation will be excluded from the request data returned by the *validate* and *validated*
-     * methods unless *anotherField*'s field is equal to *value*.
+     * methods unless *anotherField*'s field is equal to *value*. If value is *null*, the field under validation will be
+     * excluded unless the comparison field is *null* or the comparison field is missing from the request data.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-exclude-unless
      */
@@ -487,9 +552,15 @@ class Rule
     }
 
     /**
-     * The field under validation must exist in a given database table. If the *column* option is not specified, the
-     * field name will be used. Instead of specifying the table name directly, you may specify the Eloquent model class
-     * name.
+     * The field under validation must exist in a given database table.
+     *
+     * If the *column* option is not specified, the field name will be used.
+     *
+     * Occasionally, you may need to specify a specific database connection to be used for the exists query. You can
+     * accomplish this by prepending the connection name to the table name: `connection.table`.
+     *
+     * Instead of specifying the table name directly, you may specify the Eloquent model which should be used to
+     * determine the table name.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-exists
      */
@@ -532,7 +603,9 @@ class Rule
     }
 
     /**
-     * The field under validation must be greater than the given *field*.
+     * The field under validation must be greater than the given *field* or *value*. The two fields must be of the same
+     * type. Strings, numerics, arrays, and files are evaluated using the same conventions as the {@see Rule::size}
+     * rule.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-gt
      */
@@ -542,7 +615,9 @@ class Rule
     }
 
     /**
-     * The field under validation must be greater than or equal to the given *field*.
+     * The field under validation must be greater than or equal to the given *field* or *value*. The two fields must be
+     * of the same type. Strings, numerics, arrays, and files are evaluated using the same conventions as the
+     * {@see Rule::size} rule.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-gte
      */
@@ -575,8 +650,8 @@ class Rule
     /**
      * The field under validation must be included in the given list of values.
      *
-     * When the *in* rule is combined with the *array* rule, each value in the input array must be present within the
-     * list of values provided to the *in* rule.
+     * When the *in* rule is combined with the {@see Rule::array} rule, each value in the input array must be present
+     * within the list of values provided to the *in* rule.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-in
      * @param Arrayable<array-key, BackedEnum|UnitEnum|string>|array<BackedEnum|UnitEnum|string>|BackedEnum|UnitEnum|string $values
@@ -599,8 +674,9 @@ class Rule
     /**
      * The field under validation must be an integer.
      *
-     * NOTE: This validation rule does not verify that the input is of the "integer" variable type, only that the input
-     * is of a type accepted by PHP's FILTER_VALIDATE_INT rule.
+     * Warning: This validation rule does not verify that the input is of the "integer" variable type, only that the
+     *          input is of a type accepted by PHP's *FILTER_VALIDATE_INT* rule. If you need to validate the input as
+     *          being a number please use this rule in combination with the {@see Rule::numeric} validation rule.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-integer
      */
@@ -651,7 +727,7 @@ class Rule
 
     /**
      * The field under validation must be an array that is a list. An array is considered a list if its keys consist of
-     * consecutive numbers from 0 to count($array) - 1.
+     * consecutive numbers from *0* to *count($array) - 1*.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-list
      */
@@ -671,7 +747,8 @@ class Rule
     }
 
     /**
-     * The field under validation must be less than the given *field*.
+     * The field under validation must be less than the given field. The two fields must be of the same type. Strings,
+     * numerics, arrays, and files are evaluated using the same conventions as the {@see Rule::size} rule.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-lt
      */
@@ -681,7 +758,9 @@ class Rule
     }
 
     /**
-     * The field under validation must be less than or equal to the given *field*.
+     * The field under validation must be less than or equal to the given field. The two fields must be of the same
+     * type. Strings, numerics, arrays, and files are evaluated using the same conventions as the
+     * {@see Rule::size} rule.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-lte
      */
@@ -701,8 +780,8 @@ class Rule
     }
 
     /**
-     * The field under validation must be less than or equal to a maximum *value*. Strings, numerics, arrays, and files
-     * are evaluated in the same fashion as the *size* rule.
+     * The field under validation must be less than or equal to a maximum value. Strings, numerics, arrays, and files
+     * are evaluated in the same fashion as the {@see Rule::size} rule.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-max
      */
@@ -724,6 +803,9 @@ class Rule
     /**
      * The file under validation must have a MIME type corresponding to one of the listed extensions.
      *
+     * Even though you only need to specify the extensions, this rule actually validates the MIME type of the file by
+     * reading the file's contents and guessing its MIME type.
+     *
      * @link https://laravel.com/docs/11.x/validation#rule-mimes
      * @link https://svn.apache.org/repos/asf/httpd/httpd/trunk/docs/conf/mime.types
      */
@@ -735,6 +817,9 @@ class Rule
     /**
      * The file under validation must match one of the given MIME types.
      *
+     * To determine the MIME type of the uploaded file, the file's contents will be read and the framework will attempt
+     * to guess the MIME type, which may be different from the client's provided MIME type.
+     *
      * @link https://laravel.com/docs/11.x/validation#rule-mimetypes
      */
     public static function mimetypes(string ...$mimeType): string
@@ -743,8 +828,8 @@ class Rule
     }
 
     /**
-     * The field under validation must have a minimum *value*. Strings, numerics, arrays, and files are evaluated in the
-     * same fashion as the *size* rule.
+     * The field under validation must have a minimum value. Strings, numerics, arrays, and files are evaluated in the
+     * same fashion as the {@see Rule::size} rule.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-min
      */
@@ -836,6 +921,9 @@ class Rule
 
     /**
      * The field under validation must not match the given regular expression.
+     *
+     * Internally, this rule uses the PHP *preg_match* function. The pattern specified should obey the same formatting
+     * required by *preg_match* and thus also include valid delimiters.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-not-regex
      */
@@ -929,7 +1017,12 @@ class Rule
     }
 
     /**
-     * The field under validation must be empty or not present.
+     * The field under validation must be missing or empty. A field is "empty" if it meets one of the following
+     * criteria:
+     *  - The value is *null*.
+     *  - The value is an empty string.
+     *  - The value is an empty array or empty *Countable* object.
+     *  - The value is an uploaded file with no path.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-prohibited
      */
@@ -952,6 +1045,10 @@ class Rule
 
     /**
      * The field under validation must be empty or not present if the *anotherField* field is equal to any *value*.
+     *  - The value is *null*.
+     *  - The value is an empty string.
+     *  - The value is an empty array or empty *Countable* object.
+     *  - The value is an uploaded file with no path.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-prohibited-if
      */
@@ -962,6 +1059,11 @@ class Rule
 
     /**
      * The field under validation must be empty or not present unless the *anotherField* field is equal to any *value*.
+     * A field is "empty" if it meets one of the following criteria:
+     *  - The value is *null*.
+     *  - The value is an empty string.
+     *  - The value is an empty array or empty *Countable* object.
+     *  - The value is an uploaded file with no path.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-prohibited-unless
      */
@@ -971,7 +1073,12 @@ class Rule
     }
 
     /**
-     * If the field under validation is present, no fields in *anotherField* can be present, even if empty.
+     * If the field under validation is present, no fields in *anotherField* can be present, even if empty. A field is
+     * "empty" if it meets one of the following criteria:
+     *  - The value is *null*.
+     *  - The value is an empty string.
+     *  - The value is an empty array or empty *Countable* object.
+     *  - The value is an uploaded file with no path.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-prohibits
      */
@@ -983,6 +1090,9 @@ class Rule
     /**
      * The field under validation must match the given regular expression.
      *
+     * Internally, this rule uses the PHP *preg_match* function. The pattern specified should obey the same formatting
+     * required by *preg_match* and thus also include valid delimiters.
+     *
      * @link https://laravel.com/docs/11.x/validation#rule-regex
      */
     public static function regex(string $pattern): string
@@ -991,7 +1101,12 @@ class Rule
     }
 
     /**
-     * The field under validation must be present in the input data and not empty.
+     * The field under validation must be present in the input data and not empty. A field is "empty" if it meets one of
+     * the following criteria:
+     *  - The value is *null*.
+     *  - The value is an empty string.
+     *  - The value is an empty array or empty *Countable* object.
+     *  - The value is an uploaded file with no path.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-required
      */
@@ -1023,8 +1138,8 @@ class Rule
     }
 
     /**
-     * The field under validation must be present and not empty if the *field* field is equal to yes, on, 1, "1", true,
-     * or "true".
+     * The field under validation must be present and not empty if the *field* field is equal to "yes", "on", 1,  "1",
+     * true, or "true".
      *
      * @link https://laravel.com/docs/11.x/validation#rule-required-if-accepted
      */
@@ -1076,12 +1191,16 @@ class Rule
 
     /**
      * The field under validation must be present and not empty unless the *anotherField* field is equal to any
-     * *value*.
+     * *value*. This also means *anotherField* must be present in the request data unless value is *null*. If value is
+     * *null*, the field under validation will be required unless the comparison field is null or the comparison field
+     * is missing from the request data.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-required-unless
      */
-    public static function requiredUnless(string $anotherField, string ...$value): string
+    public static function requiredUnless(string $anotherField, ?string ...$value): string
     {
+        $value = array_map(fn(?string $value) => $value ?? 'null', $value);
+
         return sprintf('required_unless:%s,%s', $anotherField, implode(',', $value));
     }
 
@@ -1141,6 +1260,11 @@ class Rule
 
     /**
      * The field under validation must have a size matching the given *value*.
+     *  - For string data, value corresponds to the number of characters.
+     *  - For numeric data, value corresponds to a given integer value (the attribute must also have the numeric or
+     *    integer rule).
+     *  - For an array, size corresponds to the count of the array.
+     *  - For files, size corresponds to the file size in kilobytes.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-size
      */
@@ -1172,7 +1296,8 @@ class Rule
     }
 
     /**
-     * The field under validation must be a string.
+     * The field under validation must be a string. If you would like to allow the field to also be *null*, you should
+     * assign the {@see Rule::nullable} rule to the field.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-string
      */
@@ -1182,13 +1307,20 @@ class Rule
     }
 
     /**
-     * The field under validation must be a valid timezone identifier according to the *timezone_identifiers_list* PHP
-     * function.
+     * The field under validation must be a valid timezone identifier according to the
+     * {@see DateTimeZone::listIdentifiers} method.
      *
+     * @param ?string $timezoneGroup One of the {@see DateTimeZone} class constant names.
+     * @param ?string $countryCode A two-letter (uppercase) ISO 3166-1 compatible country code. Note: This option is only used when timezoneGroup is set to "per_country".
      * @link https://laravel.com/docs/11.x/validation#rule-timezone
+     * @link https://www.php.net/manual/en/datetimezone.listidentifiers.php
      */
-    public static function timezone(): string
+    public static function timezone(?string $timezoneGroup = null, ?string $countryCode = null): string
     {
+        if ($timezoneGroup !== null || $countryCode !== null) {
+            return 'timezone:'.($timezoneGroup ?? 'all').','.$countryCode;
+        }
+
         return 'timezone';
     }
 
@@ -1204,9 +1336,19 @@ class Rule
     }
 
     /**
-     * The field under validation must not exist within the given database table. If the *column* option is not
-     * specified, the field name will be used. Instead of specifying the table name directly, you may specify the
-     * Eloquent model class name.
+     * The field under validation must not exist within the given database table.
+     *
+     * If the *column* option is not specified, the name of the field under validation will be used.
+     *
+     * Occasionally, you may need to specify a specific database connection to be used for the exists query. You can
+     * accomplish this by prepending the connection name to the table name: `connection.table`.
+     *
+     * Instead of specifying the table name directly, you may specify the Eloquent model which should be used to
+     * determine the table name.
+     *
+     * Warning: You should never pass any user controlled request input into the *ignore* method. Instead, you should
+     *          only pass a system generated unique ID such as an auto-incrementing ID or UUID from an Eloquent model
+     *          instance. Otherwise, your application will be vulnerable to an SQL injection attack.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-unique
      */
