@@ -3,11 +3,10 @@
   "rules": {
     "blank_line_between_import_groups": false,
     "declare_strict_types": true,
-    "function_declaration": {
-      "closure_fn_spacing": "none"
-    },
+    "function_declaration": {"closure_fn_spacing": "none"},
     "not_operator_with_successor_space": false,
     "phpdoc_align": false,
-    "phpdoc_separation": false
+    "phpdoc_separation": false,
+    "php_unit_method_casing": {"case": "camel_case"}
   }
 }

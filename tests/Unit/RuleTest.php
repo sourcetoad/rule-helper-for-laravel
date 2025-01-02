@@ -3208,7 +3208,7 @@ class RuleTest extends TestCase
 
     private function mockUserAuth(string $password, ?string $guardName): void
     {
-        $user = new User();
+        $user = new User;
         /** @noinspection PhpUndefinedFieldInspection */
         $user->password = $password;
 
@@ -3249,7 +3249,7 @@ class RuleTest extends TestCase
 
         if ($mimeType) {
             // We need to start a new instance in case a guesser was already created for a previous test.
-            $finder = new MimeTypes();
+            $finder = new MimeTypes;
 
             $finder->registerGuesser(new class($mimeType) implements MimeTypeGuesserInterface
             {

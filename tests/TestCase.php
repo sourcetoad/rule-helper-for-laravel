@@ -6,4 +6,5 @@ namespace Sourcetoad\RuleHelper\Tests;
 
 abstract class TestCase extends \Orchestra\Testbench\TestCase
 {
+    //
 }

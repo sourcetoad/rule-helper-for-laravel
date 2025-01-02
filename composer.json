@@ -5,15 +5,15 @@
     "license": "MIT",
     "minimum-stability": "stable",
     "require": {
-        "php": "^8.2",
+        "php": "^8.2||^8.3||^8.4",
         "laravel/framework": "^11.23.2"
     },
     "require-dev": {
         "ext-json": "*",
         "orchestra/testbench": "^9.4",
         "phpunit/phpunit": "^10.5",
-        "laravel/pint": "1.13.9",
-        "larastan/larastan": "^2.0"
+        "laravel/pint": "1.19.0",
+        "larastan/larastan": "^3.0"
     },
     "autoload": {
         "psr-4": {
