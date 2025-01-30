@@ -338,10 +338,17 @@ class RuleSet implements Arrayable, IteratorAggregate
      * The field under validation must be a valid, non-relative date according to the *strtotime* PHP function.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-date
+     * @param ?callable(\Illuminate\Validation\Rules\Date): (\Illuminate\Validation\Rules\Date|void) $modifier
      */
-    public function date(): self
+    public function date(?callable $modifier = null): self
     {
-        return $this->rule(Rule::date());
+        $rule = Rule::date();
+
+        if ($modifier) {
+            $rule = $this->modify($rule, $modifier);
+        }
+
+        return $this->rule($rule);
     }
 
     /**

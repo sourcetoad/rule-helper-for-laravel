@@ -16,6 +16,7 @@ use Illuminate\Validation\ConditionalRules;
 use Illuminate\Validation\Rule as LaravelRule;
 use Illuminate\Validation\Rules\ArrayRule;
 use Illuminate\Validation\Rules\Can;
+use Illuminate\Validation\Rules\Date;
 use Illuminate\Validation\Rules\Dimensions;
 use Illuminate\Validation\Rules\Enum;
 use Illuminate\Validation\Rules\ExcludeIf;
@@ -289,9 +290,9 @@ class Rule
      *
      * @link https://laravel.com/docs/11.x/validation#rule-date
      */
-    public static function date(): string
+    public static function date(): Date
     {
-        return 'date';
+        return LaravelRule::date();
     }
 
     /**

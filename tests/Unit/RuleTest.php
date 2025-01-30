@@ -17,6 +17,7 @@ use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rules\Date;
 use Illuminate\Validation\Rules\Dimensions;
 use Illuminate\Validation\Rules\Enum;
 use Illuminate\Validation\Rules\Password;
@@ -739,6 +740,16 @@ class RuleTest extends TestCase
             'date invalid' => [
                 'data' => 'a',
                 'rules' => fn() => RuleSet::create()->date(),
+                'fails' => true,
+            ],
+            'date fluent valid' => [
+                'data' => '2025-01-02',
+                'rules' => fn() => RuleSet::create()->date(fn(Date $rule) => $rule->before('2025-01-03')->after('2025-01-01')),
+                'fails' => false,
+            ],
+            'date fluent invalid' => [
+                'data' => '2025-01-04',
+                'rules' => fn() => RuleSet::create()->date(fn(Date $rule) => $rule->before('2025-01-03')->after('2025-01-01')),
                 'fails' => true,
             ],
             'dateEquals valid' => [
