@@ -660,10 +660,17 @@ class RuleSet implements Arrayable, IteratorAggregate
      * The field under validation must be a successfully uploaded file.
      *
      * @link https://laravel.com/docs/11.x/validation#rule-file
+     * @param ?callable(\Illuminate\Validation\Rules\File): (\Illuminate\Validation\Rules\File|void) $modifier
      */
-    public function file(): self
+    public function file(?callable $modifier = null): self
     {
-        return $this->rule(Rule::file());
+        $rule = Rule::file();
+
+        if ($modifier) {
+            $rule = $this->modify($rule, $modifier);
+        }
+
+        return $this->rule($rule);
     }
 
     /**

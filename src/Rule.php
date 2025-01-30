@@ -22,6 +22,7 @@ use Illuminate\Validation\Rules\Email;
 use Illuminate\Validation\Rules\Enum;
 use Illuminate\Validation\Rules\ExcludeIf;
 use Illuminate\Validation\Rules\Exists;
+use Illuminate\Validation\Rules\File;
 use Illuminate\Validation\Rules\In;
 use Illuminate\Validation\Rules\NotIn;
 use Illuminate\Validation\Rules\Password;
@@ -576,9 +577,9 @@ class Rule
      *
      * @link https://laravel.com/docs/11.x/validation#rule-file
      */
-    public static function file(): string
+    public static function file(): File
     {
-        return 'file';
+        return LaravelRule::file();
     }
 
     /**

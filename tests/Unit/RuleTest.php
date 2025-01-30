@@ -21,6 +21,7 @@ use Illuminate\Validation\Rules\Date;
 use Illuminate\Validation\Rules\Dimensions;
 use Illuminate\Validation\Rules\Email;
 use Illuminate\Validation\Rules\Enum;
+use Illuminate\Validation\Rules\File as FileRule;
 use Illuminate\Validation\Rules\Password;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Sourcetoad\RuleHelper\Rule;
@@ -1201,6 +1202,16 @@ class RuleTest extends TestCase
             'file invalid' => [
                 'data' => 'not a file',
                 'rules' => fn() => RuleSet::create()->file(),
+                'fails' => true,
+            ],
+            'file fluent valid' => [
+                'data' => fn() => $this->mockFile('/code/image.jpg'),
+                'rules' => fn() => RuleSet::create()->file(fn(FileRule $rule) => $rule->extensions('jpg')),
+                'fails' => false,
+            ],
+            'file fluent invalid' => [
+                'data' => fn() => $this->mockFile('/code/document.docx'),
+                'rules' => fn() => RuleSet::create()->file(fn(FileRule $rule) => $rule->extensions('jpg')),
                 'fails' => true,
             ],
             'filled valid' => [
