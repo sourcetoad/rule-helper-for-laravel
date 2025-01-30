@@ -41,6 +41,7 @@ class RuleTest extends TestCase
         parent::setUp();
 
         Password::$defaultCallback = null;
+        MimeTypes::setDefault(new MimeTypes);
     }
 
     #[DataProvider('ruleDataProvider')]
