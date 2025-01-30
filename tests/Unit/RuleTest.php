@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Date;
 use Illuminate\Validation\Rules\Dimensions;
+use Illuminate\Validation\Rules\Email;
 use Illuminate\Validation\Rules\Enum;
 use Illuminate\Validation\Rules\Password;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -1078,52 +1079,52 @@ class RuleTest extends TestCase
             ],
             'email rfc valid' => [
                 'data' => 'someone@example.com',
-                'rules' => fn() => RuleSet::create()->email('rfc'),
+                'rules' => fn() => RuleSet::create()->email(fn(Email $rule) => $rule->rfcCompliant()),
                 'fails' => false,
             ],
             'email rfc invalid' => [
                 'data' => 'someone',
-                'rules' => fn() => RuleSet::create()->email('rfc'),
+                'rules' => fn() => RuleSet::create()->email(fn(Email $rule) => $rule->rfcCompliant()),
                 'fails' => true,
             ],
             'email strict valid' => [
                 'data' => 'someone@example.com',
-                'rules' => fn() => RuleSet::create()->email('strict'),
+                'rules' => fn() => RuleSet::create()->email(fn(Email $rule) => $rule->strict()),
                 'fails' => false,
             ],
             'email strict invalid' => [
                 'data' => 'someone@'.Str::repeat('example', 100).'.com',
-                'rules' => fn() => RuleSet::create()->email('strict'),
+                'rules' => fn() => RuleSet::create()->email(fn(Email $rule) => $rule->strict()),
                 'fails' => true,
             ],
             'email dns valid' => [
                 'data' => 'someone@gmail.com',
-                'rules' => fn() => RuleSet::create()->email('dns'),
+                'rules' => fn() => RuleSet::create()->email(fn(Email $rule) => $rule->validateMxRecord()),
                 'fails' => false,
             ],
             'email dns invalid' => [
                 'data' => 'someone@'.Str::repeat(Str::uuid()->toString(), 3).'.com',
-                'rules' => fn() => RuleSet::create()->email('dns'),
+                'rules' => fn() => RuleSet::create()->email(fn(Email $rule) => $rule->validateMxRecord()),
                 'fails' => true,
             ],
             'email spoof valid' => [
                 'data' => 'someone@gmail.com',
-                'rules' => fn() => RuleSet::create()->email('spoof'),
+                'rules' => fn() => RuleSet::create()->email(fn(Email $rule) => $rule->preventSpoofing()),
                 'fails' => false,
             ],
             'email spoof invalid' => [
                 'data' => "someone@\u{0430}pple.com",
-                'rules' => fn() => RuleSet::create()->email('spoof'),
+                'rules' => fn() => RuleSet::create()->email(fn(Email $rule) => $rule->preventSpoofing()),
                 'fails' => true,
             ],
             'email filter valid' => [
                 'data' => 'someone@gmail.com',
-                'rules' => fn() => RuleSet::create()->email('filter'),
+                'rules' => fn() => RuleSet::create()->email(fn(Email $rule) => $rule->withNativeValidation()),
                 'fails' => false,
             ],
             'email filter invalid' => [
                 'data' => 'someone@com',
-                'rules' => fn() => RuleSet::create()->email('filter'),
+                'rules' => fn() => RuleSet::create()->email(fn(Email $rule) => $rule->withNativeValidation()),
                 'fails' => true,
             ],
             'endsWith valid' => [

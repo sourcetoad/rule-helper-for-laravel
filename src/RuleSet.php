@@ -498,20 +498,18 @@ class RuleSet implements Arrayable, IteratorAggregate
     /**
      * The field under validation must be formatted as an email address.
      *
-     * By default, the *RFCValidation* validator is applied, but you can apply other validation styles as well:
-     *
-     * - *rfc*: {@see \Egulias\EmailValidator\Validation\RFCValidation}
-     * - *strict*: {@see \Egulias\EmailValidator\Validation\NoRFCWarningsValidation}
-     * - *dns*: {@see \Egulias\EmailValidator\Validation\DNSCheckValidation}
-     * - *spoof*: {@see \Egulias\EmailValidator\Validation\Extra\SpoofCheckValidation}
-     * - *filter*: {@see \Illuminate\Validation\Concerns\FilterEmailValidation}
-     * - *filter_unicode*: {@see \Illuminate\Validation\Concerns\FilterEmailValidation::unicode}
-     *
      * @link https://laravel.com/docs/11.x/validation#rule-email
+     * @param ?callable(\Illuminate\Validation\Rules\Email): (\Illuminate\Validation\Rules\Email|void) $modifier
      */
-    public function email(string ...$validator): self
+    public function email(?callable $modifier = null): self
     {
-        return $this->rule(Rule::email(...$validator));
+        $rule = Rule::email();
+
+        if ($modifier) {
+            $rule = $this->modify($rule, $modifier);
+        }
+
+        return $this->rule($rule);
     }
 
     /**

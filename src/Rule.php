@@ -18,6 +18,7 @@ use Illuminate\Validation\Rules\ArrayRule;
 use Illuminate\Validation\Rules\Can;
 use Illuminate\Validation\Rules\Date;
 use Illuminate\Validation\Rules\Dimensions;
+use Illuminate\Validation\Rules\Email;
 use Illuminate\Validation\Rules\Enum;
 use Illuminate\Validation\Rules\ExcludeIf;
 use Illuminate\Validation\Rules\Exists;
@@ -440,24 +441,11 @@ class Rule
     /**
      * The field under validation must be formatted as an email address.
      *
-     * By default, the *RFCValidation* validator is applied, but you can apply other validation styles as well:
-     *
-     * - *rfc*: {@see \Egulias\EmailValidator\Validation\RFCValidation}
-     * - *strict*: {@see \Egulias\EmailValidator\Validation\NoRFCWarningsValidation}
-     * - *dns*: {@see \Egulias\EmailValidator\Validation\DNSCheckValidation}
-     * - *spoof*: {@see \Egulias\EmailValidator\Validation\Extra\SpoofCheckValidation}
-     * - *filter*: {@see \Illuminate\Validation\Concerns\FilterEmailValidation}
-     * - *filter_unicode*: {@see \Illuminate\Validation\Concerns\FilterEmailValidation::unicode}
-     *
      * @link https://laravel.com/docs/11.x/validation#rule-email
      */
-    public static function email(string ...$validator): string
+    public static function email(): Email
     {
-        if (count($validator)) {
-            return 'email:'.implode(',', $validator);
-        }
-
-        return 'email';
+        return LaravelRule::email();
     }
 
     /**
