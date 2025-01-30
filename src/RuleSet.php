@@ -722,10 +722,17 @@ class RuleSet implements Arrayable, IteratorAggregate
      * The file under validation must be an image (jpg, jpeg, png, bmp, gif, svg, or webp).
      *
      * @link https://laravel.com/docs/11.x/validation#rule-image
+     * @param ?callable(\Illuminate\Validation\Rules\ImageFile): (\Illuminate\Validation\Rules\ImageFile|void) $modifier
      */
-    public function image(): self
+    public function image(?callable $modifier = null): self
     {
-        return $this->rule(Rule::image());
+        $rule = Rule::image();
+
+        if ($modifier) {
+            $rule = $this->modify($rule, $modifier);
+        }
+
+        return $this->rule($rule);
     }
 
     /**

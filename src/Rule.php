@@ -23,6 +23,7 @@ use Illuminate\Validation\Rules\Enum;
 use Illuminate\Validation\Rules\ExcludeIf;
 use Illuminate\Validation\Rules\Exists;
 use Illuminate\Validation\Rules\File;
+use Illuminate\Validation\Rules\ImageFile;
 use Illuminate\Validation\Rules\In;
 use Illuminate\Validation\Rules\NotIn;
 use Illuminate\Validation\Rules\Password;
@@ -632,9 +633,9 @@ class Rule
      *
      * @link https://laravel.com/docs/11.x/validation#rule-image
      */
-    public static function image(): string
+    public static function image(): ImageFile
     {
-        return 'image';
+        return LaravelRule::imageFile();
     }
 
     /**

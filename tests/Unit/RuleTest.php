@@ -22,6 +22,7 @@ use Illuminate\Validation\Rules\Dimensions;
 use Illuminate\Validation\Rules\Email;
 use Illuminate\Validation\Rules\Enum;
 use Illuminate\Validation\Rules\File as FileRule;
+use Illuminate\Validation\Rules\ImageFile;
 use Illuminate\Validation\Rules\Password;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Sourcetoad\RuleHelper\Rule;
@@ -1361,6 +1362,16 @@ class RuleTest extends TestCase
             'image invalid' => [
                 'data' => fn() => $this->mockFile('/code/document.pdf'),
                 'rules' => fn() => RuleSet::create()->image(),
+                'fails' => true,
+            ],
+            'image fluent valid' => [
+                'data' => new File(dirname(__DIR__).'/Stubs/100x50.png'),
+                'rules' => fn() => RuleSet::create()->image(fn(ImageFile $rule) => $rule->dimensions(Rule::dimensions(['min_width' => 100]))),
+                'fails' => false,
+            ],
+            'image fluent invalid' => [
+                'data' => new File(dirname(__DIR__).'/Stubs/100x50.png'),
+                'rules' => fn() => RuleSet::create()->image(fn(ImageFile $rule) => $rule->dimensions(Rule::dimensions(['min_width' => 150]))),
                 'fails' => true,
             ],
             'in valid' => [
