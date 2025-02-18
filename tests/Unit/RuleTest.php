@@ -2178,6 +2178,126 @@ class RuleTest extends TestCase
                 ],
                 'fails' => true,
             ],
+            'prohibitedIfAccepted valid number' => [
+                'data' => [
+                    'field-a' => '1',
+                    'field-b' => 0,
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->prohibitedIfAccepted('field-b'),
+                ],
+                'fails' => false,
+            ],
+            'prohibitedIfAccepted valid boolean' => [
+                'data' => [
+                    'field-a' => '1',
+                    'field-b' => false,
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->prohibitedIfAccepted('field-b'),
+                ],
+                'fails' => false,
+            ],
+            'prohibitedIfAccepted valid string' => [
+                'data' => [
+                    'field-a' => '1',
+                    'field-b' => 'off',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->prohibitedIfAccepted('field-b'),
+                ],
+                'fails' => false,
+            ],
+            'prohibitedIfAccepted invalid number' => [
+                'data' => [
+                    'field-a' => '1',
+                    'field-b' => 1,
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->prohibitedIfAccepted('field-b'),
+                ],
+                'fails' => true,
+            ],
+            'prohibitedIfAccepted invalid boolean' => [
+                'data' => [
+                    'field-a' => '1',
+                    'field-b' => true,
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->prohibitedIfAccepted('field-b'),
+                ],
+                'fails' => true,
+            ],
+            'prohibitedIfAccepted invalid string' => [
+                'data' => [
+                    'field-a' => '1',
+                    'field-b' => 'on',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->prohibitedIfAccepted('field-b'),
+                ],
+                'fails' => true,
+            ],
+            'prohibitedIfDeclined valid number' => [
+                'data' => [
+                    'field-a' => '1',
+                    'field-b' => 1,
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->prohibitedIfDeclined('field-b'),
+                ],
+                'fails' => false,
+            ],
+            'prohibitedIfDeclined valid boolean' => [
+                'data' => [
+                    'field-a' => '1',
+                    'field-b' => true,
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->prohibitedIfDeclined('field-b'),
+                ],
+                'fails' => false,
+            ],
+            'prohibitedIfDeclined valid string' => [
+                'data' => [
+                    'field-a' => '1',
+                    'field-b' => 'on',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->prohibitedIfDeclined('field-b'),
+                ],
+                'fails' => false,
+            ],
+            'prohibitedIfDeclined invalid number' => [
+                'data' => [
+                    'field-a' => '1',
+                    'field-b' => 0,
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->prohibitedIfDeclined('field-b'),
+                ],
+                'fails' => true,
+            ],
+            'prohibitedIfDeclined invalid boolean' => [
+                'data' => [
+                    'field-a' => '1',
+                    'field-b' => false,
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->prohibitedIfDeclined('field-b'),
+                ],
+                'fails' => true,
+            ],
+            'prohibitedIfDeclined invalid string' => [
+                'data' => [
+                    'field-a' => '1',
+                    'field-b' => 'off',
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->prohibitedIfDeclined('field-b'),
+                ],
+                'fails' => true,
+            ],
             'prohibitedIfValue valid' => [
                 'data' => [
                     'field-a' => '',

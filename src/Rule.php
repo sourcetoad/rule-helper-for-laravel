@@ -1044,6 +1044,24 @@ class Rule
     }
 
     /**
+     * The field under validation must be empty or not present in the input data if the *anotherField* field
+     * is equal to "yes", "on", 1,  "1", true, or "true".
+     */
+    public static function prohibitedIfAccepted(string $anotherField): string
+    {
+        return sprintf('prohibited_if_accepted:%s', $anotherField);
+    }
+
+    /**
+     * The field under validation must be empty or not present in the input data if the *anotherField* field
+     * is equal to "no", "off", 0, "0", false, or "false".
+     */
+    public static function prohibitedIfDeclined(string $anotherField): string
+    {
+        return sprintf('prohibited_if_declined:%s', $anotherField);
+    }
+
+    /**
      * The field under validation must be empty or not present if the *anotherField* field is equal to any *value*.
      *  - The value is *null*.
      *  - The value is an empty string.
