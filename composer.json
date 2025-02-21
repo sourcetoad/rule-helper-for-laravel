@@ -3,16 +3,17 @@
     "description": "Rule helper for Laravel",
     "type": "library",
     "license": "MIT",
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "require": {
         "php": "^8.2||^8.3||^8.4",
-        "laravel/framework": "^11.43"
+        "laravel/framework": "^12.0.x-dev"
     },
     "require-dev": {
         "ext-json": "*",
-        "orchestra/testbench": "^9.4",
-        "phpunit/phpunit": "^10.5",
-        "laravel/pint": "1.19.0",
+        "nunomaduro/collision": "8.6.1",
+        "orchestra/testbench": "^10.0.x-dev",
+        "phpunit/phpunit": "^11.5",
+        "laravel/pint": "1.21",
         "larastan/larastan": "^3.0"
     },
     "autoload": {
