@@ -17,8 +17,12 @@ use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rules\Date;
 use Illuminate\Validation\Rules\Dimensions;
+use Illuminate\Validation\Rules\Email;
 use Illuminate\Validation\Rules\Enum;
+use Illuminate\Validation\Rules\File as FileRule;
+use Illuminate\Validation\Rules\ImageFile;
 use Illuminate\Validation\Rules\Password;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Sourcetoad\RuleHelper\Rule;
@@ -37,6 +41,7 @@ class RuleTest extends TestCase
         parent::setUp();
 
         Password::$defaultCallback = null;
+        MimeTypes::setDefault(new MimeTypes);
     }
 
     #[DataProvider('ruleDataProvider')]
@@ -741,6 +746,16 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->date(),
                 'fails' => true,
             ],
+            'date fluent valid' => [
+                'data' => '2025-01-02',
+                'rules' => fn() => RuleSet::create()->date(fn(Date $rule) => $rule->before('2025-01-03')->after('2025-01-01')),
+                'fails' => false,
+            ],
+            'date fluent invalid' => [
+                'data' => '2025-01-04',
+                'rules' => fn() => RuleSet::create()->date(fn(Date $rule) => $rule->before('2025-01-03')->after('2025-01-01')),
+                'fails' => true,
+            ],
             'dateEquals valid' => [
                 'data' => '01-Jan-2021',
                 'rules' => fn() => RuleSet::create()->dateEquals('2021-01-01'),
@@ -1067,52 +1082,52 @@ class RuleTest extends TestCase
             ],
             'email rfc valid' => [
                 'data' => 'someone@example.com',
-                'rules' => fn() => RuleSet::create()->email('rfc'),
+                'rules' => fn() => RuleSet::create()->email(fn(Email $rule) => $rule->rfcCompliant()),
                 'fails' => false,
             ],
             'email rfc invalid' => [
                 'data' => 'someone',
-                'rules' => fn() => RuleSet::create()->email('rfc'),
+                'rules' => fn() => RuleSet::create()->email(fn(Email $rule) => $rule->rfcCompliant()),
                 'fails' => true,
             ],
             'email strict valid' => [
                 'data' => 'someone@example.com',
-                'rules' => fn() => RuleSet::create()->email('strict'),
+                'rules' => fn() => RuleSet::create()->email(fn(Email $rule) => $rule->strict()),
                 'fails' => false,
             ],
             'email strict invalid' => [
                 'data' => 'someone@'.Str::repeat('example', 100).'.com',
-                'rules' => fn() => RuleSet::create()->email('strict'),
+                'rules' => fn() => RuleSet::create()->email(fn(Email $rule) => $rule->strict()),
                 'fails' => true,
             ],
             'email dns valid' => [
                 'data' => 'someone@gmail.com',
-                'rules' => fn() => RuleSet::create()->email('dns'),
+                'rules' => fn() => RuleSet::create()->email(fn(Email $rule) => $rule->validateMxRecord()),
                 'fails' => false,
             ],
             'email dns invalid' => [
                 'data' => 'someone@'.Str::repeat(Str::uuid()->toString(), 3).'.com',
-                'rules' => fn() => RuleSet::create()->email('dns'),
+                'rules' => fn() => RuleSet::create()->email(fn(Email $rule) => $rule->validateMxRecord()),
                 'fails' => true,
             ],
             'email spoof valid' => [
                 'data' => 'someone@gmail.com',
-                'rules' => fn() => RuleSet::create()->email('spoof'),
+                'rules' => fn() => RuleSet::create()->email(fn(Email $rule) => $rule->preventSpoofing()),
                 'fails' => false,
             ],
             'email spoof invalid' => [
                 'data' => "someone@\u{0430}pple.com",
-                'rules' => fn() => RuleSet::create()->email('spoof'),
+                'rules' => fn() => RuleSet::create()->email(fn(Email $rule) => $rule->preventSpoofing()),
                 'fails' => true,
             ],
             'email filter valid' => [
                 'data' => 'someone@gmail.com',
-                'rules' => fn() => RuleSet::create()->email('filter'),
+                'rules' => fn() => RuleSet::create()->email(fn(Email $rule) => $rule->withNativeValidation()),
                 'fails' => false,
             ],
             'email filter invalid' => [
                 'data' => 'someone@com',
-                'rules' => fn() => RuleSet::create()->email('filter'),
+                'rules' => fn() => RuleSet::create()->email(fn(Email $rule) => $rule->withNativeValidation()),
                 'fails' => true,
             ],
             'endsWith valid' => [
@@ -1189,6 +1204,16 @@ class RuleTest extends TestCase
             'file invalid' => [
                 'data' => 'not a file',
                 'rules' => fn() => RuleSet::create()->file(),
+                'fails' => true,
+            ],
+            'file fluent valid' => [
+                'data' => fn() => $this->mockFile('/code/image.jpg'),
+                'rules' => fn() => RuleSet::create()->file(fn(FileRule $rule) => $rule->extensions('jpg')),
+                'fails' => false,
+            ],
+            'file fluent invalid' => [
+                'data' => fn() => $this->mockFile('/code/document.docx'),
+                'rules' => fn() => RuleSet::create()->file(fn(FileRule $rule) => $rule->extensions('jpg')),
                 'fails' => true,
             ],
             'filled valid' => [
@@ -1338,6 +1363,16 @@ class RuleTest extends TestCase
             'image invalid' => [
                 'data' => fn() => $this->mockFile('/code/document.pdf'),
                 'rules' => fn() => RuleSet::create()->image(),
+                'fails' => true,
+            ],
+            'image fluent valid' => [
+                'data' => new File(dirname(__DIR__).'/Stubs/100x50.png'),
+                'rules' => fn() => RuleSet::create()->image(fn(ImageFile $rule) => $rule->dimensions(Rule::dimensions(['min_width' => 100]))),
+                'fails' => false,
+            ],
+            'image fluent invalid' => [
+                'data' => new File(dirname(__DIR__).'/Stubs/100x50.png'),
+                'rules' => fn() => RuleSet::create()->image(fn(ImageFile $rule) => $rule->dimensions(Rule::dimensions(['min_width' => 150]))),
                 'fails' => true,
             ],
             'in valid' => [

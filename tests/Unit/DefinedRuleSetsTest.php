@@ -28,10 +28,10 @@ class DefinedRuleSetsTest extends TestCase
     public function testCanUseRulesDefinedOutsideOfCurrentRuleSet(): void
     {
         // Arrange
-        resolve(DefinedRuleSets::class)->define('user.email', RuleSet::create()->email());
+        resolve(DefinedRuleSets::class)->define('user.email', RuleSet::create()->string());
 
         $validator = Validator::make([
-            'field-a' => $this->faker->name(),
+            'field-a' => $this->faker->randomNumber(),
         ], [
             'field-a' => RuleSet::useDefined('user.email'),
         ]);
@@ -42,7 +42,7 @@ class DefinedRuleSetsTest extends TestCase
 
         // Assert
         $this->assertTrue($fails, 'Failed asserting that RuleSet used defined rule.');
-        $this->assertEquals(['field-a' => ['The field-a field must be a valid email address.']], $messages->toArray());
+        $this->assertEquals(['field-a' => ['The field-a field must be a string.']], $messages->toArray());
     }
 
     public function testModifyingDuringUseDoesNotModifyStoredCopy(): void
@@ -83,31 +83,31 @@ class DefinedRuleSetsTest extends TestCase
     public function testConcatDefinedRuleSet(): void
     {
         // Arrange
-        RuleSet::define('user.email', RuleSet::create()->email());
+        RuleSet::define('user.email', RuleSet::create()->string());
 
         // Act
         $ruleSet = RuleSet::create()->required()->concatDefined('user.email');
 
         // Assert
-        $this->assertSame(['required', 'email'], $ruleSet->toArray());
+        $this->assertSame(['required', 'string'], $ruleSet->toArray());
     }
 
     public function testWorksWithNonBackedEnums(): void
     {
         // Arrange
-        RuleSet::define(ExampleNonBackedEnum::Value, RuleSet::create()->email());
+        RuleSet::define(ExampleNonBackedEnum::Value, RuleSet::create()->string());
 
         // Act
         $ruleSet = RuleSet::useDefined(ExampleNonBackedEnum::Value);
 
         // Assert
-        $this->assertSame(['email'], $ruleSet->toArray());
+        $this->assertSame(['string'], $ruleSet->toArray());
     }
 
     public function testDefinedEnumsWithDuplicateValuesAreTreatedAsDifferent(): void
     {
         // Arrange
-        RuleSet::define(ExampleStringEnum::Another, RuleSet::create()->email());
+        RuleSet::define(ExampleStringEnum::Another, RuleSet::create()->string());
         RuleSet::define(ExampleStringDuplicateEnum::Another, RuleSet::create()->required());
 
         // Act
@@ -115,7 +115,7 @@ class DefinedRuleSetsTest extends TestCase
         $ruleSetTwo = RuleSet::useDefined(ExampleStringDuplicateEnum::Another);
 
         // Assert
-        $this->assertSame(['email'], $ruleSetOne->toArray());
+        $this->assertSame(['string'], $ruleSetOne->toArray());
         $this->assertSame(['required'], $ruleSetTwo->toArray());
     }
 }

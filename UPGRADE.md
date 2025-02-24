@@ -1,5 +1,13 @@
 # Upgrade Guide
 
+## v6
+
+### Upgrading from v5.6 to v6.0
+
+- Minimum Laravel version increased from `11.43` to `12.0`.
+- `Rule::date`, `Rule::email`, `Rule::file`, and `Rule::image` now return the fluent interface instead of a string. The
+  `RuleSet` variant now accepts a modifier callback.
+
 ## v5
 
 ### Upgrading from v5.5 to v5.6

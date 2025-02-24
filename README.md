@@ -12,7 +12,7 @@ composer require sourcetoad/rule-helper-for-laravel
 
 ### RuleSet
 
-The `RuleSet` class provides a fluent interface for defining sets of rules. 
+The `RuleSet` class provides a fluent interface for defining sets of rules.
 
 #### Basic usage
 
@@ -108,3 +108,14 @@ Accepts multiple `RequiredIf` rules and only marks as required if all return tru
 #### requiredIfAny
 
 Accepts multiple `RequiredIf` rules and marks as required if any return true.
+
+## Version Compatibility
+
+| Laravel | Rule Helper |
+|---------|-------------|
+| 12.x    | 6.x         |
+| 11.x    | 5.x         |
+| 10.x    | 4.x         |
+| 9.x     | 3.x         |
+| 9.x     | 2.x         |
+| 8.x     | 1.x         |

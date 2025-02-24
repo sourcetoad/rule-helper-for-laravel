@@ -16,10 +16,14 @@ use Illuminate\Validation\ConditionalRules;
 use Illuminate\Validation\Rule as LaravelRule;
 use Illuminate\Validation\Rules\ArrayRule;
 use Illuminate\Validation\Rules\Can;
+use Illuminate\Validation\Rules\Date;
 use Illuminate\Validation\Rules\Dimensions;
+use Illuminate\Validation\Rules\Email;
 use Illuminate\Validation\Rules\Enum;
 use Illuminate\Validation\Rules\ExcludeIf;
 use Illuminate\Validation\Rules\Exists;
+use Illuminate\Validation\Rules\File;
+use Illuminate\Validation\Rules\ImageFile;
 use Illuminate\Validation\Rules\In;
 use Illuminate\Validation\Rules\NotIn;
 use Illuminate\Validation\Rules\Password;
@@ -289,9 +293,9 @@ class Rule
      *
      * @link https://laravel.com/docs/11.x/validation#rule-date
      */
-    public static function date(): string
+    public static function date(): Date
     {
-        return 'date';
+        return LaravelRule::date();
     }
 
     /**
@@ -439,24 +443,11 @@ class Rule
     /**
      * The field under validation must be formatted as an email address.
      *
-     * By default, the *RFCValidation* validator is applied, but you can apply other validation styles as well:
-     *
-     * - *rfc*: {@see \Egulias\EmailValidator\Validation\RFCValidation}
-     * - *strict*: {@see \Egulias\EmailValidator\Validation\NoRFCWarningsValidation}
-     * - *dns*: {@see \Egulias\EmailValidator\Validation\DNSCheckValidation}
-     * - *spoof*: {@see \Egulias\EmailValidator\Validation\Extra\SpoofCheckValidation}
-     * - *filter*: {@see \Illuminate\Validation\Concerns\FilterEmailValidation}
-     * - *filter_unicode*: {@see \Illuminate\Validation\Concerns\FilterEmailValidation::unicode}
-     *
      * @link https://laravel.com/docs/11.x/validation#rule-email
      */
-    public static function email(string ...$validator): string
+    public static function email(): Email
     {
-        if (count($validator)) {
-            return 'email:'.implode(',', $validator);
-        }
-
-        return 'email';
+        return LaravelRule::email();
     }
 
     /**
@@ -587,9 +578,9 @@ class Rule
      *
      * @link https://laravel.com/docs/11.x/validation#rule-file
      */
-    public static function file(): string
+    public static function file(): File
     {
-        return 'file';
+        return LaravelRule::file();
     }
 
     /**
@@ -642,9 +633,9 @@ class Rule
      *
      * @link https://laravel.com/docs/11.x/validation#rule-image
      */
-    public static function image(): string
+    public static function image(): ImageFile
     {
-        return 'image';
+        return LaravelRule::imageFile();
     }
 
     /**
