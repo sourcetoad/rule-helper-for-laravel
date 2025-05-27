@@ -1431,6 +1431,33 @@ class RuleTest extends TestCase
                 ],
                 'fails' => true,
             ],
+            'inArrayKeys valid' => [
+                'data' => [
+                    'field-a' => ['timezone' => 'UTC', 'locale' => 'en'],
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->array()->inArrayKeys('timezone'),
+                ],
+                'fails' => false,
+            ],
+            'inArrayKeys valid multiple keys' => [
+                'data' => [
+                    'field-a' => ['locale' => 'en', 'currency' => 'USD'],
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->array()->inArrayKeys('timezone', 'locale'),
+                ],
+                'fails' => false,
+            ],
+            'inArrayKeys invalid' => [
+                'data' => [
+                    'field-a' => ['locale' => 'en', 'currency' => 'USD'],
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->array()->inArrayKeys('timezone'),
+                ],
+                'fails' => true,
+            ],
             'integer valid' => [
                 'data' => '1',
                 'rules' => fn() => RuleSet::create()->integer(),

@@ -760,6 +760,16 @@ class RuleSet implements Arrayable, IteratorAggregate
     }
 
     /**
+     * The field under validation must be an array having at least one of the given *values* as a key within the array.
+     *
+     * @link https://laravel.com/docs/12.x/validation#rule-in-array-keys
+     */
+    public function inArrayKeys(string ...$value): self
+    {
+        return $this->rule(Rule::inArrayKeys(...$value));
+    }
+
+    /**
      * The field under validation must be an integer.
      *
      * Warning: This validation rule does not verify that the input is of the "integer" variable type, only that the
