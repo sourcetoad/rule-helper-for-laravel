@@ -9,24 +9,21 @@ use BackedEnum;
 use Brick\Math\BigNumber;
 use DateTimeInterface;
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Contracts\Validation\InvokableRule;
-use Illuminate\Contracts\Validation\Rule as RuleContract;
-use Illuminate\Contracts\Validation\ValidationRule;
-use Illuminate\Validation\ConditionalRules;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\Rules\RequiredIf;
 use IteratorAggregate;
-use Stringable;
 use UnitEnum;
 
 /**
- * @implements Arrayable<array-key, RuleContract|InvokableRule|ValidationRule|ConditionalRules|Stringable|string>
- * @implements IteratorAggregate<array-key, RuleContract|InvokableRule|ValidationRule|ConditionalRules|Stringable|string>
+ * @phpstan-import-type RuleType from Rule
+ * @phpstan-import-type RuleSetDefinition from Rule
+ * @implements Arrayable<array-key, RuleType>
+ * @implements IteratorAggregate<array-key, RuleType>
  */
 class RuleSet implements Arrayable, IteratorAggregate
 {
     /**
-     * @param array<array-key, RuleContract|InvokableRule|ValidationRule|ConditionalRules|Stringable|string> $rules
+     * @param array<array-key, RuleType> $rules
      */
     final public function __construct(protected array $rules = [])
     {
@@ -34,7 +31,7 @@ class RuleSet implements Arrayable, IteratorAggregate
     }
 
     /**
-     * @return ArrayIterator<array-key, RuleContract|InvokableRule|ValidationRule|ConditionalRules|Stringable|string>
+     * @return ArrayIterator<array-key, RuleType>
      */
     public function getIterator(): ArrayIterator
     {
@@ -44,7 +41,7 @@ class RuleSet implements Arrayable, IteratorAggregate
     /**
      * Get the rule set as an array.
      *
-     * @return array<array-key, RuleContract|InvokableRule|ValidationRule|ConditionalRules|Stringable|string>
+     * @return array<array-key, RuleType>
      */
     public function toArray(): array
     {
@@ -54,7 +51,7 @@ class RuleSet implements Arrayable, IteratorAggregate
     /**
      * Create a new rule set.
      *
-     * @param array<array-key, RuleContract|InvokableRule|ValidationRule|ConditionalRules|Stringable|string> $rules
+     * @param array<array-key, RuleType> $rules
      */
     public static function create(array $rules = []): self
     {
@@ -80,7 +77,7 @@ class RuleSet implements Arrayable, IteratorAggregate
     /**
      * Append one or more rules to the end of the rule set.
      *
-     * @param RuleContract|InvokableRule|ValidationRule|ConditionalRules|Stringable|string $rule
+     * @param RuleType $rule
      */
     public function concat(...$rule): self
     {
@@ -98,7 +95,7 @@ class RuleSet implements Arrayable, IteratorAggregate
     /**
      * Append a rule to the end of the rule set.
      *
-     * @param RuleContract|InvokableRule|ValidationRule|ConditionalRules|Stringable|string $rule
+     * @param RuleType $rule
      */
     public function rule(mixed $rule): self
     {
@@ -203,6 +200,18 @@ class RuleSet implements Arrayable, IteratorAggregate
     public function alphaNum(?bool $limitToAscii = null): self
     {
         return $this->rule(Rule::alphaNum($limitToAscii));
+    }
+
+    /**
+     * The `anyOf` validation rule allows you to specify that the field under validation must satisfy any of the given
+     * validation rulesets.
+     *
+     * @link https://laravel.com/docs/12.x/validation#rule-anyof
+     * @param array<array-key, RuleSetDefinition> $ruleSets
+     */
+    public function anyOf(array $ruleSets): self
+    {
+        return $this->rule(Rule::anyOf($ruleSets));
     }
 
     /**
@@ -757,6 +766,16 @@ class RuleSet implements Arrayable, IteratorAggregate
     public function inArray(string $anotherField): self
     {
         return $this->rule(Rule::inArray($anotherField));
+    }
+
+    /**
+     * The field under validation must be an array having at least one of the given *values* as a key within the array.
+     *
+     * @link https://laravel.com/docs/12.x/validation#rule-in-array-keys
+     */
+    public function inArrayKeys(string ...$value): self
+    {
+        return $this->rule(Rule::inArrayKeys(...$value));
     }
 
     /**
@@ -1505,8 +1524,8 @@ class RuleSet implements Arrayable, IteratorAggregate
      * Create a new conditional rule set.
      *
      * @param bool|callable(\Illuminate\Support\Fluent<array-key, mixed>): bool $condition
-     * @param array<array-key, RuleContract|InvokableRule|ValidationRule|ConditionalRules|Stringable|string>|string|RuleSet $rules
-     * @param array<array-key, RuleContract|InvokableRule|ValidationRule|ConditionalRules|Stringable|string>|string|RuleSet $defaultRules
+     * @param array<array-key, RuleType>|string|RuleSet $rules
+     * @param array<array-key, RuleType>|string|RuleSet $defaultRules
      */
     public function when(mixed $condition, array|string|RuleSet $rules, array|string|RuleSet $defaultRules = []): self
     {

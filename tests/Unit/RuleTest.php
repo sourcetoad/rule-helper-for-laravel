@@ -1431,6 +1431,33 @@ class RuleTest extends TestCase
                 ],
                 'fails' => true,
             ],
+            'inArrayKeys valid' => [
+                'data' => [
+                    'field-a' => ['timezone' => 'UTC', 'locale' => 'en'],
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->array()->inArrayKeys('timezone'),
+                ],
+                'fails' => false,
+            ],
+            'inArrayKeys valid multiple keys' => [
+                'data' => [
+                    'field-a' => ['locale' => 'en', 'currency' => 'USD'],
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->array()->inArrayKeys('timezone', 'locale'),
+                ],
+                'fails' => false,
+            ],
+            'inArrayKeys invalid' => [
+                'data' => [
+                    'field-a' => ['locale' => 'en', 'currency' => 'USD'],
+                ],
+                'rules' => fn() => [
+                    'field-a' => RuleSet::create()->array()->inArrayKeys('timezone'),
+                ],
+                'fails' => true,
+            ],
             'integer valid' => [
                 'data' => '1',
                 'rules' => fn() => RuleSet::create()->integer(),
@@ -3024,6 +3051,282 @@ class RuleTest extends TestCase
                     RuleSet::create()->string()
                 ),
                 'fails' => true,
+            ],
+            'anyOf valid - first rule set passes' => [
+                'data' => [
+                    'field' => [
+                        'type' => 'email',
+                        'value' => 'test@example.com',
+                    ],
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->anyOf([
+                        [
+                            'type' => RuleSet::create()->required()->in(['email']),
+                            'value' => RuleSet::create()->required()->email(),
+                        ],
+                        [
+                            'type' => RuleSet::create()->required()->in(['url']),
+                            'value' => RuleSet::create()->required()->url(),
+                        ],
+                    ]),
+                ],
+                'fails' => false,
+            ],
+            'anyOf valid - second rule set passes' => [
+                'data' => [
+                    'field' => [
+                        'type' => 'url',
+                        'value' => 'https://example.com',
+                    ],
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->anyOf([
+                        [
+                            'type' => RuleSet::create()->required()->in(['email']),
+                            'value' => RuleSet::create()->required()->email(),
+                        ],
+                        [
+                            'type' => RuleSet::create()->required()->in(['url']),
+                            'value' => RuleSet::create()->required()->url(),
+                        ],
+                    ]),
+                ],
+                'fails' => false,
+            ],
+            'anyOf valid - multiple rule sets could pass' => [
+                'data' => [
+                    'field' => [
+                        'name' => 'John Doe',
+                        'age' => 25,
+                    ],
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->anyOf([
+                        [
+                            'name' => RuleSet::create()->required()->string(),
+                            'age' => RuleSet::create()->required()->integer(),
+                        ],
+                        [
+                            'name' => RuleSet::create()->required()->string()->min(3),
+                            'age' => RuleSet::create()->sometimes()->integer(),
+                        ],
+                        [
+                            'name' => RuleSet::create()->required()->string(),
+                            'email' => RuleSet::create()->sometimes()->email(),
+                        ],
+                    ]),
+                ],
+                'fails' => false,
+            ],
+            'anyOf invalid - no rule sets pass' => [
+                'data' => [
+                    'field' => [
+                        'type' => 'phone',
+                        'value' => '123-456-7890',
+                    ],
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->anyOf([
+                        [
+                            'type' => RuleSet::create()->required()->in(['email']),
+                            'value' => RuleSet::create()->required()->email(),
+                        ],
+                        [
+                            'type' => RuleSet::create()->required()->in(['url']),
+                            'value' => RuleSet::create()->required()->url(),
+                        ],
+                    ]),
+                ],
+                'fails' => true,
+            ],
+            'anyOf valid - simple array values' => [
+                'data' => [
+                    'field' => ['a', 'b', 'c'],
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->anyOf([
+                        RuleSet::create()->array()->min(3),
+                        RuleSet::create()->string()->min(10),
+                    ]),
+                ],
+                'fails' => false,
+            ],
+            'anyOf valid - string value matches second rule set' => [
+                'data' => [
+                    'field' => 'this is a long string',
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->anyOf([
+                        RuleSet::create()->array()->min(3),
+                        RuleSet::create()->string()->min(10),
+                    ]),
+                ],
+                'fails' => false,
+            ],
+            'anyOf invalid - neither rule set matches' => [
+                'data' => [
+                    'field' => 'short',
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->anyOf([
+                        RuleSet::create()->array()->min(3),
+                        RuleSet::create()->string()->min(10),
+                    ]),
+                ],
+                'fails' => true,
+            ],
+            'anyOf valid - nested anyOf rules' => [
+                'data' => [
+                    'field' => [
+                        'contact' => [
+                            'type' => 'email',
+                            'value' => 'test@example.com',
+                        ],
+                    ],
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->anyOf([
+                        [
+                            'contact' => RuleSet::create()->anyOf([
+                                [
+                                    'type' => RuleSet::create()->required()->in(['email']),
+                                    'value' => RuleSet::create()->required()->email(),
+                                ],
+                                [
+                                    'type' => RuleSet::create()->required()->in(['phone']),
+                                    'value' => RuleSet::create()->required()->regex('/^\d{3}-\d{3}-\d{4}$/'),
+                                ],
+                            ]),
+                        ],
+                        [
+                            'name' => RuleSet::create()->required()->string(),
+                            'age' => RuleSet::create()->required()->integer(),
+                        ],
+                    ]),
+                ],
+                'fails' => false,
+            ],
+            'anyOf valid - with sometimes rules' => [
+                'data' => [
+                    'field' => [
+                        'type' => 'basic',
+                        'name' => 'Test User',
+                    ],
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->anyOf([
+                        [
+                            'type' => RuleSet::create()->required()->in(['premium']),
+                            'name' => RuleSet::create()->required()->string(),
+                            'features' => RuleSet::create()->required()->array(),
+                        ],
+                        [
+                            'type' => RuleSet::create()->required()->in(['basic']),
+                            'name' => RuleSet::create()->required()->string(),
+                            'features' => RuleSet::create()->sometimes()->array(),
+                        ],
+                    ]),
+                ],
+                'fails' => false,
+            ],
+            'anyOf invalid - missing required fields in all rule sets' => [
+                'data' => [
+                    'field' => [
+                        'name' => 'Test',
+                    ],
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->anyOf([
+                        [
+                            'name' => RuleSet::create()->required()->string(),
+                            'email' => RuleSet::create()->required()->email(),
+                        ],
+                        [
+                            'name' => RuleSet::create()->required()->string(),
+                            'phone' => RuleSet::create()->required()->string(),
+                        ],
+                    ]),
+                ],
+                'fails' => true,
+            ],
+            'anyOf valid - empty rule set passes' => [
+                'data' => [
+                    'field' => [
+                        'anything' => 'value',
+                    ],
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->anyOf([
+                        [
+                            'required_field' => RuleSet::create()->required()->string(),
+                        ],
+                        [],
+                    ]),
+                ],
+                'fails' => false,
+            ],
+            'anyOf valid - single rule set' => [
+                'data' => [
+                    'field' => [
+                        'name' => 'Test User',
+                        'email' => 'test@example.com',
+                    ],
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->anyOf([
+                        [
+                            'name' => RuleSet::create()->required()->string(),
+                            'email' => RuleSet::create()->required()->email(),
+                        ],
+                    ]),
+                ],
+                'fails' => false,
+            ],
+            'anyOf invalid - single rule set fails' => [
+                'data' => [
+                    'field' => [
+                        'name' => 'Test User',
+                        'email' => 'invalid-email',
+                    ],
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->anyOf([
+                        [
+                            'name' => RuleSet::create()->required()->string(),
+                            'email' => RuleSet::create()->required()->email(),
+                        ],
+                    ]),
+                ],
+                'fails' => true,
+            ],
+            'anyOf valid - discriminator' => [
+                'data' => [
+                    'field' => [
+                        'discriminator' => 'user',
+                        'username' => 'john_doe',
+                        'email' => 'john@example.com',
+                    ],
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->anyOf([
+                        [
+                            'discriminator' => RuleSet::create()->required()->in(['admin']),
+                            'admin_level' => RuleSet::create()->required()->integer(),
+                            'permissions' => RuleSet::create()->required()->array(),
+                        ],
+                        [
+                            'discriminator' => RuleSet::create()->required()->in(['user']),
+                            'username' => RuleSet::create()->required()->string(),
+                            'email' => RuleSet::create()->required()->email(),
+                        ],
+                        [
+                            'discriminator' => RuleSet::create()->required()->in(['guest']),
+                            'session_id' => RuleSet::create()->required()->string(),
+                        ],
+                    ]),
+                ],
+                'fails' => false,
             ],
         ];
     }

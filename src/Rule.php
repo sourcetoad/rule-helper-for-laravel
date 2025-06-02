@@ -12,8 +12,10 @@ use Illuminate\Contracts\Validation\InvokableRule;
 use Illuminate\Contracts\Validation\Rule as RuleContract;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Fluent;
 use Illuminate\Validation\ConditionalRules;
 use Illuminate\Validation\Rule as LaravelRule;
+use Illuminate\Validation\Rules\AnyOf;
 use Illuminate\Validation\Rules\ArrayRule;
 use Illuminate\Validation\Rules\Can;
 use Illuminate\Validation\Rules\Date;
@@ -33,6 +35,11 @@ use Illuminate\Validation\Rules\Unique;
 use Stringable;
 use UnitEnum;
 
+/**
+ * @phpstan-type RuleType RuleContract|InvokableRule|ValidationRule|ConditionalRules|Stringable|string
+ * @phpstan-type FieldRules RuleSet|array<int, RuleType>|RuleType
+ * @phpstan-type RuleSetDefinition RuleSet|array<string, FieldRules>
+ */
 class Rule
 {
     /**
@@ -145,6 +152,18 @@ class Rule
         }
 
         return 'alpha_num';
+    }
+
+    /**
+     * The `anyOf` validation rule allows you to specify that the field under validation must satisfy any of the given
+     * validation rulesets.
+     *
+     * @link https://laravel.com/docs/12.x/validation#rule-anyof
+     * @param array<array-key, RuleSetDefinition> $ruleSets
+     */
+    public static function anyOf(array $ruleSets): AnyOf
+    {
+        return LaravelRule::anyOf($ruleSets);
     }
 
     /**
@@ -660,6 +679,16 @@ class Rule
     public static function inArray(string $anotherField): string
     {
         return 'in_array:'.$anotherField;
+    }
+
+    /**
+     * The field under validation must be an array having at least one of the given *values* as a key within the array.
+     *
+     * @link https://laravel.com/docs/12.x/validation#rule-in-array-keys
+     */
+    public static function inArrayKeys(string ...$value): string
+    {
+        return 'in_array_keys:'.implode(',', $value);
     }
 
     /**
@@ -1403,9 +1432,9 @@ class Rule
     /**
      * Create a new conditional rule set.
      *
-     * @param bool|callable(\Illuminate\Support\Fluent<array-key, mixed>): bool $condition
-     * @param array<array-key, RuleContract|InvokableRule|ValidationRule|ConditionalRules|Stringable|string>|string|RuleSet $rules
-     * @param array<array-key, RuleContract|InvokableRule|ValidationRule|ConditionalRules|Stringable|string>|string|RuleSet $defaultRules
+     * @param bool|callable(Fluent<array-key, mixed>): bool $condition
+     * @param array<array-key, RuleType>|string|RuleSet $rules
+     * @param array<array-key, RuleType>|string|RuleSet $defaultRules
      */
     public static function when(
         mixed $condition,
