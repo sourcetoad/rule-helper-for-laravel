@@ -1438,8 +1438,8 @@ class Rule
      * Create a new conditional rule set.
      *
      * @param bool|callable(Fluent<array-key, mixed>): bool $condition
-     * @param array<array-key, RuleContract|InvokableRule|ValidationRule|ConditionalRules|Stringable|string>|string|RuleSet $rules
-     * @param array<array-key, RuleContract|InvokableRule|ValidationRule|ConditionalRules|Stringable|string>|string|RuleSet $defaultRules
+     * @param array<array-key, RuleType>|string|RuleSet $rules
+     * @param array<array-key, RuleType>|string|RuleSet $defaultRules
      */
     public static function when(
         mixed $condition,
