@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Fluent;
 use Illuminate\Validation\ConditionalRules;
 use Illuminate\Validation\Rule as LaravelRule;
+use Illuminate\Validation\Rules\AnyOf;
 use Illuminate\Validation\Rules\ArrayRule;
 use Illuminate\Validation\Rules\Can;
 use Illuminate\Validation\Rules\Date;
@@ -34,6 +35,11 @@ use Illuminate\Validation\Rules\Unique;
 use Stringable;
 use UnitEnum;
 
+/**
+ * @phpstan-type RuleType RuleContract|InvokableRule|ValidationRule|ConditionalRules|Stringable|string
+ * @phpstan-type FieldRules RuleSet|array<int, RuleType>|RuleType
+ * @phpstan-type RuleSetDefinition RuleSet|array<string, FieldRules>
+ */
 class Rule
 {
     /**
@@ -146,6 +152,23 @@ class Rule
         }
 
         return 'alpha_num';
+    }
+
+    /**
+     * The `anyOf` validation rule allows you to specify that the field under validation must satisfy any of the given
+     * validation rulesets.
+     *
+     * @link https://laravel.com/docs/12.x/validation#rule-anyof
+     * @param array<array-key, RuleSetDefinition> $ruleSets
+     */
+    public static function anyOf(array $ruleSets): AnyOf
+    {
+        $ruleSets = array_map(
+            fn(Arrayable|array $sets) => $sets instanceof Arrayable ? $sets->toArray() : $sets,
+            $ruleSets
+        );
+
+        return LaravelRule::anyOf($ruleSets);
     }
 
     /**

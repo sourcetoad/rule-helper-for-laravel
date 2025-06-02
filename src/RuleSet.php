@@ -22,6 +22,7 @@ use UnitEnum;
 /**
  * @implements Arrayable<array-key, RuleContract|InvokableRule|ValidationRule|ConditionalRules|Stringable|string>
  * @implements IteratorAggregate<array-key, RuleContract|InvokableRule|ValidationRule|ConditionalRules|Stringable|string>
+ * @phpstan-import-type RuleSetDefinition from Rule
  */
 class RuleSet implements Arrayable, IteratorAggregate
 {
@@ -203,6 +204,18 @@ class RuleSet implements Arrayable, IteratorAggregate
     public function alphaNum(?bool $limitToAscii = null): self
     {
         return $this->rule(Rule::alphaNum($limitToAscii));
+    }
+
+    /**
+     * The `anyOf` validation rule allows you to specify that the field under validation must satisfy any of the given
+     * validation rulesets.
+     *
+     * @link https://laravel.com/docs/12.x/validation#rule-anyof
+     * @param array<array-key, RuleSetDefinition> $ruleSets
+     */
+    public function anyOf(array $ruleSets): self
+    {
+        return $this->rule(Rule::anyOf($ruleSets));
     }
 
     /**
