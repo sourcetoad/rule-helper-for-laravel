@@ -8,7 +8,7 @@ use Illuminate\Support\ServiceProvider;
 
 class RuleHelperServiceProvider extends ServiceProvider
 {
-    public function register()
+    public function register(): void
     {
         $this->app->singleton(Contracts\DefinedRuleSets::class, DefinedRuleSets::class);
     }
