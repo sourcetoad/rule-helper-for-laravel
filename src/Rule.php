@@ -163,11 +163,6 @@ class Rule
      */
     public static function anyOf(array $ruleSets): AnyOf
     {
-        $ruleSets = array_map(
-            fn(Arrayable|array $sets) => $sets instanceof Arrayable ? $sets->toArray() : $sets,
-            $ruleSets
-        );
-
         return LaravelRule::anyOf($ruleSets);
     }
 
