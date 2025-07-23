@@ -589,6 +589,21 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->boolean(),
                 'fails' => true,
             ],
+            'boolean strict valid' => [
+                'data' => true,
+                'rules' => fn() => RuleSet::create()->boolean(true),
+                'fails' => false,
+            ],
+            'boolean strict invalid' => [
+                'data' => 'false',
+                'rules' => fn() => RuleSet::create()->boolean(true),
+                'fails' => true,
+            ],
+            'boolean strict invalid number' => [
+                'data' => '0',
+                'rules' => fn() => RuleSet::create()->boolean(true),
+                'fails' => true,
+            ],
             'can valid' => [
                 'data' => 'value-a',
                 'rules' => function () {

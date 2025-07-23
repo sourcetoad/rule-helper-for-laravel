@@ -294,9 +294,9 @@ class RuleSet implements Arrayable, IteratorAggregate
      *
      * @link https://laravel.com/docs/12.x/validation#rule-boolean
      */
-    public function boolean(): self
+    public function boolean(bool $strict = false): self
     {
-        return $this->rule(Rule::boolean());
+        return $this->rule(Rule::boolean($strict));
     }
 
     /**

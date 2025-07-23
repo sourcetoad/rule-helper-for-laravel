@@ -250,8 +250,12 @@ class Rule
      *
      * @link https://laravel.com/docs/12.x/validation#rule-boolean
      */
-    public static function boolean(): string
+    public static function boolean(bool $strict = false): string
     {
+        if ($strict) {
+            return 'boolean:strict';
+        }
+
         return 'boolean';
     }
 
