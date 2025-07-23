@@ -2015,6 +2015,16 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->numeric(),
                 'fails' => true,
             ],
+            'numeric strict valid' => [
+                'data' => 1.25,
+                'rules' => fn() => RuleSet::create()->numeric(true),
+                'fails' => false,
+            ],
+            'numeric strict invalid' => [
+                'data' => '1.25',
+                'rules' => fn() => RuleSet::create()->numeric(true),
+                'fails' => true,
+            ],
             'password using default valid' => [
                 'data' => 'pass1!',
                 'rules' => function () {

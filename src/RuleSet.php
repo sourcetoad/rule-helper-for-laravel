@@ -1055,9 +1055,9 @@ class RuleSet implements Arrayable, IteratorAggregate
      * @link https://laravel.com/docs/12.x/validation#rule-numeric
      * @link https://www.php.net/manual/en/function.is-numeric.php
      */
-    public function numeric(): self
+    public function numeric(bool $strict = false): self
     {
-        return $this->rule(Rule::numeric());
+        return $this->rule(Rule::numeric($strict));
     }
 
     /**

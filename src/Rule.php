@@ -972,8 +972,12 @@ class Rule
      * @link https://laravel.com/docs/12.x/validation#rule-numeric
      * @link https://www.php.net/manual/en/function.is-numeric.php
      */
-    public static function numeric(): string
+    public static function numeric(bool $strict = false): string
     {
+        if ($strict) {
+            return 'numeric:strict';
+        }
+
         return 'numeric';
     }
 
