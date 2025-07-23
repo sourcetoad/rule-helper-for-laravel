@@ -2,6 +2,10 @@
 
 ## v6
 
+### Upgrading from v6.1 to v6.2
+
+- Minimum Laravel version increased from `12.16` to `12.21`.
+
 ### Upgrading from v6.0 to v6.1
 
 - Minimum Laravel version increased from `12.0` to `12.16`.
