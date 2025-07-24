@@ -5,6 +5,8 @@
 ### Upgrading from v6.1 to v6.2
 
 - Minimum Laravel version increased from `12.16` to `12.21`.
+- The `distinct` rule helper parameters have been deprecated in favor of the `distinctStrict` and `distinctIgnoreCase`
+  helpers. The parameters are planned to be removed in a future major version.
 
 ### Upgrading from v6.0 to v6.1
 
