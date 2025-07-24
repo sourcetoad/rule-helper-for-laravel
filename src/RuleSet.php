@@ -294,9 +294,19 @@ class RuleSet implements Arrayable, IteratorAggregate
      *
      * @link https://laravel.com/docs/12.x/validation#rule-boolean
      */
-    public function boolean(bool $strict = false): self
+    public function boolean(): self
     {
-        return $this->rule(Rule::boolean($strict));
+        return $this->rule(Rule::boolean());
+    }
+
+    /**
+     * The field under validation must a boolean.
+     *
+     * @link https://laravel.com/docs/12.x/validation#rule-boolean
+     */
+    public function booleanStrict(): self
+    {
+        return $this->rule(Rule::booleanStrict());
     }
 
     /**
@@ -479,9 +489,33 @@ class RuleSet implements Arrayable, IteratorAggregate
      *
      * @link https://laravel.com/docs/12.x/validation#rule-distinct
      */
-    public function distinct(bool $strict = false, bool $ignoreCase = false): self
-    {
+    public function distinct(
+        /** @deprecated Use `distinctStrict()` instead */
+        bool $strict = false,
+        /** @deprecated Use `distinctIgnoreCase()` instead */
+        bool $ignoreCase = false,
+    ): self {
         return $this->rule(Rule::distinct($strict, $ignoreCase));
+    }
+
+    /**
+     * When validating arrays, the field under validation must not have any duplicate values.
+     *
+     * @link https://laravel.com/docs/12.x/validation#rule-distinct
+     */
+    public function distinctIgnoreCase(): self
+    {
+        return $this->rule(Rule::distinctIgnoreCase());
+    }
+
+    /**
+     * When validating arrays, the field under validation must not have any duplicate values.
+     *
+     * @link https://laravel.com/docs/12.x/validation#rule-distinct
+     */
+    public function distinctStrict(): self
+    {
+        return $this->rule(Rule::distinctStrict());
     }
 
     /**
@@ -1055,9 +1089,20 @@ class RuleSet implements Arrayable, IteratorAggregate
      * @link https://laravel.com/docs/12.x/validation#rule-numeric
      * @link https://www.php.net/manual/en/function.is-numeric.php
      */
-    public function numeric(bool $strict = false): self
+    public function numeric(): self
     {
-        return $this->rule(Rule::numeric($strict));
+        return $this->rule(Rule::numeric());
+    }
+
+    /**
+     * The field under validation must be numeric and typed as an integer or float.
+     *
+     * @link https://laravel.com/docs/12.x/validation#rule-numeric
+     * @link https://www.php.net/manual/en/function.is-numeric.php
+     */
+    public function numericStrict(): self
+    {
+        return $this->rule(Rule::numericStrict());
     }
 
     /**
