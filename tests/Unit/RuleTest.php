@@ -589,6 +589,21 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->boolean(),
                 'fails' => true,
             ],
+            'booleanStrict valid' => [
+                'data' => true,
+                'rules' => fn() => RuleSet::create()->booleanStrict(),
+                'fails' => false,
+            ],
+            'booleanStrict invalid' => [
+                'data' => 'false',
+                'rules' => fn() => RuleSet::create()->booleanStrict(),
+                'fails' => true,
+            ],
+            'booleanStrict invalid number' => [
+                'data' => '0',
+                'rules' => fn() => RuleSet::create()->booleanStrict(),
+                'fails' => true,
+            ],
             'can valid' => [
                 'data' => 'value-a',
                 'rules' => function () {
@@ -1998,6 +2013,16 @@ class RuleTest extends TestCase
             'numeric invalid' => [
                 'data' => 'a',
                 'rules' => fn() => RuleSet::create()->numeric(),
+                'fails' => true,
+            ],
+            'numericStrict valid' => [
+                'data' => 1.25,
+                'rules' => fn() => RuleSet::create()->numericStrict(),
+                'fails' => false,
+            ],
+            'numericStrict invalid' => [
+                'data' => '1.25',
+                'rules' => fn() => RuleSet::create()->numericStrict(),
                 'fails' => true,
             ],
             'password using default valid' => [

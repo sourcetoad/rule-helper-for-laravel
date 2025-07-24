@@ -256,6 +256,16 @@ class Rule
     }
 
     /**
+     * The field under validation must a boolean.
+     *
+     * @link https://laravel.com/docs/12.x/validation#rule-boolean
+     */
+    public static function booleanStrict(): string
+    {
+        return 'boolean:strict';
+    }
+
+    /**
      * The field under validation must pass a Gate check for the specified ability.
      *
      * @link https://laravel.com/docs/12.x/authorization#gates
@@ -426,17 +436,41 @@ class Rule
      *
      * @link https://laravel.com/docs/12.x/validation#rule-distinct
      */
-    public static function distinct(bool $strict = false, bool $ignoreCase = false): string
-    {
+    public static function distinct(
+        /** @deprecated Use `distinctStrict()` instead */
+        bool $strict = false,
+        /** @deprecated Use `distinctIgnoreCase()` instead */
+        bool $ignoreCase = false,
+    ): string {
         if ($ignoreCase) {
-            return 'distinct:ignore_case';
+            return self::distinctIgnoreCase();
         }
 
         if ($strict) {
-            return 'distinct:strict';
+            return self::distinctStrict();
         }
 
         return 'distinct';
+    }
+
+    /**
+     * When validating arrays, the field under validation must not have any duplicate values.
+     *
+     * @link https://laravel.com/docs/12.x/validation#rule-distinct
+     */
+    public static function distinctIgnoreCase(): string
+    {
+        return 'distinct:ignore_case';
+    }
+
+    /**
+     * When validating arrays, the field under validation must not have any duplicate values.
+     *
+     * @link https://laravel.com/docs/12.x/validation#rule-distinct
+     */
+    public static function distinctStrict(): string
+    {
+        return 'distinct:strict';
     }
 
     /**
@@ -971,6 +1005,17 @@ class Rule
     public static function numeric(): string
     {
         return 'numeric';
+    }
+
+    /**
+     * The field under validation must be numeric and typed as an integer or float.
+     *
+     * @link https://laravel.com/docs/12.x/validation#rule-numeric
+     * @link https://www.php.net/manual/en/function.is-numeric.php
+     */
+    public static function numericStrict(): string
+    {
+        return 'numeric:strict';
     }
 
     /**
