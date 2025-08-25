@@ -7,6 +7,7 @@ namespace Sourcetoad\RuleHelper;
 use ArrayIterator;
 use BackedEnum;
 use Brick\Math\BigNumber;
+use Closure;
 use DateTimeInterface;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Validation\Rules\Password;
@@ -605,7 +606,7 @@ class RuleSet implements Arrayable, IteratorAggregate
      * methods if a true boolean is passed in or the passed in closure returns true.
      *
      * @link https://laravel.com/docs/12.x/validation#rule-exclude-if
-     * @param bool|callable(): bool $callback
+     * @param bool|Closure(): bool $callback
      */
     public function excludeIf(mixed $callback): self
     {
@@ -1196,7 +1197,7 @@ class RuleSet implements Arrayable, IteratorAggregate
      * passed in closure returns true.
      *
      * @link https://laravel.com/docs/12.x/validation#rule-prohibited-if
-     * @param bool|callable(): bool $callback
+     * @param bool|Closure(): bool $callback
      */
     public function prohibitedIf(mixed $callback): self
     {
@@ -1308,7 +1309,7 @@ class RuleSet implements Arrayable, IteratorAggregate
      * closure returns true.
      *
      * @link https://laravel.com/docs/12.x/validation#rule-required-if
-     * @param bool|callable(): bool $callback
+     * @param bool|Closure(): bool $callback
      */
     public function requiredIf(mixed $callback): self
     {
