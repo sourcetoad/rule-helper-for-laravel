@@ -1111,7 +1111,7 @@ class Rule
 
     /**
      * The field under validation must be empty or not present in the input data if the *anotherField* field
-     * is equal to "yes", "on", 1,  "1", true, or "true".
+     * is equal to "yes", "on", 1, "1", true, or "true".
      */
     public static function prohibitedIfAccepted(string $anotherField): string
     {
@@ -1222,7 +1222,7 @@ class Rule
     }
 
     /**
-     * The field under validation must be present and not empty if the *field* field is equal to "yes", "on", 1,  "1",
+     * The field under validation must be present and not empty if the *field* field is equal to "yes", "on", 1, "1",
      * true, or "true".
      *
      * @link https://laravel.com/docs/12.x/validation#rule-required-if-accepted
