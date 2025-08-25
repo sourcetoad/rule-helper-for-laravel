@@ -6,6 +6,7 @@ namespace Sourcetoad\RuleHelper;
 
 use BackedEnum;
 use Brick\Math\BigNumber;
+use Closure;
 use DateTimeInterface;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Validation\InvokableRule;
@@ -543,7 +544,7 @@ class Rule
      * methods if a true boolean is passed in or the passed in closure returns true.
      *
      * @link https://laravel.com/docs/12.x/validation#rule-exclude-if
-     * @param bool|callable(): bool $callback
+     * @param bool|Closure(): bool $callback
      */
     public static function excludeIf(mixed $callback): ExcludeIf
     {
@@ -1101,7 +1102,7 @@ class Rule
      * passed in closure returns true.
      *
      * @link https://laravel.com/docs/12.x/validation#rule-prohibited-if
-     * @param bool|callable(): bool $callback
+     * @param bool|Closure(): bool $callback
      */
     public static function prohibitedIf(mixed $callback): ProhibitedIf
     {
@@ -1110,7 +1111,7 @@ class Rule
 
     /**
      * The field under validation must be empty or not present in the input data if the *anotherField* field
-     * is equal to "yes", "on", 1,  "1", true, or "true".
+     * is equal to "yes", "on", 1, "1", true, or "true".
      */
     public static function prohibitedIfAccepted(string $anotherField): string
     {
@@ -1213,7 +1214,7 @@ class Rule
      * closure returns true.
      *
      * @link https://laravel.com/docs/12.x/validation#rule-required-if
-     * @param bool|callable(): bool $callback
+     * @param bool|Closure(): bool $callback
      */
     public static function requiredIf(mixed $callback): RequiredIf
     {
@@ -1221,7 +1222,7 @@ class Rule
     }
 
     /**
-     * The field under validation must be present and not empty if the *field* field is equal to "yes", "on", 1,  "1",
+     * The field under validation must be present and not empty if the *field* field is equal to "yes", "on", 1, "1",
      * true, or "true".
      *
      * @link https://laravel.com/docs/12.x/validation#rule-required-if-accepted
