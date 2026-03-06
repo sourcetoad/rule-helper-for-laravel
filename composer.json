@@ -6,13 +6,13 @@
     "minimum-stability": "stable",
     "require": {
         "php": "^8.2||^8.3||^8.4||^8.5",
-        "laravel/framework": "^12.21"
+        "laravel/framework": "^12.21||^13.0"
     },
     "require-dev": {
         "ext-json": "*",
-        "orchestra/testbench": "^10.0",
-        "phpunit/phpunit": "^11.5",
-        "laravel/pint": "1.21",
+        "orchestra/testbench": "^10.0||^11.0",
+        "phpunit/phpunit": "^11.5||^12.5.12",
+        "laravel/pint": "1.21||^1.27",
         "larastan/larastan": "^3.0"
     },
     "autoload": {
