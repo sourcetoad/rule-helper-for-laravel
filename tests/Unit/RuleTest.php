@@ -801,6 +801,26 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->dateFormat('d-M-Y', 'Y-M-d'),
                 'fails' => true,
             ],
+            'dateTime valid' => [
+                'data' => '2021-01-01 13:45:00',
+                'rules' => fn() => RuleSet::create()->dateTime(),
+                'fails' => false,
+            ],
+            'dateTime invalid without time' => [
+                'data' => '2021-01-01',
+                'rules' => fn() => RuleSet::create()->dateTime(),
+                'fails' => true,
+            ],
+            'dateTime fluent valid' => [
+                'data' => '2025-01-02 13:45:00',
+                'rules' => fn() => RuleSet::create()->dateTime(fn(Date $rule) => $rule->after('2025-01-01 13:45:00')),
+                'fails' => false,
+            ],
+            'dateTime fluent invalid' => [
+                'data' => '2025-01-02 13:45:00',
+                'rules' => fn() => RuleSet::create()->dateTime(fn(Date $rule) => $rule->after('2025-01-03 13:45:00')),
+                'fails' => true,
+            ],
             'decimal valid' => [
                 'data' => '1.1',
                 'rules' => fn() => RuleSet::create()->decimal(1),
@@ -1045,6 +1065,51 @@ class RuleTest extends TestCase
                 ],
                 'fails' => true,
             ],
+            'doesntContain valid' => [
+                'data' => [
+                    'field' => ['a', 'b', 'c'],
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->doesntContain('d', 'e'),
+                ],
+                'fails' => false,
+            ],
+            'doesntContain invalid' => [
+                'data' => [
+                    'field' => ['a', 'b', 'c'],
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->doesntContain('c', 'd'),
+                ],
+                'fails' => true,
+            ],
+            'doesntContain valid with enum' => [
+                'data' => [
+                    'field' => ['another'],
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->doesntContain(ExampleStringEnum::Valid),
+                ],
+                'fails' => false,
+            ],
+            'doesntContain invalid with enum' => [
+                'data' => [
+                    'field' => ['valid'],
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->doesntContain(ExampleStringEnum::Valid),
+                ],
+                'fails' => true,
+            ],
+            'doesntContain invalid not array' => [
+                'data' => [
+                    'field' => 'what',
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->doesntContain('z'),
+                ],
+                'fails' => true,
+            ],
             'doesntEndWith valid' => [
                 'data' => 'string',
                 'rules' => fn() => RuleSet::create()->doesntEndWith('a'),
@@ -1143,6 +1208,26 @@ class RuleTest extends TestCase
             'email filter invalid' => [
                 'data' => 'someone@com',
                 'rules' => fn() => RuleSet::create()->email(fn(Email $rule) => $rule->withNativeValidation()),
+                'fails' => true,
+            ],
+            'encoding valid' => [
+                'data' => 'plain ascii string',
+                'rules' => fn() => RuleSet::create()->encoding('ASCII'),
+                'fails' => false,
+            ],
+            'encoding invalid' => [
+                'data' => "not ascii \u{00e9}",
+                'rules' => fn() => RuleSet::create()->encoding('ASCII'),
+                'fails' => true,
+            ],
+            'encoding valid utf-8' => [
+                'data' => "not ascii \u{00e9}",
+                'rules' => fn() => RuleSet::create()->encoding('UTF-8'),
+                'fails' => false,
+            ],
+            'encoding invalid file' => [
+                'data' => new File(dirname(__DIR__).'/Stubs/100x50.png'),
+                'rules' => fn() => RuleSet::create()->encoding('UTF-8'),
                 'fails' => true,
             ],
             'endsWith valid' => [
@@ -1379,6 +1464,16 @@ class RuleTest extends TestCase
                 'data' => fn() => $this->mockFile('/code/document.pdf'),
                 'rules' => fn() => RuleSet::create()->image(),
                 'fails' => true,
+            ],
+            'image svg invalid' => [
+                'data' => fn() => $this->mockFile('/code/image.svg'),
+                'rules' => fn() => RuleSet::create()->image(),
+                'fails' => true,
+            ],
+            'image svg valid when allowed' => [
+                'data' => fn() => $this->mockFile('/code/image.svg'),
+                'rules' => fn() => RuleSet::create()->image(allowSvg: true),
+                'fails' => false,
             ],
             'image fluent valid' => [
                 'data' => new File(dirname(__DIR__).'/Stubs/100x50.png'),
@@ -3016,6 +3111,25 @@ class RuleTest extends TestCase
             'ulid invalid' => [
                 'data' => Str::uuid()->toString(),
                 'rules' => fn() => RuleSet::create()->ulid(),
+                'fails' => true,
+            ],
+            'unless valid' => [
+                'data' => 9,
+                'rules' => fn() => RuleSet::create()->unless(fn() => true, RuleSet::create()->min(10)),
+                'fails' => false,
+            ],
+            'unless invalid' => [
+                'data' => 9,
+                'rules' => fn() => RuleSet::create()->unless(fn() => false, RuleSet::create()->min(10)),
+                'fails' => true,
+            ],
+            'unless invalid fallback' => [
+                'data' => 9,
+                'rules' => fn() => RuleSet::create()->unless(
+                    fn() => true,
+                    RuleSet::create()->numeric(),
+                    RuleSet::create()->string()
+                ),
                 'fails' => true,
             ],
             'uppercase valid' => [

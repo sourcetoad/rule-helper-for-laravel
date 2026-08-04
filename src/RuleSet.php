@@ -395,6 +395,24 @@ class RuleSet implements Arrayable, IteratorAggregate
     }
 
     /**
+     * The field under validation must be a valid, non-relative date matching the *Y-m-d H:i:s* format.
+     *
+     * @link https://laravel.com/docs/12.x/validation#rule-date
+     * @link https://www.php.net/manual/en/datetime.format.php
+     * @param ?callable(\Illuminate\Validation\Rules\Date): (\Illuminate\Validation\Rules\Date|void) $modifier
+     */
+    public function dateTime(?callable $modifier = null): self
+    {
+        $rule = Rule::dateTime();
+
+        if ($modifier) {
+            $rule = $this->modify($rule, $modifier);
+        }
+
+        return $this->rule($rule);
+    }
+
+    /**
      * The field under validation must be numeric and must contain the specified number of decimal places.
      *
      * @link https://laravel.com/docs/12.x/validation#rule-decimal
@@ -520,6 +538,16 @@ class RuleSet implements Arrayable, IteratorAggregate
     }
 
     /**
+     * The field under validation must be an array that does not contain any of the given parameter values.
+     *
+     * @link https://laravel.com/docs/12.x/validation#rule-doesnt-contain
+     */
+    public function doesntContain(mixed ...$value): self
+    {
+        return $this->rule(Rule::doesntContain(...$value));
+    }
+
+    /**
      * The field under validation must not end with one of the given values.
      *
      * @link https://laravel.com/docs/12.x/validation#rule-doesnt-end-with
@@ -554,6 +582,18 @@ class RuleSet implements Arrayable, IteratorAggregate
         }
 
         return $this->rule($rule);
+    }
+
+    /**
+     * The field under validation must match the specified character encoding. This rule uses PHP's *mb_check_encoding*
+     * function to verify the encoding of the given file or string value.
+     *
+     * @link https://laravel.com/docs/12.x/validation#rule-encoding
+     * @link https://www.php.net/manual/en/function.mb-check-encoding.php
+     */
+    public function encoding(string $encoding): self
+    {
+        return $this->rule(Rule::encoding($encoding));
     }
 
     /**
@@ -763,14 +803,17 @@ class RuleSet implements Arrayable, IteratorAggregate
     }
 
     /**
-     * The file under validation must be an image (jpg, jpeg, png, bmp, gif, svg, or webp).
+     * The file under validation must be an image (jpg, jpeg, png, bmp, gif, or webp).
+     *
+     * Warning: By default, SVG files are not allowed due to the possibility of XSS vulnerabilities. If you need to
+     *          allow SVG files, *allowSvg* may be set to true.
      *
      * @link https://laravel.com/docs/12.x/validation#rule-image
      * @param ?callable(\Illuminate\Validation\Rules\ImageFile): (\Illuminate\Validation\Rules\ImageFile|void) $modifier
      */
-    public function image(?callable $modifier = null): self
+    public function image(?callable $modifier = null, bool $allowSvg = false): self
     {
-        $rule = Rule::image();
+        $rule = Rule::image($allowSvg);
 
         if ($modifier) {
             $rule = $this->modify($rule, $modifier);
@@ -1534,6 +1577,21 @@ class RuleSet implements Arrayable, IteratorAggregate
         }
 
         return $this->rule($rule);
+    }
+
+    /**
+     * Create a new conditional rule set applied when the *condition* is false.
+     *
+     * @param bool|callable(\Illuminate\Support\Fluent<array-key, mixed>): bool $condition
+     * @param array<array-key, RuleType>|string|RuleSet $rules
+     * @param array<array-key, RuleType>|string|RuleSet $defaultRules
+     */
+    public function unless(
+        mixed $condition,
+        array|string|RuleSet $rules,
+        array|string|RuleSet $defaultRules = []
+    ): self {
+        return $this->rule(Rule::unless($condition, $rules, $defaultRules));
     }
 
     /**
