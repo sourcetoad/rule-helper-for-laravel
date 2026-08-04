@@ -801,6 +801,26 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->dateFormat('d-M-Y', 'Y-M-d'),
                 'fails' => true,
             ],
+            'dateTime valid' => [
+                'data' => '2021-01-01 13:45:00',
+                'rules' => fn() => RuleSet::create()->dateTime(),
+                'fails' => false,
+            ],
+            'dateTime invalid without time' => [
+                'data' => '2021-01-01',
+                'rules' => fn() => RuleSet::create()->dateTime(),
+                'fails' => true,
+            ],
+            'dateTime fluent valid' => [
+                'data' => '2025-01-02 13:45:00',
+                'rules' => fn() => RuleSet::create()->dateTime(fn(Date $rule) => $rule->after('2025-01-01 13:45:00')),
+                'fails' => false,
+            ],
+            'dateTime fluent invalid' => [
+                'data' => '2025-01-02 13:45:00',
+                'rules' => fn() => RuleSet::create()->dateTime(fn(Date $rule) => $rule->after('2025-01-03 13:45:00')),
+                'fails' => true,
+            ],
             'decimal valid' => [
                 'data' => '1.1',
                 'rules' => fn() => RuleSet::create()->decimal(1),

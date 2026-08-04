@@ -395,6 +395,24 @@ class RuleSet implements Arrayable, IteratorAggregate
     }
 
     /**
+     * The field under validation must be a valid, non-relative date matching the *Y-m-d H:i:s* format.
+     *
+     * @link https://laravel.com/docs/12.x/validation#rule-date
+     * @link https://www.php.net/manual/en/datetime.format.php
+     * @param ?callable(\Illuminate\Validation\Rules\Date): (\Illuminate\Validation\Rules\Date|void) $modifier
+     */
+    public function dateTime(?callable $modifier = null): self
+    {
+        $rule = Rule::dateTime();
+
+        if ($modifier) {
+            $rule = $this->modify($rule, $modifier);
+        }
+
+        return $this->rule($rule);
+    }
+
+    /**
      * The field under validation must be numeric and must contain the specified number of decimal places.
      *
      * @link https://laravel.com/docs/12.x/validation#rule-decimal
