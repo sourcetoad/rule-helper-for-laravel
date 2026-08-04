@@ -1580,6 +1580,21 @@ class RuleSet implements Arrayable, IteratorAggregate
     }
 
     /**
+     * Create a new conditional rule set applied when the *condition* is false.
+     *
+     * @param bool|callable(\Illuminate\Support\Fluent<array-key, mixed>): bool $condition
+     * @param array<array-key, RuleType>|string|RuleSet $rules
+     * @param array<array-key, RuleType>|string|RuleSet $defaultRules
+     */
+    public function unless(
+        mixed $condition,
+        array|string|RuleSet $rules,
+        array|string|RuleSet $defaultRules = []
+    ): self {
+        return $this->rule(Rule::unless($condition, $rules, $defaultRules));
+    }
+
+    /**
      * The field under validation must be uppercase.
      *
      * @link https://laravel.com/docs/12.x/validation#rule-uppercase

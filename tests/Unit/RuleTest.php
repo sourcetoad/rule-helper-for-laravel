@@ -3113,6 +3113,25 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->ulid(),
                 'fails' => true,
             ],
+            'unless valid' => [
+                'data' => 9,
+                'rules' => fn() => RuleSet::create()->unless(fn() => true, RuleSet::create()->min(10)),
+                'fails' => false,
+            ],
+            'unless invalid' => [
+                'data' => 9,
+                'rules' => fn() => RuleSet::create()->unless(fn() => false, RuleSet::create()->min(10)),
+                'fails' => true,
+            ],
+            'unless invalid fallback' => [
+                'data' => 9,
+                'rules' => fn() => RuleSet::create()->unless(
+                    fn() => true,
+                    RuleSet::create()->numeric(),
+                    RuleSet::create()->string()
+                ),
+                'fails' => true,
+            ],
             'uppercase valid' => [
                 'data' => 'UPPERCASE',
                 'rules' => fn() => RuleSet::create()->uppercase(),

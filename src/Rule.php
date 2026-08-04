@@ -1479,6 +1479,28 @@ class Rule
     }
 
     /**
+     * Create a new conditional rule set applied when the *condition* is false.
+     *
+     * @param bool|callable(Fluent<array-key, mixed>): bool $condition
+     * @param array<array-key, RuleType>|string|RuleSet $rules
+     * @param array<array-key, RuleType>|string|RuleSet $defaultRules
+     */
+    public static function unless(
+        mixed $condition,
+        array|string|RuleSet $rules,
+        array|string|RuleSet $defaultRules = []
+    ): ConditionalRules {
+        if ($rules instanceof RuleSet) {
+            $rules = $rules->toArray();
+        }
+        if ($defaultRules instanceof RuleSet) {
+            $defaultRules = $defaultRules->toArray();
+        }
+
+        return LaravelRule::unless($condition, $rules, $defaultRules);
+    }
+
+    /**
      * The field under validation must be uppercase.
      *
      * @link https://laravel.com/docs/12.x/validation#rule-uppercase
