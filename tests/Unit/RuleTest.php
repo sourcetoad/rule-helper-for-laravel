@@ -401,6 +401,64 @@ class RuleTest extends TestCase
                 ],
                 'fails' => true,
             ],
+            'arrayKeys valid' => [
+                'data' => [
+                    'field' => ['timezone' => 'UTC', 'locale' => 'en'],
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->arrayKeys('timezone', 'locale'),
+                ],
+                'fails' => false,
+            ],
+            'arrayKeys valid with missing keys' => [
+                'data' => [
+                    'field' => ['locale' => 'en'],
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->arrayKeys('timezone', 'locale'),
+                ],
+                'fails' => false,
+            ],
+            'arrayKeys invalid with unexpected key' => [
+                'data' => [
+                    'field' => ['timezone' => 'UTC', 'currency' => 'USD'],
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->arrayKeys('timezone', 'locale'),
+                ],
+                'fails' => true,
+            ],
+            'arrayKeys valid with enum keys' => [
+                'data' => [
+                    'field' => [
+                        ExampleStringEnum::Valid->value => 'value',
+                    ],
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->arrayKeys(ExampleStringEnum::Valid, ExampleStringEnum::Another),
+                ],
+                'fails' => false,
+            ],
+            'arrayKeys invalid with enum keys' => [
+                'data' => [
+                    'field' => [
+                        ExampleStringEnum::Valid->value => 'value',
+                    ],
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->arrayKeys(ExampleStringEnum::Another),
+                ],
+                'fails' => true,
+            ],
+            'arrayKeys invalid not array' => [
+                'data' => [
+                    'field' => 'what',
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->arrayKeys('timezone'),
+                ],
+                'fails' => true,
+            ],
             'ascii valid' => [
                 'data' => 'Ascii',
                 'rules' => fn() => RuleSet::create()->ascii(),

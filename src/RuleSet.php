@@ -231,6 +231,17 @@ class RuleSet implements Arrayable, IteratorAggregate
     }
 
     /**
+     * The field under validation must be an array where every key is present within the list of given *keys*. At least
+     * one key must be provided.
+     *
+     * @link https://laravel.com/docs/12.x/validation#rule-array-keys
+     */
+    public function arrayKeys(BackedEnum|UnitEnum|string ...$key): self
+    {
+        return $this->rule(Rule::arrayKeys(...$key));
+    }
+
+    /**
      * The field under validation must be entirely 7-bit ASCII characters.
      *
      * @link https://laravel.com/docs/12.x/validation#rule-ascii

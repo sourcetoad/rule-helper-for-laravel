@@ -17,6 +17,7 @@ use Illuminate\Support\Fluent;
 use Illuminate\Validation\ConditionalRules;
 use Illuminate\Validation\Rule as LaravelRule;
 use Illuminate\Validation\Rules\AnyOf;
+use Illuminate\Validation\Rules\ArrayKeys;
 use Illuminate\Validation\Rules\ArrayRule;
 use Illuminate\Validation\Rules\Can;
 use Illuminate\Validation\Rules\Date;
@@ -185,6 +186,17 @@ class Rule
         }
 
         return LaravelRule::array();
+    }
+
+    /**
+     * The field under validation must be an array where every key is present within the list of given *keys*. At least
+     * one key must be provided.
+     *
+     * @link https://laravel.com/docs/12.x/validation#rule-array-keys
+     */
+    public static function arrayKeys(BackedEnum|UnitEnum|string ...$key): ArrayKeys
+    {
+        return LaravelRule::arrayKeys($key);
     }
 
     /**
