@@ -21,6 +21,7 @@ use Illuminate\Validation\Rules\ArrayRule;
 use Illuminate\Validation\Rules\Can;
 use Illuminate\Validation\Rules\Date;
 use Illuminate\Validation\Rules\Dimensions;
+use Illuminate\Validation\Rules\DoesntContain;
 use Illuminate\Validation\Rules\Email;
 use Illuminate\Validation\Rules\Enum;
 use Illuminate\Validation\Rules\ExcludeIf;
@@ -483,6 +484,16 @@ class Rule
     public static function distinctStrict(): string
     {
         return 'distinct:strict';
+    }
+
+    /**
+     * The field under validation must be an array that does not contain any of the given parameter values.
+     *
+     * @link https://laravel.com/docs/12.x/validation#rule-doesnt-contain
+     */
+    public static function doesntContain(mixed ...$value): DoesntContain
+    {
+        return LaravelRule::doesntContain($value);
     }
 
     /**

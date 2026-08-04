@@ -1065,6 +1065,51 @@ class RuleTest extends TestCase
                 ],
                 'fails' => true,
             ],
+            'doesntContain valid' => [
+                'data' => [
+                    'field' => ['a', 'b', 'c'],
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->doesntContain('d', 'e'),
+                ],
+                'fails' => false,
+            ],
+            'doesntContain invalid' => [
+                'data' => [
+                    'field' => ['a', 'b', 'c'],
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->doesntContain('c', 'd'),
+                ],
+                'fails' => true,
+            ],
+            'doesntContain valid with enum' => [
+                'data' => [
+                    'field' => ['another'],
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->doesntContain(ExampleStringEnum::Valid),
+                ],
+                'fails' => false,
+            ],
+            'doesntContain invalid with enum' => [
+                'data' => [
+                    'field' => ['valid'],
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->doesntContain(ExampleStringEnum::Valid),
+                ],
+                'fails' => true,
+            ],
+            'doesntContain invalid not array' => [
+                'data' => [
+                    'field' => 'what',
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->doesntContain('z'),
+                ],
+                'fails' => true,
+            ],
             'doesntEndWith valid' => [
                 'data' => 'string',
                 'rules' => fn() => RuleSet::create()->doesntEndWith('a'),

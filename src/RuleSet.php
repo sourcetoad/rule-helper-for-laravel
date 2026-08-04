@@ -538,6 +538,16 @@ class RuleSet implements Arrayable, IteratorAggregate
     }
 
     /**
+     * The field under validation must be an array that does not contain any of the given parameter values.
+     *
+     * @link https://laravel.com/docs/12.x/validation#rule-doesnt-contain
+     */
+    public function doesntContain(mixed ...$value): self
+    {
+        return $this->rule(Rule::doesntContain(...$value));
+    }
+
+    /**
      * The field under validation must not end with one of the given values.
      *
      * @link https://laravel.com/docs/12.x/validation#rule-doesnt-end-with
