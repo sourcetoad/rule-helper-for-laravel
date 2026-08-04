@@ -34,6 +34,7 @@ use Illuminate\Validation\Rules\NotIn;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\Rules\ProhibitedIf;
 use Illuminate\Validation\Rules\RequiredIf;
+use Illuminate\Validation\Rules\StringRule;
 use Illuminate\Validation\Rules\Unique;
 use Stringable;
 use UnitEnum;
@@ -1434,9 +1435,9 @@ class Rule
      *
      * @link https://laravel.com/docs/12.x/validation#rule-string
      */
-    public static function string(): string
+    public static function string(): StringRule
     {
-        return 'string';
+        return LaravelRule::string();
     }
 
     /**

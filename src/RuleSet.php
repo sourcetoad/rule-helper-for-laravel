@@ -1527,10 +1527,17 @@ class RuleSet implements Arrayable, IteratorAggregate
      * assign the {@see RuleSet::nullable} rule to the field.
      *
      * @link https://laravel.com/docs/12.x/validation#rule-string
+     * @param ?callable(\Illuminate\Validation\Rules\StringRule): (\Illuminate\Validation\Rules\StringRule|void) $modifier
      */
-    public function string(): self
+    public function string(?callable $modifier = null): self
     {
-        return $this->rule(Rule::string());
+        $rule = Rule::string();
+
+        if ($modifier) {
+            $rule = $this->modify($rule, $modifier);
+        }
+
+        return $this->rule($rule);
     }
 
     /**

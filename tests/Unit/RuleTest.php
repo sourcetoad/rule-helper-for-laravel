@@ -24,6 +24,7 @@ use Illuminate\Validation\Rules\Enum;
 use Illuminate\Validation\Rules\File as FileRule;
 use Illuminate\Validation\Rules\ImageFile;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Validation\Rules\StringRule;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Sourcetoad\RuleHelper\Rule;
 use Sourcetoad\RuleHelper\RuleSet;
@@ -3124,6 +3125,16 @@ class RuleTest extends TestCase
             'string invalid' => [
                 'data' => 1,
                 'rules' => fn() => RuleSet::create()->string(),
+                'fails' => true,
+            ],
+            'string fluent valid' => [
+                'data' => 'abc',
+                'rules' => fn() => RuleSet::create()->string(fn(StringRule $rule) => $rule->alpha()->exactly(3)),
+                'fails' => false,
+            ],
+            'string fluent invalid' => [
+                'data' => 'ab1',
+                'rules' => fn() => RuleSet::create()->string(fn(StringRule $rule) => $rule->alpha()->exactly(3)),
                 'fails' => true,
             ],
             'timezone valid' => [
