@@ -803,14 +803,17 @@ class RuleSet implements Arrayable, IteratorAggregate
     }
 
     /**
-     * The file under validation must be an image (jpg, jpeg, png, bmp, gif, svg, or webp).
+     * The file under validation must be an image (jpg, jpeg, png, bmp, gif, or webp).
+     *
+     * Warning: By default, SVG files are not allowed due to the possibility of XSS vulnerabilities. If you need to
+     *          allow SVG files, *allowSvg* may be set to true.
      *
      * @link https://laravel.com/docs/12.x/validation#rule-image
      * @param ?callable(\Illuminate\Validation\Rules\ImageFile): (\Illuminate\Validation\Rules\ImageFile|void) $modifier
      */
-    public function image(?callable $modifier = null): self
+    public function image(?callable $modifier = null, bool $allowSvg = false): self
     {
-        $rule = Rule::image();
+        $rule = Rule::image($allowSvg);
 
         if ($modifier) {
             $rule = $this->modify($rule, $modifier);

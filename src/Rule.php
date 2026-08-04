@@ -717,13 +717,16 @@ class Rule
     }
 
     /**
-     * The file under validation must be an image (jpg, jpeg, png, bmp, gif, svg, or webp).
+     * The file under validation must be an image (jpg, jpeg, png, bmp, gif, or webp).
+     *
+     * Warning: By default, SVG files are not allowed due to the possibility of XSS vulnerabilities. If you need to
+     *          allow SVG files, *allowSvg* may be set to true.
      *
      * @link https://laravel.com/docs/12.x/validation#rule-image
      */
-    public static function image(): ImageFile
+    public static function image(bool $allowSvg = false): ImageFile
     {
-        return LaravelRule::imageFile();
+        return LaravelRule::imageFile($allowSvg);
     }
 
     /**

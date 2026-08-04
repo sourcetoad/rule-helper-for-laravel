@@ -1465,6 +1465,16 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->image(),
                 'fails' => true,
             ],
+            'image svg invalid' => [
+                'data' => fn() => $this->mockFile('/code/image.svg'),
+                'rules' => fn() => RuleSet::create()->image(),
+                'fails' => true,
+            ],
+            'image svg valid when allowed' => [
+                'data' => fn() => $this->mockFile('/code/image.svg'),
+                'rules' => fn() => RuleSet::create()->image(allowSvg: true),
+                'fails' => false,
+            ],
             'image fluent valid' => [
                 'data' => new File(dirname(__DIR__).'/Stubs/100x50.png'),
                 'rules' => fn() => RuleSet::create()->image(fn(ImageFile $rule) => $rule->dimensions(Rule::dimensions(['min_width' => 100]))),
