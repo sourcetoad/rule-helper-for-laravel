@@ -1210,6 +1210,26 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->email(fn(Email $rule) => $rule->withNativeValidation()),
                 'fails' => true,
             ],
+            'encoding valid' => [
+                'data' => 'plain ascii string',
+                'rules' => fn() => RuleSet::create()->encoding('ASCII'),
+                'fails' => false,
+            ],
+            'encoding invalid' => [
+                'data' => "not ascii \u{00e9}",
+                'rules' => fn() => RuleSet::create()->encoding('ASCII'),
+                'fails' => true,
+            ],
+            'encoding valid utf-8' => [
+                'data' => "not ascii \u{00e9}",
+                'rules' => fn() => RuleSet::create()->encoding('UTF-8'),
+                'fails' => false,
+            ],
+            'encoding invalid file' => [
+                'data' => new File(dirname(__DIR__).'/Stubs/100x50.png'),
+                'rules' => fn() => RuleSet::create()->encoding('UTF-8'),
+                'fails' => true,
+            ],
             'endsWith valid' => [
                 'data' => 'string',
                 'rules' => fn() => RuleSet::create()->endsWith('g'),

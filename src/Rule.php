@@ -527,6 +527,18 @@ class Rule
     }
 
     /**
+     * The field under validation must match the specified character encoding. This rule uses PHP's *mb_check_encoding*
+     * function to verify the encoding of the given file or string value.
+     *
+     * @link https://laravel.com/docs/12.x/validation#rule-encoding
+     * @link https://www.php.net/manual/en/function.mb-check-encoding.php
+     */
+    public static function encoding(string $encoding): string
+    {
+        return 'encoding:'.$encoding;
+    }
+
+    /**
      * The field under validation must end with one of the given values.
      *
      * @link https://laravel.com/docs/12.x/validation#rule-ends-with
