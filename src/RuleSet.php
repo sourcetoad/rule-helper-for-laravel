@@ -1143,10 +1143,17 @@ class RuleSet implements Arrayable, IteratorAggregate
      *
      * @link https://laravel.com/docs/12.x/validation#rule-numeric
      * @link https://www.php.net/manual/en/function.is-numeric.php
+     * @param ?callable(\Illuminate\Validation\Rules\Numeric): (\Illuminate\Validation\Rules\Numeric|void) $modifier
      */
-    public function numeric(): self
+    public function numeric(?callable $modifier = null): self
     {
-        return $this->rule(Rule::numeric());
+        $rule = Rule::numeric();
+
+        if ($modifier) {
+            $rule = $this->modify($rule, $modifier);
+        }
+
+        return $this->rule($rule);
     }
 
     /**

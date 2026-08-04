@@ -31,6 +31,7 @@ use Illuminate\Validation\Rules\File;
 use Illuminate\Validation\Rules\ImageFile;
 use Illuminate\Validation\Rules\In;
 use Illuminate\Validation\Rules\NotIn;
+use Illuminate\Validation\Rules\Numeric;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\Rules\ProhibitedIf;
 use Illuminate\Validation\Rules\RequiredIf;
@@ -1053,9 +1054,9 @@ class Rule
      * @link https://laravel.com/docs/12.x/validation#rule-numeric
      * @link https://www.php.net/manual/en/function.is-numeric.php
      */
-    public static function numeric(): string
+    public static function numeric(): Numeric
     {
-        return 'numeric';
+        return LaravelRule::numeric();
     }
 
     /**

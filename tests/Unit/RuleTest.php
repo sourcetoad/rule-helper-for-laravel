@@ -23,6 +23,7 @@ use Illuminate\Validation\Rules\Email;
 use Illuminate\Validation\Rules\Enum;
 use Illuminate\Validation\Rules\File as FileRule;
 use Illuminate\Validation\Rules\ImageFile;
+use Illuminate\Validation\Rules\Numeric;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\Rules\StringRule;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -2167,6 +2168,16 @@ class RuleTest extends TestCase
             'numeric invalid' => [
                 'data' => 'a',
                 'rules' => fn() => RuleSet::create()->numeric(),
+                'fails' => true,
+            ],
+            'numeric fluent valid' => [
+                'data' => 8,
+                'rules' => fn() => RuleSet::create()->numeric(fn(Numeric $rule) => $rule->integer()->between(5, 10)),
+                'fails' => false,
+            ],
+            'numeric fluent invalid' => [
+                'data' => 8.5,
+                'rules' => fn() => RuleSet::create()->numeric(fn(Numeric $rule) => $rule->integer()->between(5, 10)),
                 'fails' => true,
             ],
             'numericStrict valid' => [
