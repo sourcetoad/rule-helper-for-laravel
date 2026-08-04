@@ -1,5 +1,15 @@
 # Upgrade Guide
 
+## v7
+
+### Upgrading from v6.4 to v7.0
+
+- Minimum Laravel version increased from `12.44` to `13.24`. Laravel 12 is no longer supported, the `6.4.x` releases are
+  the last to support it.
+- Minimum PHP version increased from `8.2` to `8.3`.
+- `Rule::numeric` and `Rule::string` now return the fluent interface instead of a string. The `RuleSet` variants now
+  accept a modifier callback.
+
 ## v6
 
 ### Upgrading from v6.3 to v6.4

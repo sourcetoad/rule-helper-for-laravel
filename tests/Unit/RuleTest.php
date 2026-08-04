@@ -23,7 +23,9 @@ use Illuminate\Validation\Rules\Email;
 use Illuminate\Validation\Rules\Enum;
 use Illuminate\Validation\Rules\File as FileRule;
 use Illuminate\Validation\Rules\ImageFile;
+use Illuminate\Validation\Rules\Numeric;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Validation\Rules\StringRule;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Sourcetoad\RuleHelper\Rule;
 use Sourcetoad\RuleHelper\RuleSet;
@@ -398,6 +400,64 @@ class RuleTest extends TestCase
                 ],
                 'rules' => fn() => [
                     'field' => RuleSet::create()->array(ExampleStringEnum::Another),
+                ],
+                'fails' => true,
+            ],
+            'arrayKeys valid' => [
+                'data' => [
+                    'field' => ['timezone' => 'UTC', 'locale' => 'en'],
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->arrayKeys('timezone', 'locale'),
+                ],
+                'fails' => false,
+            ],
+            'arrayKeys valid with missing keys' => [
+                'data' => [
+                    'field' => ['locale' => 'en'],
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->arrayKeys('timezone', 'locale'),
+                ],
+                'fails' => false,
+            ],
+            'arrayKeys invalid with unexpected key' => [
+                'data' => [
+                    'field' => ['timezone' => 'UTC', 'currency' => 'USD'],
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->arrayKeys('timezone', 'locale'),
+                ],
+                'fails' => true,
+            ],
+            'arrayKeys valid with enum keys' => [
+                'data' => [
+                    'field' => [
+                        ExampleStringEnum::Valid->value => 'value',
+                    ],
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->arrayKeys(ExampleStringEnum::Valid, ExampleStringEnum::Another),
+                ],
+                'fails' => false,
+            ],
+            'arrayKeys invalid with enum keys' => [
+                'data' => [
+                    'field' => [
+                        ExampleStringEnum::Valid->value => 'value',
+                    ],
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->arrayKeys(ExampleStringEnum::Another),
+                ],
+                'fails' => true,
+            ],
+            'arrayKeys invalid not array' => [
+                'data' => [
+                    'field' => 'what',
+                ],
+                'rules' => fn() => [
+                    'field' => RuleSet::create()->arrayKeys('timezone'),
                 ],
                 'fails' => true,
             ],
@@ -2110,6 +2170,16 @@ class RuleTest extends TestCase
                 'rules' => fn() => RuleSet::create()->numeric(),
                 'fails' => true,
             ],
+            'numeric fluent valid' => [
+                'data' => 8,
+                'rules' => fn() => RuleSet::create()->numeric(fn(Numeric $rule) => $rule->integer()->between(5, 10)),
+                'fails' => false,
+            ],
+            'numeric fluent invalid' => [
+                'data' => 8.5,
+                'rules' => fn() => RuleSet::create()->numeric(fn(Numeric $rule) => $rule->integer()->between(5, 10)),
+                'fails' => true,
+            ],
             'numericStrict valid' => [
                 'data' => 1.25,
                 'rules' => fn() => RuleSet::create()->numericStrict(),
@@ -3066,6 +3136,16 @@ class RuleTest extends TestCase
             'string invalid' => [
                 'data' => 1,
                 'rules' => fn() => RuleSet::create()->string(),
+                'fails' => true,
+            ],
+            'string fluent valid' => [
+                'data' => 'abc',
+                'rules' => fn() => RuleSet::create()->string(fn(StringRule $rule) => $rule->alpha()->exactly(3)),
+                'fails' => false,
+            ],
+            'string fluent invalid' => [
+                'data' => 'ab1',
+                'rules' => fn() => RuleSet::create()->string(fn(StringRule $rule) => $rule->alpha()->exactly(3)),
                 'fails' => true,
             ],
             'timezone valid' => [

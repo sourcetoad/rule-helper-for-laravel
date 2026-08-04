@@ -113,6 +113,7 @@ Accepts multiple `RequiredIf` rules and marks as required if any return true.
 
 | Laravel | Rule Helper |
 |---------|-------------|
+| 13.x    | 7.x         |
 | 13.x    | 6.3.x       |
 | 12.x    | 6.x         |
 | 11.x    | 5.x         |
