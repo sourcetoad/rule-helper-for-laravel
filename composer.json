@@ -11,7 +11,7 @@
     "require-dev": {
         "ext-json": "*",
         "orchestra/testbench": "^11.0",
-        "phpunit/phpunit": "^11.5||^12.5.12",
+        "phpunit/phpunit": "^12.5.12",
         "laravel/pint": "1.27.1",
         "larastan/larastan": "^3.0"
     },
