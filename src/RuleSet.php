@@ -266,6 +266,14 @@ class RuleSet implements Arrayable, IteratorAggregate
     }
 
     /**
+     * The field under validation must be a valid base64 encoded string.
+     */
+    public function base64(): self
+    {
+        return $this->rule(Rule::base64());
+    }
+
+    /**
      * The field under validation must be a value preceding the given date. The dates will be passed into the PHP
      * *strtotime* function in order to be converted into a valid *DateTime* instance. In addition, like the
      * {@see RuleSet::after} rule, the name of another field under validation may be supplied as the value of date.

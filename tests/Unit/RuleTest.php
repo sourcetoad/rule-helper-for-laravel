@@ -497,6 +497,21 @@ class RuleTest extends TestCase
                     ],
                 ],
             ],
+            'base64 valid' => [
+                'data' => 'dGVzdA==',
+                'rules' => fn() => RuleSet::create()->base64(),
+                'fails' => false,
+            ],
+            'base64 invalid' => [
+                'data' => 'what?',
+                'rules' => fn() => RuleSet::create()->base64(),
+                'fails' => true,
+                'errors' => [
+                    'field' => [
+                        'The field field must be a valid Base64 string.',
+                    ],
+                ],
+            ],
             'before valid' => [
                 'data' => '2021-01-01',
                 'rules' => fn() => RuleSet::create()->before('2021-01-02'),
